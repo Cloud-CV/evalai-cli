@@ -20,3 +20,11 @@ Starting Venv.
 Installing your package locally.
 
 `pip install --editable . `
+
+## Authentication
+
+Get your token from your profile on the EvalAI webapp.
+
+Configure the CLI with the token by running the command
+
+`evalai auth --token <TOKEN>`
