@@ -19,6 +19,7 @@ def main(ctx):
         echo(welcome_text)
 
 
+# Command -> evalai auth/challenges/submissions/teams
 main.add_command(auth)
 main.add_command(challenges)
 main.add_command(submissions)

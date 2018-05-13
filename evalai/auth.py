@@ -5,5 +5,5 @@ from click import echo
 
 @click.command()
 def auth():
-    """Example script."""
+    """Authentications and tokens."""
     echo('Hello auth!')
