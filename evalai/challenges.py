@@ -2,6 +2,11 @@ import click
 
 from click import echo
 
+from evalai.utils.challenges import (
+                                    get_challenge_list,
+                                    get_past_challenge_list,
+                                    get_future_challenge_list,)
+
 
 @click.group(invoke_without_command=True)
 @click.pass_context
@@ -21,15 +26,7 @@ def list_challenges(ctx):
     Lists all challenges.
     """
     if ctx.invoked_subcommand is None:
-        echo('Hello all!')
-
-
-@click.command(name='ongoing')
-def list_ongoing_challenges():
-    """
-    Lists currently active challenges.
-    """
-    echo('Hello currently active!')
+        get_challenge_list()
 
 
 @click.command(name='past')
@@ -37,7 +34,7 @@ def list_past_challenges():
     """
     Lists past challenges.
     """
-    echo('Hello past!')
+    get_past_challenge_list()
 
 
 @click.command(name='future')
@@ -45,13 +42,12 @@ def list_future_challenges():
     """
     Lists future challenges.
     """
-    echo('Hello future!')
+    get_future_challenge_list()
 
 
 # Command -> evalai challenges list
 challenges.add_command(list_challenges)
 
 # Command -> evalai challenges list ongoing/past/future
-list_challenges.add_command(list_ongoing_challenges)
 list_challenges.add_command(list_past_challenges)
 list_challenges.add_command(list_future_challenges)

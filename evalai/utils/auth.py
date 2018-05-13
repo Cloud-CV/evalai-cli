@@ -8,7 +8,7 @@ CONFIG_FILE = 'token.json'
 FULL_PATH = str(Path.home()) + "/.evalai/{}".format(CONFIG_FILE)
 
 
-def load_token():
+def get_token():
     """
     Loads token to be used for sending requests.
     """
@@ -20,3 +20,14 @@ def load_token():
     data = json.loads(data)
     token = data["token"]
     return token
+
+
+def get_headers():
+    """
+    Returns token formatted in header for sending requests.
+    """
+    headers = {
+            "Authorization": "Token {}".format(get_token()),
+    }
+
+    return headers
