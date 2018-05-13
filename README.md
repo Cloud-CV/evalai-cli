@@ -23,8 +23,6 @@ Installing your package locally.
 
 ## Authentication
 
-Get your token from your profile on the EvalAI webapp.
+### API credentials
 
-Configure the CLI with the token by running the command
-
-`evalai auth --token <TOKEN>`
+To obtain the EvalAI auth token, sign up for a EvalAI account. Then go to your user profile and select 'Get your Auth Token'. This will trigger the download of token.json, a file containing your API credentials. Place this file in the location `~/.evalai/token.json` (on Windows in the location `C:\Users\<Windows-username>\.evalai\token.json)`.

@@ -5,16 +5,16 @@ from click import echo
 
 
 CONFIG_FILE = 'token.json'
-FULL_PATH = str(Path.home()) + "/.evalai/{}".format(CONFIG_FILE)
+AUTH_TOKEN_PATH = "{}/.evalai/{}".format(str(Path.home()), CONFIG_FILE)
 
 
 def get_token():
     """
     Loads token to be used for sending requests.
     """
-    with open(FULL_PATH, 'r') as fr:
+    with open(AUTH_TOKEN_PATH, 'r') as TokenObj:
         try:
-            data = fr.read()
+            data = TokenObj.read()
         except (OSError, IOError) as e:
             echo(e)
     data = json.loads(data)
