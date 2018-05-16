@@ -1,5 +1,6 @@
-urls = {
-            "get_challenge_list": "/api/challenges/challenge/all",
-            "get_past_challenge_list": "/api/challenges/challenge/past",
-            "get_future_challenge_list": "/api/challenges/challenge/future",
-       }
+from enum import Enum
+
+class Urls(Enum):
+    challenge_list = "/api/challenges/challenge/all"
+    past_challenge_list = "/api/challenges/challenge/past"
+    future_challenge_list = "/api/challenges/challenge/future"

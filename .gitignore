@@ -86,7 +86,6 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
-evalai/utils/.config
 
 # Spyder project settings
 .spyderproject

@@ -1,9 +1,9 @@
 import click
-
 from click import echo
 
 from evalai.utils.challenges import (
                                     get_challenge_list,
+                                    get_ongoing_challenge_list,
                                     get_past_challenge_list,
                                     get_future_challenge_list,)
 
@@ -29,6 +29,14 @@ def list_challenges(ctx):
         get_challenge_list()
 
 
+@click.command(name='ongoing')
+def list_ongoing_challenges():
+    """
+    Lists ongoing challenges.
+    """
+    get_ongoing_challenge_list()
+
+
 @click.command(name='past')
 def list_past_challenges():
     """
@@ -49,5 +57,6 @@ def list_future_challenges():
 challenges.add_command(list_challenges)
 
 # Command -> evalai challenges list ongoing/past/future
+list_challenges.add_command(list_ongoing_challenges)
 list_challenges.add_command(list_past_challenges)
 list_challenges.add_command(list_future_challenges)

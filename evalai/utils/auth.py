@@ -1,25 +1,31 @@
+import os
 import json
 from pathlib import Path
 
 from click import echo
 
 
-CONFIG_FILE = 'token.json'
-AUTH_TOKEN_PATH = "{}/.evalai/{}".format(str(Path.home()), CONFIG_FILE)
+AUTH_TOKEN = 'token.json'
+AUTH_TOKEN_PATH = "{}/.evalai/{}".format(str(Path.home()), AUTH_TOKEN)
 
 
 def get_token():
     """
     Loads token to be used for sending requests.
     """
-    with open(AUTH_TOKEN_PATH, 'r') as TokenObj:
-        try:
-            data = TokenObj.read()
-        except (OSError, IOError) as e:
-            echo(e)
-    data = json.loads(data)
-    token = data["token"]
-    return token
+    if os.path.exists(AUTH_TOKEN_PATH):
+        with open(str(AUTH_TOKEN_PATH), 'r') as TokenObj:
+            try:
+                data = TokenObj.read()
+            except (OSError, IOError) as e:
+                echo(e)
+        data = json.loads(data)
+        token = data["token"]
+        return token
+    else:
+        echo("\nYour token file doesn't exists.")
+        echo("\nIt should be present at ~/.evalai/token.json\n")
+        return None
 
 
 def get_headers():

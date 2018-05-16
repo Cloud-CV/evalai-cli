@@ -1,14 +1,14 @@
 import os
-import json
 import requests
+import sys
 
 from click import echo
 
 from pylsy import pylsytable
 
 from evalai.utils.auth import get_headers
-from evalai.utils.urls import urls
-from evalai.utils.common import valid_token
+from evalai.utils.urls import Urls
+from evalai.utils.common import Text, valid_token
 
 
 API_HOST_URL = os.environ.get("EVALAI_API_URL", 'http://localhost:8000')
@@ -17,49 +17,60 @@ API_HOST_URL = os.environ.get("EVALAI_API_URL", 'http://localhost:8000')
 def get_challenges(url):
 
     headers = get_headers()
-    response = requests.get(url, headers=headers)
-    response_json = json.loads(response.text)
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException as err:
+        echo(err)
+        sys.exit(1)
+
+    response_json = response.json()
     if valid_token(response_json):
 
-        column_names = ['ID', 'Challenge Name', 'Short Description']
-        attributes = ['id', 'title', 'short_description']
-        table = pylsytable(column_names)
-
         challenges = response_json["results"]
-        for attribute, column_name in zip(attributes, column_names):
-            items = []
+        if len(challenges) is not 0:
             for challenge in challenges:
-                if attribute == 'short_description':
-                    items.append(challenge[attribute][:50])
-                else:
-                    items.append(challenge[attribute])
-
-            table.add_data(column_name, items)
-        echo(table)
-    else:
-        echo("The authentication token you are using isn't valid. Please try again")
-
+                title = Text.title.format(challenge['title'])
+                challenge_id = "ID: " + Text.idfield.format(challenge['id'])
+                echo("{} {}".format(title, challenge_id))
+                echo(challenge['short_description'])
+                date = "End Date : " + challenge['end_date']
+                echo(Text.subtitle.format(date))
+                echo(Text.br)
+        else:
+            echo("Sorry, no challenges found.")
 
 
 def get_challenge_list():
     """
     Fetches the list of challenges from the backend.
     """
-    url = "{}{}".format(API_HOST_URL, urls["get_challenge_list"])
+    url = "{}{}".format(API_HOST_URL, Urls.challenge_list.value)
     get_challenges(url)
 
 
 def get_past_challenge_list():
     """
-    Fetches the list of challenges from the backend.
+    Fetches the list of past challenges from the backend.
     """
-    url = "{}{}".format(API_HOST_URL, urls["get_past_challenge_list"])
+    url = "{}{}".format(API_HOST_URL, Urls.past_challenge_list.value)
+    get_challenges(url)
+
+
+def get_ongoing_challenge_list():
+    """
+    Fetches the list of ongoing challenges from the backend.
+    """
+    url = "{}{}".format(API_HOST_URL, Urls.challenge_list.value)
     get_challenges(url)
 
 
 def get_future_challenge_list():
     """
-    Fetches the list of challenges from the backend.
+    Fetches the list of future challenges from the backend.
     """
-    url = "{}{}".format(API_HOST_URL, urls["get_future_challenge_list"])
+    url = "{}{}".format(API_HOST_URL, Urls.future_challenge_list.value)
     get_challenges(url)
