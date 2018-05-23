@@ -2,16 +2,31 @@ import os
 import requests
 import sys
 
-from click import echo
+from click import echo, style
 
 from pylsy import pylsytable
 
 from evalai.utils.auth import get_headers
 from evalai.utils.urls import Urls
-from evalai.utils.common import Text, valid_token
+from evalai.utils.common import valid_token
 
 
 API_HOST_URL = os.environ.get("EVALAI_API_URL", 'http://localhost:8000')
+
+
+def print_challenge_table(challenge):
+    br = style("------------------------------------------------------------------", bold=True)
+
+    challenge_title = "\n{}".format(style(challenge["title"], bold=True, fg="green"))
+    challenge_id = "ID: {}\n\n".format(style(str(challenge["id"]), bold=True, fg="blue"))
+
+    title = "{} {}".format(challenge_title, challenge_id)
+
+    description = "{}\n".format(challenge["short_description"])
+    date = "End Date : " + style(challenge["end_date"].split("T")[0], fg="red")
+    date = "\n{}\n\n".format(style(date, bold=True))
+    challenge = "{}{}{}{}".format(title, description, date, br)
+    return challenge
 
 
 def get_challenges(url):
@@ -33,13 +48,8 @@ def get_challenges(url):
         challenges = response_json["results"]
         if len(challenges) is not 0:
             for challenge in challenges:
-                title = Text.title.format(challenge['title'])
-                challenge_id = "ID: " + Text.idfield.format(challenge['id'])
-                echo("{} {}".format(title, challenge_id))
-                echo(challenge['short_description'])
-                date = "End Date : " + challenge['end_date']
-                echo(Text.subtitle.format(date))
-                echo(Text.br)
+                challenge = print_challenge_table(challenge)
+                echo(challenge)
         else:
             echo("Sorry, no challenges found.")
 

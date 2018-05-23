@@ -12,10 +12,10 @@ from evalai.utils.challenges import (
 @click.pass_context
 def challenges(ctx):
     """
-    Challenges and related Options.
+    Challenges and related options.
     """
     if ctx.invoked_subcommand is None:
-        welcome_text = """Welcome to the EvalAI CLI. Use evalai challenges --help for viewing all the options"""
+        welcome_text = """Welcome to the EvalAI CLI. Use evalai challenges --help for viewing all the options."""
         echo(welcome_text)
 
 
@@ -23,7 +23,8 @@ def challenges(ctx):
 @click.pass_context
 def list_challenges(ctx):
     """
-    Lists all challenges.
+    Used to list all the challenges.
+    Invoked by running `evalai challenges list`
     """
     if ctx.invoked_subcommand is None:
         get_challenge_list()
@@ -32,7 +33,8 @@ def list_challenges(ctx):
 @click.command(name='ongoing')
 def list_ongoing_challenges():
     """
-    Lists ongoing challenges.
+    Used to list all the challenges which are active.
+    Invoked by running `evalai challenges list ongoing`
     """
     get_ongoing_challenge_list()
 
@@ -40,7 +42,8 @@ def list_ongoing_challenges():
 @click.command(name='past')
 def list_past_challenges():
     """
-    Lists past challenges.
+    Used to list all the past challenges.
+    Invoked by running `evalai challenges list past`
     """
     get_past_challenge_list()
 
@@ -48,7 +51,8 @@ def list_past_challenges():
 @click.command(name='future')
 def list_future_challenges():
     """
-    Lists future challenges.
+    Used to list all the challenges which are coming up.
+    Invoked by running `evalai challenges list future`
     """
     get_future_challenge_list()
 

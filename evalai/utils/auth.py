@@ -1,12 +1,12 @@
 import os
 import json
-from pathlib import Path
+from os.path import expanduser
 
 from click import echo
 
 
 AUTH_TOKEN = 'token.json'
-AUTH_TOKEN_PATH = "{}/.evalai/{}".format(str(Path.home()), AUTH_TOKEN)
+AUTH_TOKEN_PATH = "{}/.evalai/{}".format(expanduser('~'), AUTH_TOKEN)
 
 
 def get_token():

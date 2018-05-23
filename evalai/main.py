@@ -2,7 +2,6 @@ import click
 
 from click import echo
 
-from .auth import auth
 from .challenges import challenges
 from .submissions import submissions
 from .teams import teams
@@ -20,7 +19,6 @@ def main(ctx):
 
 
 # Command -> evalai auth/challenges/submissions/teams
-main.add_command(auth)
 main.add_command(challenges)
 main.add_command(submissions)
 main.add_command(teams)
