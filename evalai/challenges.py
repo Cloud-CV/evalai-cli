@@ -22,18 +22,19 @@ def challenges(ctx):
 
 @click.group(invoke_without_command=True, name='list')
 @click.pass_context
-@click.option('-participate', default='false',
+@click.option('--participant', is_flag=True,
               help="Show the challenges that you've participated")
-@click.option('-host', default='false',
+@click.option('--host', is_flag=True,
               help="Show the challenges that you've hosted")
-def list_challenges(ctx, participate, host):
+def list_challenges(ctx, participant, host):
     """
-    Lists all challenges.
+    Used to list challenges.
+    Invoked by running `evalai challenges list`
     """
-    if participate == 'true':
-        get_challenge_count("participate")
-    elif host == 'true':
-        get_challenge_count("host")
+    if participant:
+        get_challenge_count(host, participant)
+    elif host:
+        get_challenge_count(host, participant)
     elif ctx.invoked_subcommand is None:
         get_challenge_list()
 
