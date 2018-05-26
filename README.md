@@ -1,9 +1,10 @@
 # EvalAI CLI
 
 Official Command Line utility to use EvalAI in your terminal. 
+
 This package offers almost all of the full suite of features available on the website within your terminal.
-and i
-## Setup
+
+## Development Setup
 
 1. Clone the repository to you machine
 
