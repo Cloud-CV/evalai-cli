@@ -6,7 +6,11 @@ This package offers almost all of the full suite of features available on the we
 
 ## Development Setup
 
-1. Clone the repository to you machine
+1. Clone the repository to your machine
+
+```bash
+git clone https://github.com/Cloud-CV/evalai-cli.git EvalAI-CLI
+```
 
 2. Setup the virtual environment.
 

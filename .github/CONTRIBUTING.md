@@ -11,7 +11,7 @@ We use Github's issue system for logging issues. Moreover, we like to add tags t
 
 ### Pull Requests
 
-Pull Requests are the workhorses of any open source project. When submitting a Pull Request (PR), be sure to tag the corresponding issue so we know what the PR intends to fix.
+Pull Requests are the workhorses of any open source project. When submitting a Pull Request (PR), be sure to tag the corresponding issue so we know what the PR intends to fix. You should take a look at [this](https://help.github.com/articles/closing-issues-using-keywords/) to better understand how to point to issues.
 
 PRs are always squashed and merged and should only be done so by maintainers so that both you, the contributor, and the maintainers are on the same page and can figure out the next steps. 
 
