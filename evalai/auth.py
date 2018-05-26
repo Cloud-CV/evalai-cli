@@ -4,6 +4,6 @@ from click import echo
 
 
 @click.command()
-def challenges():
+def auth():
     """Example script."""
-    echo('Hello Challenges!')
+    echo('Hello Auth!')

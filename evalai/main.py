@@ -2,6 +2,7 @@ import click
 
 from click import echo
 
+from .auth import auth
 from .challenges import challenges
 from .submissions import submissions
 from .teams import teams
@@ -10,15 +11,12 @@ from .teams import teams
 @click.group(invoke_without_command=True)
 @click.pass_context
 def main(ctx):
-    """
-    Welcome to the EvalAI CLI.
-    """
     if ctx.invoked_subcommand is None:
-        welcome_text = """Welcome to the EvalAI CLI. Use evalai --help for viewing all the options"""
-        echo(welcome_text)
+        echo('I was invoked without subcommand')
+    else:
+        echo('I am about to invoke %s' % ctx.invoked_subcommand)
 
-
-# Command -> evalai auth/challenges/submissions/teams
+main.add_command(auth)
 main.add_command(challenges)
 main.add_command(submissions)
 main.add_command(teams)
