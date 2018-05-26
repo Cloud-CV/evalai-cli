@@ -5,7 +5,8 @@ from evalai.utils.challenges import (
                                     get_challenge_list,
                                     get_ongoing_challenge_list,
                                     get_past_challenge_list,
-                                    get_future_challenge_list,)
+                                    get_future_challenge_list,
+                                    get_challenge_count,)
 
 
 @click.group(invoke_without_command=True)
@@ -21,12 +22,19 @@ def challenges(ctx):
 
 @click.group(invoke_without_command=True, name='list')
 @click.pass_context
-def list_challenges(ctx):
+@click.option('-participate', default='false',
+              help="Show the challenges that you've participated")
+@click.option('-host', default='false',
+              help="Show the challenges that you've hosted")
+def list_challenges(ctx, participate, host):
     """
-    Used to list all the challenges.
-    Invoked by running `evalai challenges list`
+    Lists all challenges.
     """
-    if ctx.invoked_subcommand is None:
+    if participate == 'true':
+        get_challenge_count("participate")
+    elif host == 'true':
+        get_challenge_count("host")
+    elif ctx.invoked_subcommand is None:
         get_challenge_list()
 
 
