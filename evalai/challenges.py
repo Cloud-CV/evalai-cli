@@ -16,7 +16,8 @@ def challenges(ctx):
     Challenges and related options.
     """
     if ctx.invoked_subcommand is None:
-        welcome_text = """Welcome to the EvalAI CLI. Use evalai challenges --help for viewing all the options."""
+        welcome_text = ("Welcome to the EvalAI CLI. Use evalai"
+                        "challenges --help for viewing all the options.")
         echo(welcome_text)
 
 

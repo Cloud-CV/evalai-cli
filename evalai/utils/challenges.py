@@ -15,10 +15,13 @@ API_HOST_URL = os.environ.get("EVALAI_API_URL", 'http://localhost:8000')
 
 
 def print_challenge_table(challenge):
-    br = style("------------------------------------------------------------------", bold=True)
+    br = style("----------------------------------------"
+               "--------------------------", bold=True)
 
-    challenge_title = "\n{}".format(style(challenge["title"], bold=True, fg="green"))
-    challenge_id = "ID: {}\n\n".format(style(str(challenge["id"]), bold=True, fg="blue"))
+    challenge_title = "\n{}".format(style(challenge["title"],
+                                    bold=True, fg="green"))
+    challenge_id = "ID: {}\n\n".format(style(str(challenge["id"]),
+                                       bold=True, fg="blue"))
 
     title = "{} {}".format(challenge_title, challenge_id)
 
@@ -131,18 +134,22 @@ def get_teams_challenges(url, teams):
     return challenges
 
 
-def get_challenge_count(is_host, is_participant):
+def get_challenge_count(is_host=False, is_participant=False):
     """
     Gets the challenge the user has participated or hosted.
     """
     challenges = []
 
     if is_host:
-        team_url = "{}{}".format(API_HOST_URL, Urls.host_teams.value)
-        challenge_url = "{}{}".format(API_HOST_URL, Urls.host_challenges.value)
+        team_url = "{}{}".format(API_HOST_URL,
+                                 Urls.host_teams.value)
+        challenge_url = "{}{}".format(API_HOST_URL,
+                                      Urls.host_challenges.value)
     elif is_participant:
-        team_url = "{}{}".format(API_HOST_URL, Urls.participant_teams.value)
-        challenge_url = "{}{}".format(API_HOST_URL, Urls.participant_challenges.value)
+        team_url = "{}{}".format(API_HOST_URL,
+                                 Urls.participant_teams.value)
+        challenge_url = "{}{}".format(API_HOST_URL,
+                                      Urls.participant_challenges.value)
     else:
         echo("Option doesn't exist. Use --help for information")
         sys.exit(1)
