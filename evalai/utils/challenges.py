@@ -2,6 +2,8 @@ import os
 import requests
 import sys
 
+from bs4 import BeautifulSoup
+
 from click import echo, style
 
 from pylsy import pylsytable
@@ -25,7 +27,8 @@ def print_challenge_table(challenge):
 
     title = "{} {}".format(challenge_title, challenge_id)
 
-    description = "{}\n".format(challenge["short_description"])
+    cleaned_desc = BeautifulSoup(challenge["short_description"], "lxml").text
+    description = "{}\n".format(cleaned_desc)
     date = "End Date : " + style(challenge["end_date"].split("T")[0], fg="red")
     date = "\n{}\n\n".format(style(date, bold=True))
     challenge = "{}{}{}{}".format(title, description, date, br)
@@ -179,7 +182,8 @@ def print_phases(phases):
 
         title = "{} {} {}".format(phase_title, challenge_id, phase_id)
 
-        description = "{}\n\n".format(phase["description"])
+        cleaned_desc = BeautifulSoup(phase["description"], "lxml").text
+        description = "{}\n\n".format(cleaned_desc)
         phase = "{}{}{}".format(title, description, br)
         echo(phase)
 
@@ -197,7 +201,7 @@ def get_phase_list(challenge_id):
         response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        echo(err)
+        echo(style("Error: " + response.json()['error'], fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
@@ -220,7 +224,8 @@ def print_phase_details(phase):
 
     title = "{} {} {}".format(phase_title, challenge_id, phase_id)
 
-    description = "{}\n".format(phase["description"])
+    cleaned_desc = BeautifulSoup(phase["description"], "lxml").text
+    description = "{}\n".format(cleaned_desc)
 
     start_date = "Start Date : " + style(phase["start_date"].split("T")[0], fg="green")
     start_date = "\n{}\n".format(style(start_date, bold=True))
@@ -265,7 +270,7 @@ def get_phase_details(challenge_id, phase_id):
         response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        echo(err)
+        echo(style("Error: " + response.json()['error'], fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)

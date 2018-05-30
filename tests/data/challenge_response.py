@@ -23,3 +23,16 @@ challenge_participant_teams = """
 challenge_host_teams = """
 {'next': None, 'previous': None, 'count': 1, 'results': [{'id': 2, 'members': [{'id': 2, 'team_name': 2, 'permissions': 'Admin', 'user': 'host', 'status': 'Self'}], 'team_name': 'South Lisafurt Host Team', 'created_by': 'host'}]}
 """
+
+challenge_phase_list = """
+{"count":2,"next":null,"previous":null,"results":[{"id":19,"name":"Kimberly Phase","description":"Ipsa id minima commodi quo itaque. Reprehenderit eos iusto maiores iusto impedit dolores. Nihil \
+possimus repudiandae animi quasi nulla molestias reiciendis necessitatibus. Minus eos similique facilis accusamus reprehenderit in officiis.","leaderboard_public":true,"start_date":"2018-08-21T18:56:42.789363Z",\
+"end_date":"2019-09-25T18:56:42.789372Z","challenge":10,"max_submissions_per_day":100000,"max_submissions":100000,"is_public":true,"is_active":false,"codename":"phase1"},{"id":20,"name":"Philip Phase",\
+"description":"Est nobis consequatur quam sint in nemo distinctio magni. Eaque a natus laboriosam ipsa molestiae corrupti.","leaderboard_public":true,"start_date":"2018-08-21T18:56:42.789363Z",\
+"end_date":"2019-09-25T18:56:42.789372Z","challenge":10,"max_submissions_per_day":100000,"max_submissions":100000,"is_public":true,"is_active":false,"codename":"phase2"}]}
+"""
+
+challenge_phase_details = """
+{"id":20,"name":"Philip Phase","description":"Est nobis consequatur quam sint in nemo distinctio magni. Eaque a natus laboriosam ipsa molestiae corrupti.","leaderboard_public":true,"start_date":"2018-08-21T18:56:42.789363Z",\
+"end_date":"2019-09-25T18:56:42.789372Z","challenge":10,"max_submissions_per_day":100000,"max_submissions":100000,"is_public":true,"is_active":false,"codename":"phase2"}
+"""

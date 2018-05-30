@@ -32,8 +32,10 @@ setup(
 
     provides=[],
     install_requires=[
+        'bs4',
         'click',
         'colorama',
+        'lxml',
         'pandas',
         'pylsy',
         'requests',

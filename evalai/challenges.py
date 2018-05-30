@@ -82,25 +82,23 @@ def phases(ctx, challenge_id, phase_id):
     """
     if ctx.invoked_subcommand != "list":
         if challenge_id is None or phase_id is None:
-            echo("Please pass in both parameters.")
+            echo("Please pass in both challenge and phase ID.\n"
+                 "evalai challenges phases -c <challenge_id>"
+                 " -p <phase_id >")
         else:
             get_phase_details(challenge_id, phase_id)
 
 
 @click.command(name='list')
 @click.option('-c', '--challenge-id', type=int,
-              help="Challenge ID for viewing its phases.")
+              help="Challenge ID for viewing its phases.",
+              required=True)
 def list_phases(challenge_id):
     """
     Displays phases as a list.
     Invoked by running `evalai challenges phases list`
     """
-
-    if challenge_id is None:
-        echo("Please pass in parameters.")
-    else:
-        challenge_id = int(challenge_id)
-        get_phase_list(challenge_id)
+    get_phase_list(challenge_id)
 
 
 # Command -> evalai challenges list
