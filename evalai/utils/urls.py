@@ -9,3 +9,5 @@ class Urls(Enum):
     host_teams = "/api/hosts/challenge_host_team/"
     host_challenges = "/api/challenges/challenge_host_team/{}/challenge"
     participant_challenges = "/api/participants/participant_team/{}/challenge"
+    participant_team_lists = "/api/participants/participant_team"
+    challenge_participate = "/api/challenges/challenge/{}/participant_team/{}"
