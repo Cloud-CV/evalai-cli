@@ -6,7 +6,9 @@ from evalai.utils.challenges import (
                                     get_ongoing_challenge_list,
                                     get_past_challenge_list,
                                     get_future_challenge_list,
-                                    get_challenge_count,)
+                                    get_challenge_count,
+                                    get_phase_list,
+                                    get_phase_details,)
 
 
 @click.group(invoke_without_command=True)
@@ -67,6 +69,38 @@ def list_future_challenges():
     get_future_challenge_list()
 
 
+@click.group(invoke_without_command=True)
+@click.pass_context
+@click.option('-c', '--challenge-id', type=int,
+              help="Challenge ID for viewing its phases.")
+@click.option('-p', '--phase-id', type=int,
+              help="Phase ID for showing the phase details")
+def phases(ctx, challenge_id, phase_id):
+    """
+    Displays phase and phase related details.
+    Invoked by running `evalai challenges phases`
+    """
+    if ctx.invoked_subcommand != "list":
+        if challenge_id is None or phase_id is None:
+            echo("Please pass in both challenge and phase ID.\n"
+                 "evalai challenges phases -c <challenge_id>"
+                 " -p <phase_id >")
+        else:
+            get_phase_details(challenge_id, phase_id)
+
+
+@click.command(name='list')
+@click.option('-c', '--challenge-id', type=int,
+              help="Challenge ID for viewing its phases.",
+              required=True)
+def list_phases(challenge_id):
+    """
+    Displays phases as a list.
+    Invoked by running `evalai challenges phases list`
+    """
+    get_phase_list(challenge_id)
+
+
 # Command -> evalai challenges list
 challenges.add_command(list_challenges)
 
@@ -74,3 +108,9 @@ challenges.add_command(list_challenges)
 list_challenges.add_command(list_ongoing_challenges)
 list_challenges.add_command(list_past_challenges)
 list_challenges.add_command(list_future_challenges)
+
+# Command -> evalai challenges phases
+challenges.add_command(phases)
+
+# Command -> evalai challenges phases list
+phases.add_command(list_phases)
