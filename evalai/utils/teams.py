@@ -51,7 +51,6 @@ def get_participant_teams():
     except requests.exceptions.RequestException as err:
         echo(err)
         sys.exit(1)
-
     response_json = response.json()
 
     if valid_token(response_json):
@@ -90,7 +89,6 @@ def create_participant_team(team_name):
     except requests.exceptions.RequestException as err:
         echo(err)
         sys.exit(1)
-
     response_json = response.json()
     if response.status_code == 201:
         echo(style("\nThe team {} was successfully created.\n".format(response_json["team_name"]),
@@ -107,7 +105,6 @@ def challenge_participate(challenge_id, participant_team_id):
 
     headers = get_headers()
     headers['Content-Type'] = 'application/json'
-
     try:
         response = requests.post(
                                 url,
