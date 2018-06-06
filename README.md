@@ -29,5 +29,5 @@ $ pip install -r requirements.txt
 2. Install the package locally to try it out.
 
 ```bash
-$ pip install --editable . 
+$ pip install -e . 
 ```
