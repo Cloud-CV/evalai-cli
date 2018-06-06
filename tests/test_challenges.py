@@ -54,28 +54,28 @@ class TestChallenges(BaseTestClass):
     @responses.activate
     def test_challenge_lists(self):
         runner = CliRunner()
-        result = runner.invoke(challenges, ['list'])
+        result = runner.invoke(challenges)
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
     def test_challenge_lists_past(self):
         runner = CliRunner()
-        result = runner.invoke(challenges, ['list', 'past'])
+        result = runner.invoke(challenges, ['past'])
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
     def test_challenge_lists_ongoing(self):
         runner = CliRunner()
-        result = runner.invoke(challenges, ['list', 'ongoing'])
+        result = runner.invoke(challenges, ['ongoing'])
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
     def test_challenge_lists_future(self):
         runner = CliRunner()
-        result = runner.invoke(challenges, ['list', 'future'])
+        result = runner.invoke(challenges, ['future'])
         response_table = result.output
         assert response_table == self.output
 
