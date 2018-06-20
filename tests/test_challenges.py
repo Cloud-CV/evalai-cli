@@ -125,6 +125,7 @@ class TestTeamChallenges(BaseTestClass):
     @responses.activate
     def test_challenge_lists_host(self):
         runner = CliRunner()
+        self.output = "\nHosted Challenges.\n\n" + self.output
         result = runner.invoke(challenges, ['list', '--host'])
         response_table = result.output
         assert response_table == self.output
@@ -132,6 +133,7 @@ class TestTeamChallenges(BaseTestClass):
     @responses.activate
     def test_challenge_lists_participant(self):
         runner = CliRunner()
+        self.output = "\nParticipated Challenges.\n\n" + self.output
         result = runner.invoke(challenges, ['list', '--participant'])
         response_table = result.output
         assert response_table == self.output

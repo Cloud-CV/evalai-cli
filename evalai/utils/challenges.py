@@ -129,29 +129,40 @@ def get_teams_challenges(url, teams):
     return challenges
 
 
-def get_challenge_count(is_host=False, is_participant=False):
+def get_participated_or_hosted_challenges(is_host=False, is_participant=False):
     """
-    Gets the challenge the user has participated or hosted.
+    Function to display the participated or hosted challenges by a user.
     """
-    challenges = []
-
     if is_host:
+        challenges = []
         team_url = "{}{}".format(API_HOST_URL,
                                  URLS.host_teams.value)
         challenge_url = "{}{}".format(API_HOST_URL,
                                       URLS.host_challenges.value)
-    elif is_participant:
+        teams = get_teams(team_url)
+
+        challenges = get_teams_challenges(challenge_url, teams)
+
+        echo(style("\nHosted Challenges.\n", bold=True, bg="blue"))
+        if len(challenges) != 0:
+            for challenge in challenges:
+                print_challenge_table(challenge)
+        else:
+            echo("Sorry, no you haven't hosted any challenges.\n")
+
+    if is_participant:
+        challenges = []
         team_url = "{}{}".format(API_HOST_URL,
                                  URLS.participant_teams.value)
         challenge_url = "{}{}".format(API_HOST_URL,
                                       URLS.participant_challenges.value)
-    else:
-        echo("Option doesn't exist. Use --help for information")
-        sys.exit(1)
+        teams = get_teams(team_url)
 
-    teams = get_teams(team_url)
+        challenges = get_teams_challenges(challenge_url, teams)
 
-    challenges = get_teams_challenges(challenge_url, teams)
-
-    for challenge in challenges:
-        print_challenge_table(challenge)
+        echo(style("\nParticipated Challenges.\n", bold=True, bg="blue"))
+        if len(challenges) != 0:
+            for challenge in challenges:
+                print_challenge_table(challenge)
+        else:
+            echo("Sorry, you haven't participated in any challenges.")
