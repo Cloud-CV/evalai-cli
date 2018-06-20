@@ -4,7 +4,6 @@ import random
 import string
 
 import os.path as osp
-from os.path import expanduser
 
 from evalai.utils.config import AUTH_TOKEN_FILE_NAME, AUTH_TOKEN_DIR
 
