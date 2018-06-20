@@ -4,12 +4,10 @@ import random
 import string
 
 import os.path as osp
-from os.path import expanduser
 
+from evalai.utils.config import AUTH_TOKEN_PATH
 
 random.seed(10)
-FILE = 'token.json'
-AUTH_TOKEN_PATH = "{}/.evalai/".format(expanduser('~'))
 
 
 class BaseTestClass:
