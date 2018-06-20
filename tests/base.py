@@ -5,7 +5,7 @@ import string
 
 import os.path as osp
 
-from evalai.utils.config import AUTH_TOKEN_PATH
+from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN
 
 random.seed(10)
 
@@ -16,7 +16,7 @@ class BaseTestClass:
     def setup_class(cls):
         if not os.path.exists(AUTH_TOKEN_PATH):
             os.makedirs(AUTH_TOKEN_PATH)
-            with open(osp.join(AUTH_TOKEN_PATH, FILE), 'w') as fw:
+            with open(osp.join(AUTH_TOKEN_PATH, AUTH_TOKEN), 'w') as fw:
                 token = ''.join(random.choice(string.ascii_lowercase) for _ in range(40))
                 data = {"token": "{}".format(token)}
                 fw.write(json.dumps(data))
