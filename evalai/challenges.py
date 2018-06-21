@@ -1,11 +1,11 @@
 import click
 
 from evalai.utils.challenges import (
-                                    display_participated_or_hosted_challenges,
                                     display_all_challenge_list,
                                     display_future_challenge_list,
                                     display_ongoing_challenge_list,
-                                    display_past_challenge_list,)
+                                    display_past_challenge_list,
+                                    display_participated_or_hosted_challenges,)
 
 
 @click.group(invoke_without_command=True)
