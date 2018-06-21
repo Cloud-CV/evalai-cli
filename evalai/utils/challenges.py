@@ -150,6 +150,16 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
                                       URLS.host_challenges.value)
         echo(style("\nHosted Challenges\n", bold=True))
 
+        teams = get_participant_or_host_teams(team_url)
+
+        challenges = get_participant_or_host_team_challenges(challenge_url, teams)
+
+        if len(challenges) != 0:
+            for challenge in challenges:
+                pretty_print_challenge_data(challenge)
+        else:
+            echo("Sorry, no challenges found!")
+
     if is_participant:
         team_url = "{}{}".format(API_HOST_URL,
                                  URLS.participant_teams.value)
@@ -157,12 +167,12 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
                                       URLS.participant_challenges.value)
         echo(style("\nParticipated Challenges\n", bold=True))
 
-    teams = get_participant_or_host_teams(team_url)
+        teams = get_participant_or_host_teams(team_url)
 
-    challenges = get_participant_or_host_team_challenges(challenge_url, teams)
+        challenges = get_participant_or_host_team_challenges(challenge_url, teams)
 
-    if len(challenges) != 0:
-        for challenge in challenges:
-            pretty_print_challenge_data(challenge)
-    else:
-        echo("Sorry, no challenges found!")
+        if len(challenges) != 0:
+            for challenge in challenges:
+                pretty_print_challenge_data(challenge)
+        else:
+            echo("Sorry, no challenges found!")
