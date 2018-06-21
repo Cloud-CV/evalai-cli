@@ -31,7 +31,6 @@ def pretty_print_challenge_data(challenge):
 
 
 def display_challenges(url):
-
     """
     Function to fetch & display the challenge list based on API
     """
