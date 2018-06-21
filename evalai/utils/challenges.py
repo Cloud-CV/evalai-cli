@@ -157,7 +157,7 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
                                       URLS.participant_challenges.value)
         echo(style("\nParticipated Challenges\n", bold=True))
 
-    teams = get_partcipant_or_host_teams(team_url)
+    teams = get_participant_or_host_teams(team_url)
 
     challenges = get_participant_or_host_team_challenges(challenge_url, teams)
 
