@@ -90,7 +90,7 @@ def display_future_challenge_list():
     display_challenges(url)
 
 
-def get_partcipant_or_host_teams(url):
+def get_participant_or_host_teams(url):
     """
     Returns the participant or host teams corresponding to the user
     """
