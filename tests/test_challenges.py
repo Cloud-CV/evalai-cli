@@ -139,3 +139,13 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
         result = runner.invoke(challenges, ['--participant'])
         response = result.output
         assert response == self.output
+
+    @responses.activate
+    def test_participant_and_host_challenge_lists(self):
+        runner = CliRunner()
+        participant_string = "\nParticipated Challenges\n\n"
+        host_string = "\nHosted Challenges\n\n"
+        self.output = "{}{}{}{}".format(host_string, self.output, participant_string, self.output)
+        result = runner.invoke(challenges, ['--participant', '--host'])
+        response = result.output
+        assert response == self.output
