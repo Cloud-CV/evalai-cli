@@ -1,15 +1,19 @@
+import os
 import requests
 import sys
 
 from click import echo, style
 
-from evalai.utils.auth import get_headers
-from evalai.utils.common import valid_token
+from evalai.utils.auth import get_request_header
+from evalai.utils.common import validate_token
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
 
-def print_challenge_table(challenge):
+def pretty_print_challenge_data(challenge):
+    """
+    Function to print the challenge data
+    """
     br = style("----------------------------------------"
                "--------------------------", bold=True)
 
@@ -21,17 +25,21 @@ def print_challenge_table(challenge):
     title = "{} {}".format(challenge_title, challenge_id)
 
     description = "{}\n".format(challenge["short_description"])
-    date = "End Date : " + style(challenge["end_date"].split("T")[0], fg="red")
-    date = "\n{}\n\n".format(style(date, bold=True))
-    challenge = "{}{}{}{}".format(title, description, date, br)
+    end_date = "End Date : " + style(challenge["end_date"].split("T")[0], fg="red")
+    end_date = "\n{}\n\n".format(style(end_date, bold=True))
+    challenge = "{}{}{}{}".format(title, description, end_date, br)
     echo(challenge)
 
 
-def get_challenges(url):
+def display_challenges(url):
 
-    headers = get_headers()
+    """
+    Function to fetch & display the challenge list based on API
+    """
+
+    header = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=header)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         echo(err)
@@ -40,57 +48,57 @@ def get_challenges(url):
         echo(err)
         sys.exit(1)
 
-    response_json = response.json()
-    if valid_token(response_json):
+    response = response.json()
+    if validate_token(response):
 
-        challenges = response_json["results"]
+        challenges = response["results"]
         if len(challenges) is not 0:
             for challenge in challenges:
-                print_challenge_table(challenge)
+                pretty_print_challenge_data(challenge)
         else:
-            echo("Sorry, no challenges found.")
+            echo("Sorry, no challenges found!")
 
 
-def get_challenge_list():
+def display_all_challenge_list():
     """
-    Fetches the list of challenges from the backend.
+    Displays the list of all challenges from the backend
     """
     url = "{}{}".format(API_HOST_URL, URLS.challenge_list.value)
-    get_challenges(url)
+    display_challenges(url)
 
 
-def get_past_challenge_list():
+def display_past_challenge_list():
     """
-    Fetches the list of past challenges from the backend.
+    Displays the list of past challenges from the backend
     """
     url = "{}{}".format(API_HOST_URL, URLS.past_challenge_list.value)
-    get_challenges(url)
+    display_challenges(url)
 
 
-def get_ongoing_challenge_list():
+def display_ongoing_challenge_list():
     """
-    Fetches the list of ongoing challenges from the backend.
+    Displays the list of ongoing challenges from the backend
     """
     url = "{}{}".format(API_HOST_URL, URLS.challenge_list.value)
-    get_challenges(url)
+    display_challenges(url)
 
 
-def get_future_challenge_list():
+def display_future_challenge_list():
     """
-    Fetches the list of future challenges from the backend.
+    Displays the list of future challenges from the backend
     """
     url = "{}{}".format(API_HOST_URL, URLS.future_challenge_list.value)
-    get_challenges(url)
+    display_challenges(url)
 
 
-def get_teams(url):
+def get_partcipant_or_host_teams(url):
     """
-    Returns the teams corresponding to the user.
+    Returns the participant or host teams corresponding to the user
     """
-    headers = get_headers()
+    header = get_request_header()
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=header)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         echo(err)
@@ -99,24 +107,24 @@ def get_teams(url):
         echo(err)
         sys.exit(1)
 
-    response_json = response.json()
+    response = response.json()
 
-    if valid_token(response_json):
-        return response_json['results']
+    if validate_token(response):
+        return response['results']
     else:
-        echo("The token is not valid. Try again.")
+        echo("The authentication token is not valid. Please try again!")
         sys.exit(1)
 
 
-def get_teams_challenges(url, teams):
+def get_participant_or_host_team_challenges(url, teams):
     """
-    Returns the challenges corresponding to the teams.
+    Returns the challenges corresponding to the participant or host teams
     """
     challenges = []
     for team in teams:
-        headers = get_headers()
+        header = get_request_header()
         try:
-            response = requests.get(url.format(team['id']), headers=headers)
+            response = requests.get(url.format(team['id']), headers=header)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             echo(err)
@@ -124,45 +132,38 @@ def get_teams_challenges(url, teams):
         except requests.exceptions.RequestException as err:
             echo(err)
             sys.exit(1)
-        response_json = response.json()
-        challenges = challenges + response_json['results']
+        response = response.json()
+        challenges += response['results']
     return challenges
 
 
-def get_participated_or_hosted_challenges(is_host=False, is_participant=False):
+def display_participated_or_hosted_challenges(is_host=False, is_participant=False):
     """
-    Function to display the participated or hosted challenges by a user.
+    Function to display the participated or hosted challenges by a user
     """
+
+    challenges = []
+
     if is_host:
-        challenges = []
         team_url = "{}{}".format(API_HOST_URL,
                                  URLS.host_teams.value)
         challenge_url = "{}{}".format(API_HOST_URL,
                                       URLS.host_challenges.value)
-        teams = get_teams(team_url)
-
-        challenges = get_teams_challenges(challenge_url, teams)
-
-        echo(style("\nHosted Challenges.\n", bold=True, bg="blue"))
-        if len(challenges) != 0:
-            for challenge in challenges:
-                print_challenge_table(challenge)
-        else:
-            echo("Sorry, no you haven't hosted any challenges.\n")
+        echo(style("\nHosted Challenges\n", bold=True))
 
     if is_participant:
-        challenges = []
         team_url = "{}{}".format(API_HOST_URL,
                                  URLS.participant_teams.value)
         challenge_url = "{}{}".format(API_HOST_URL,
                                       URLS.participant_challenges.value)
-        teams = get_teams(team_url)
+        echo(style("\nParticipated Challenges\n", bold=True))
 
-        challenges = get_teams_challenges(challenge_url, teams)
+    teams = get_partcipant_or_host_teams(team_url)
 
-        echo(style("\nParticipated Challenges.\n", bold=True, bg="blue"))
-        if len(challenges) != 0:
-            for challenge in challenges:
-                print_challenge_table(challenge)
-        else:
-            echo("Sorry, you haven't participated in any challenges.")
+    challenges = get_participant_or_host_team_challenges(challenge_url, teams)
+
+    if len(challenges) != 0:
+        for challenge in challenges:
+            pretty_print_challenge_data(challenge)
+    else:
+        echo("Sorry, no challenges found!")

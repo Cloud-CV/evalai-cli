@@ -1,11 +1,11 @@
 import click
 
 from evalai.utils.challenges import (
-                                    get_challenge_list,
-                                    get_ongoing_challenge_list,
-                                    get_past_challenge_list,
-                                    get_future_challenge_list,
-                                    get_participated_or_hosted_challenges,)
+                                    display_participated_or_hosted_challenges,
+                                    display_all_challenge_list,
+                                    display_future_challenge_list,
+                                    display_ongoing_challenge_list,
+                                    display_past_challenge_list,)
 
 
 @click.group(invoke_without_command=True)
@@ -16,37 +16,41 @@ from evalai.utils.challenges import (
               help="List the challenges that you've hosted")
 def challenges(ctx, participant, host):
     """
-    Lists challenges.
+    Lists challenges
+
     Invoked by running `evalai challenges`
     """
     if participant or host:
-        get_participated_or_hosted_challenges(host, participant)
+        display_participated_or_hosted_challenges(host, participant)
     elif ctx.invoked_subcommand is None:
-        get_challenge_list()
+        display_all_challenge_list()
 
 
 @challenges.command()
 def ongoing():
     """
-    List all active challenges.
+    List all active challenges
+
     Invoked by running `evalai challenges ongoing`
     """
-    get_ongoing_challenge_list()
+    display_ongoing_challenge_list()
 
 
 @challenges.command()
 def past():
     """
-    List all past challenges.
+    List all past challenges
+
     Invoked by running `evalai challenges past`
     """
-    get_past_challenge_list()
+    display_past_challenge_list()
 
 
 @challenges.command()
 def future():
     """
-    List all upcoming challenges.
+    List all upcoming challenges
+
     Invoked by running `evalai challenges future`
     """
-    get_future_challenge_list()
+    display_future_challenge_list()
