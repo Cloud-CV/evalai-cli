@@ -1,3 +1,4 @@
+import json
 import responses
 
 from click.testing import CliRunner
@@ -7,9 +8,10 @@ from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
 from .base import BaseTestClass
+from tests.data import challenge_response
 
 
-class TestRequests(BaseTestClass):
+class TestHTTPErrorRequests(BaseTestClass):
 
     def setup(self):
 
@@ -34,39 +36,39 @@ class TestRequests(BaseTestClass):
         self.expected = "404 Client Error: Not Found for url: {}"
 
     @responses.activate
-    def test_404_challenge_list(self):
+    def test_challenge_list_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges)
-        response_table = result.output.rstrip()
+        response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.challenge_list.value)
-        assert response_table == self.expected.format(url)
+        assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_past_challenge_list(self):
+    def test_past_challenge_list_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['past'])
-        response_table = result.output.rstrip()
+        response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.past_challenge_list.value)
-        assert response_table == self.expected.format(url)
+        assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_ongoing_challenge_list(self):
+    def test_ongoing_challenge_list_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['ongoing'])
-        response_table = result.output.rstrip()
+        response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.challenge_list.value)
-        assert response_table == self.expected.format(url)
+        assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_future_challenge_list(self):
+    def test_future_challenge_list_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['future'])
-        response_table = result.output.rstrip()
+        response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.future_challenge_list.value)
-        assert response_table == self.expected.format(url)
+        assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_host_challenge_list(self):
+    def test_host_challenge_list_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['--host'])
         response = result.output.rstrip()
@@ -74,7 +76,7 @@ class TestRequests(BaseTestClass):
         assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_participant_challenge_lists(self):
+    def test_participant_challenge_lists_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['--participant'])
         response = result.output.rstrip()
@@ -82,9 +84,121 @@ class TestRequests(BaseTestClass):
         assert response == self.expected.format(url)
 
     @responses.activate
-    def test_404_participant_and_host_challenge_lists(self):
+    def test_participant_and_host_challenge_lists_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['--participant', '--host'])
         response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.host_teams.value)
         assert response == self.expected.format(url)
+
+
+class TestChallengesSpecialCases(BaseTestClass):
+
+    def setup(self):
+
+        participant_team_data = json.loads(challenge_response.challenge_participant_teams)
+
+        url = "{}{}"
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_teams.value),
+                      json=participant_team_data, status=200)
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_challenges.value).format("3"),
+                      status=404)
+
+        self.expected = "404 Client Error: Not Found for url: {}"
+
+    @responses.activate
+    def test_participant_challenge_lists_for_http_error_404(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['--participant'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.participant_challenges.value)
+        assert response == self.expected.format(url.format("3"))
+
+
+class TestChallengesExceptionSpecialCases(BaseTestClass):
+
+    def setup(self):
+
+        participant_team_data = json.loads(challenge_response.challenge_participant_teams)
+
+        url = "{}{}"
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_teams.value),
+                      json=participant_team_data, status=200)
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_challenges.value).format("3"),
+                      body=Exception('...'))
+
+        self.expected = "404 Client Error: Not Found for url: {}"
+
+    @responses.activate
+    def test_participant_challenge_lists_for_http_error_404(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['--participant'])
+        assert result.exit_code == -1
+
+
+class TestRequestExceptionRequests(BaseTestClass):
+
+    def setup(self):
+
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.past_challenge_list.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.future_challenge_list.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_teams.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_teams.value), body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_challenges.value).format("3"),
+                      body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_challenges.value).format("2"),
+                      body=Exception('...'))
+
+    @responses.activate
+    def test_challenge_list_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges)
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_past_challenge_list_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['past'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_ongoing_challenge_list_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['ongoing'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_future_challenge_list_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['future'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_host_challenge_list_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['--host'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_participant_challenge_lists_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['--participant'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_participant_and_host_challenge_lists_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges, ['--participant', '--host'])
+        assert result.exit_code == -1

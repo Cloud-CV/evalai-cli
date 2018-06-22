@@ -80,6 +80,70 @@ class TestChallenges(BaseTestClass):
         assert response_table == self.output
 
 
+class TestChallengesWithNoChallengeData(BaseTestClass):
+
+    def setup(self):
+
+        participant_team_data = json.loads(challenge_response.challenge_participant_teams)
+        host_team_data = json.loads(challenge_response.challenge_host_teams)
+
+        url = "{}{}"
+
+        challenges = '{"count": 2, "next": null, "previous": null,"results": []}'
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value),
+                      json=json.loads(challenges), status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_teams.value),
+                      json=participant_team_data, status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_teams.value),
+                      json=host_team_data, status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_challenges.value).format("3"),
+                      json=json.loads(challenges), status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_challenges.value).format("2"),
+                      json=json.loads(challenges), status=200)
+
+        self.output = "Sorry, no challenges found!\n"
+
+    @responses.activate
+    def test_challenge_lists_with_no_challenge_data(self):
+        runner = CliRunner()
+        result = runner.invoke(challenges)
+        response = result.output
+        assert response == self.output
+
+    @responses.activate
+    def test_host_challenge_list_with_no_challenge_data(self):
+        runner = CliRunner()
+        expected = "\nHosted Challenges\n\n"
+        self.output = "{}{}".format(expected, self.output)
+        result = runner.invoke(challenges, ['--host'])
+        response = result.output
+        assert response == self.output
+
+    @responses.activate
+    def test_participant_challenge_lists_with_no_challenge_data(self):
+        runner = CliRunner()
+        expected = "\nParticipated Challenges\n\n"
+        self.output = "{}{}".format(expected, self.output)
+        result = runner.invoke(challenges, ['--participant'])
+        response = result.output
+        assert response == self.output
+
+    @responses.activate
+    def test_participant_and_host_challenge_lists_with_no_challenge_data(self):
+        runner = CliRunner()
+        participant_string = "\nParticipated Challenges\n\n"
+        host_string = "\nHosted Challenges\n\n"
+        self.output = "{}{}{}{}".format(host_string, self.output, participant_string, self.output)
+        result = runner.invoke(challenges, ['--participant', '--host'])
+        response = result.output
+        assert response == self.output
+
+
 class TestParticipantOrHostTeamChallenges(BaseTestClass):
 
     def setup(self):
