@@ -11,7 +11,7 @@ from tests.data import challenge_response
 from .base import BaseTestClass
 
 
-class TestChallenges(BaseTestClass):
+class TestDisplayChallenges(BaseTestClass):
 
     def setup(self):
 
@@ -52,35 +52,35 @@ class TestChallenges(BaseTestClass):
             self.output = "{}{}".format(self.output, challenge)
 
     @responses.activate
-    def test_challenge_lists(self):
+    def test_diaplay_all_challenge_lists(self):
         runner = CliRunner()
         result = runner.invoke(challenges)
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
-    def test_past_challenge_lists(self):
+    def test_display_past_challenge_lists(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['past'])
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
-    def test_ongoing_challenge_lists(self):
+    def test_display_ongoing_challenge_lists(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['ongoing'])
         response_table = result.output
         assert response_table == self.output
 
     @responses.activate
-    def test_future_challenge_lists(self):
+    def test_display_future_challenge_lists(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['future'])
         response_table = result.output
         assert response_table == self.output
 
 
-class TestChallengesWithNoChallengeData(BaseTestClass):
+class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
 
     def setup(self):
 
@@ -109,14 +109,14 @@ class TestChallengesWithNoChallengeData(BaseTestClass):
         self.output = "Sorry, no challenges found!\n"
 
     @responses.activate
-    def test_challenge_lists_with_no_challenge_data(self):
+    def test_display_all_challenge_lists_with_no_challenge_data(self):
         runner = CliRunner()
         result = runner.invoke(challenges)
         response = result.output
         assert response == self.output
 
     @responses.activate
-    def test_host_challenge_list_with_no_challenge_data(self):
+    def test_display_host_challenge_list_with_no_challenge_data(self):
         runner = CliRunner()
         expected = "\nHosted Challenges\n\n"
         self.output = "{}{}".format(expected, self.output)
@@ -125,7 +125,7 @@ class TestChallengesWithNoChallengeData(BaseTestClass):
         assert response == self.output
 
     @responses.activate
-    def test_participant_challenge_lists_with_no_challenge_data(self):
+    def test_display_participant_challenge_lists_with_no_challenge_data(self):
         runner = CliRunner()
         expected = "\nParticipated Challenges\n\n"
         self.output = "{}{}".format(expected, self.output)
@@ -134,7 +134,7 @@ class TestChallengesWithNoChallengeData(BaseTestClass):
         assert response == self.output
 
     @responses.activate
-    def test_participant_and_host_challenge_lists_with_no_challenge_data(self):
+    def test_display_participant_and_host_challenge_lists_with_no_challenge_data(self):
         runner = CliRunner()
         participant_string = "\nParticipated Challenges\n\n"
         host_string = "\nHosted Challenges\n\n"
@@ -187,7 +187,7 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
             self.output = "{}{}".format(self.output, challenge)
 
     @responses.activate
-    def test_host_challenge_list(self):
+    def test_display_host_challenge_list(self):
         runner = CliRunner()
         expected = "\nHosted Challenges\n\n"
         self.output = "{}{}".format(expected, self.output)
@@ -196,7 +196,7 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
         assert response == self.output
 
     @responses.activate
-    def test_participant_challenge_lists(self):
+    def test_display_participant_challenge_lists(self):
         runner = CliRunner()
         expected = "\nParticipated Challenges\n\n"
         self.output = "{}{}".format(expected, self.output)
@@ -205,7 +205,7 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
         assert response == self.output
 
     @responses.activate
-    def test_participant_and_host_challenge_lists(self):
+    def test_display_participant_and_host_challenge_lists(self):
         runner = CliRunner()
         participant_string = "\nParticipated Challenges\n\n"
         host_string = "\nHosted Challenges\n\n"
