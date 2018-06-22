@@ -4,6 +4,7 @@ import sys
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
 from click import echo, style
+from datetime import datetime
 
 from evalai.utils.auth import get_request_header
 from evalai.utils.common import validate_token, convert_UTC_date_to_local
@@ -173,6 +174,14 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
         echo(style("\nParticipated Challenges\n", bold=True))
 
         if len(challenges) != 0:
+
+            # Filter out past/unapproved/unpublished challenges.
+            challenges = list(filter(lambda challenge:
+                                     datetime.strptime(challenge['end_date'], "%Y-%m-%dT%H:%M:%SZ") > datetime.now() and
+                                     challenge["approved_by_admin"] and
+                                     challenge["published"],
+                                     challenges))
+
             for challenge in challenges:
                 pretty_print_challenge_data(challenge)
         else:
