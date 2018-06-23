@@ -40,3 +40,17 @@ create_team = """
     "team_name": "TestTeam"
 }
 """
+
+
+object_error = """
+{
+    "error": "Sorry, the object does not exist."
+}
+"""
+
+
+participant_team_already_exists_error = """
+{
+    "team_name": ["participant team with this team name already exists."]
+}
+"""

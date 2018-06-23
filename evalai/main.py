@@ -21,6 +21,5 @@ def main(ctx):
 
 main.add_command(challenges)
 main.add_command(challenge)
-
 main.add_command(submissions)
 main.add_command(teams)
