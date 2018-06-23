@@ -10,6 +10,8 @@ from evalai.utils.common import validate_token
 from evalai.utils.urls import URLS
 
 
+EVALAI_ERROR_CODES = [400, 401, 406]
+
 API_HOST_URL = os.environ.get("EVALAI_API_URL", 'http://localhost:8000')
 
 
@@ -46,7 +48,10 @@ def display_participant_teams():
         response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        echo(style("Error: " + response.json()['error'], fg="red", bold=True))
+        if (response.status_code in EVALAI_ERROR_CODES):
+            echo(style("Error: " + response.json()["error"], fg="red", bold=True))
+        else:
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
@@ -81,10 +86,13 @@ def create_participant_team(team_name):
                                 )
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        if "team_name" in response.json().keys():
-            echo(style("Error: {}".format(response.json()["team_name"][0]), fg="red", bold=True))
+        if (response.status_code in EVALAI_ERROR_CODES):
+            if "team_name" in response.json().keys():
+                echo(style("Error: {}".format(response.json()["team_name"][0]), fg="red", bold=True))
+            else:
+                echo(style("Error: " + response.json()['error'], fg="red", bold=True))
         else:
-            echo(style("Error: " + response.json()['error'], fg="red", bold=True))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
@@ -114,7 +122,10 @@ def challenge_participate(challenge_id, participant_team_id):
                                 )
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        echo(style("Error: " + response.json()['error'], fg="red", bold=True))
+        if (response.status_code in EVALAI_ERROR_CODES):
+            echo(style("Error: " + response.json()["error"], fg="red", bold=True))
+        else:
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
