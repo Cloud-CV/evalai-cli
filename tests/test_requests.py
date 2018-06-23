@@ -3,7 +3,7 @@ import responses
 
 from click.testing import CliRunner
 
-from evalai.challenges import challenges
+from evalai.challenges import challenge, challenges
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
@@ -16,6 +16,9 @@ class TestHTTPErrorRequests(BaseTestClass):
     def setup(self):
 
         url = "{}{}"
+
+        # Challenge URLS
+
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value), status=404)
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.past_challenge_list.value), status=404)
@@ -32,6 +35,14 @@ class TestHTTPErrorRequests(BaseTestClass):
                       status=404)
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_challenges.value).format("2"), status=404)
+
+        # Teams URLS
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format('10'),
+                      status=404)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format('10', '20'),
+                      status=404)
 
         self.expected = "404 Client Error: Not Found for url: {}"
 
@@ -90,6 +101,52 @@ class TestHTTPErrorRequests(BaseTestClass):
         response = result.output.rstrip()
         url = "{}{}".format(API_HOST_URL, URLS.host_teams.value)
         assert response == self.expected.format(url)
+
+    @responses.activate
+    def test_challenge_phase_lists_for_http_error_404(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phases'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value).format("10")
+        assert response == self.expected.format(url)
+
+    @responses.activate
+    def test_challenge_phase_details_for_http_error_404(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phase', '20'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.challenge_phase_detail.value).format("10", "20")
+        assert response == self.expected.format(url)
+
+
+class TestPhasesObjectDoesNotExist(BaseTestClass):
+
+    def setup(self):
+
+        error_data = json.loads(challenge_response.object_error)
+        url = "{}{}"
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format('10'),
+                      json=error_data, status=406)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format('10', '20'),
+                      json=error_data, status=406)
+
+        self.expected = "Error: Sorry, the object does not exist."
+
+    @responses.activate
+    def test_display_phase_lists_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phases'])
+        response = result.output.rstrip()
+        assert response == self.expected
+
+    @responses.activate
+    def test_display_phase_details_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phase', '20'])
+        response = result.output.rstrip()
+        assert response == self.expected
 
 
 class TestGetParticipantOrHostTeamChallengesHTTPErrorRequests(BaseTestClass):
@@ -161,6 +218,14 @@ class TestRequestForExceptions(BaseTestClass):
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_challenges.value).format("2"),
                       body=Exception('...'))
 
+        # Teams URLS
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format('10'),
+                      body=Exception('...'))
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format('10', '20'),
+                      body=Exception('...'))
+
     @responses.activate
     def test_display_challenge_list_for_request_exception(self):
         runner = CliRunner()
@@ -201,4 +266,16 @@ class TestRequestForExceptions(BaseTestClass):
     def test_display_participant_and_host_challenge_lists_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenges, ['--participant', '--host'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_challenge_phase_lists_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phases'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_challenge_phase_details_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phase', '20'])
         assert result.exit_code == -1
