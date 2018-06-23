@@ -119,6 +119,36 @@ class TestHTTPErrorRequests(BaseTestClass):
         assert response == self.expected.format(url)
 
 
+class TestPhasesObjectDoesNotExist(BaseTestClass):
+
+    def setup(self):
+
+        error_data = json.loads(challenge_response.object_error)
+        url = "{}{}"
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format('10'),
+                      json=error_data, status=406)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format('10', '20'),
+                      json=error_data, status=406)
+
+        self.expected = "Error: Sorry, the object does not exist."
+
+    @responses.activate
+    def test_display_phase_lists_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phases'])
+        response = result.output.rstrip()
+        assert response == self.expected
+
+    @responses.activate
+    def test_display_phase_details_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phase', '20'])
+        response = result.output.rstrip()
+        assert response == self.expected
+
+
 class TestGetParticipantOrHostTeamChallengesHTTPErrorRequests(BaseTestClass):
 
     def setup(self):

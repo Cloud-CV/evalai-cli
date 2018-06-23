@@ -208,7 +208,6 @@ def display_challenge_phase_list(challenge_id):
     url = "{}{}".format(API_HOST_URL, url)
     url = url.format(challenge_id)
     headers = get_request_header()
-
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
