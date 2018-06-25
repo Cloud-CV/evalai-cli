@@ -11,3 +11,5 @@ class URLS(Enum):
     participant_challenges = "/api/participants/participant_team/{}/challenge"
     participant_team_list = "/api/participants/participant_team"
     participate_in_a_challenge = "/api/challenges/challenge/{}/participant_team/{}"
+    submit_file = "/api/jobs/challenge/{}/challenge_phase/{}/submission/"
+    submission = "/api/jobs/submission/{}"
