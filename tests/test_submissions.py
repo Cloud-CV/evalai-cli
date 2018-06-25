@@ -22,11 +22,11 @@ class TestSubmission:
                       json=self.submission, status=200)
 
     @responses.activate
-    def test_get_submission(self):
+    def test_display_submission_details(self):
         team_title = "\n{}".format(self.submission['participant_team_name'])
         sid = "Submission ID: {}\n".format(str(self.submission['id']))
 
-        title = "{} {}".format(team_title, sid)
+        team = "{} {}".format(team_title, sid)
 
         status = "\nSubmission Status : {}\n".format(
                                     self.submission['status'])
@@ -35,7 +35,7 @@ class TestSubmission:
         submitted_at = "\nSubmission Status : {}\n".format(
                                     self.submission['submitted_at'].split('T')[0])
 
-        phase = "{}{}{}{}\n".format(title, status, execution_time, submitted_at)
+        phase = "{}{}{}{}\n".format(team, status, execution_time, submitted_at)
 
         runner = CliRunner()
         result = runner.invoke(submission, ['9'])
@@ -43,7 +43,7 @@ class TestSubmission:
         assert response == phase
 
     @responses.activate
-    def test_submission_string_argument(self):
+    def test_display_submission_details_with_a_string_argument(self):
         expected = ("Usage: submission [OPTIONS] SUBMISSION COMMAND [ARGS]...\n"
                     "\nError: Invalid value for \"SUBMISSION\": two is not a valid integer\n")
         runner = CliRunner()
@@ -52,7 +52,7 @@ class TestSubmission:
         assert response == expected
 
     @responses.activate
-    def test_submission_no_argument(self):
+    def test_display_submission_details_with_no_argument(self):
         expected = ("Usage: submission [OPTIONS] SUBMISSION COMMAND [ARGS]...\n"
                     "\nError: Missing argument \"SUBMISSION\".\n")
         runner = CliRunner()
@@ -71,7 +71,7 @@ class TestMakeSubmission:
                       json=self.submission, status=200)
 
     @responses.activate
-    def test_submit_not_file(self):
+    def test_submission_when_file_is_not_valid(self):
         expected = ("Usage: challenge phase submit [OPTIONS] FILE\n"
                     "\nError: Invalid value for \"FILE\": Could not open file: file: No such file or directory\n")
         runner = CliRunner()
@@ -80,7 +80,7 @@ class TestMakeSubmission:
         assert response == expected
 
     @responses.activate
-    def test_submit_file(self):
+    def test_submission_when_file_is_valid(self):
         expected = ("\nYour file was successfully submitted.\n\n")
 
         runner = CliRunner()

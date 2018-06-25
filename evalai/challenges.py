@@ -7,7 +7,7 @@ from evalai.utils.challenges import (
                                     display_past_challenge_list,
                                     display_participated_or_hosted_challenges,)
 from evalai.utils.teams import participate_in_a_challenge
-from evalai.utils.submissions import submit_file
+from evalai.utils.submissions import submit_a_file
 
 
 class Challenge(object):
@@ -110,12 +110,12 @@ def phase(ctx, phase):
 @click.argument('FILE', type=click.File('rb'))
 def submit(ctx, file):
     """
-    Make a submission to a challenge.
+    Make submission to a challenge.
     """
     """
     Invoked by running `evalai challenge CHALLENGE phase PHASE submit FILE`
     """
-    submit_file(ctx.challenge_id, ctx.phase_id, file)
+    submit_a_file(ctx.challenge_id, ctx.phase_id, file)
 
 
 challenge.add_command(phase)

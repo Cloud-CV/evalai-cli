@@ -5,6 +5,7 @@ from click.testing import CliRunner
 
 from evalai.challenges import challenge, challenges
 from evalai.teams import teams
+from evalai.submissions import submission
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
@@ -45,6 +46,12 @@ class TestHTTPErrorRequests(BaseTestClass):
 
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format("2", "3"),
                       status=404)
+
+        # Submission URLS
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"), status=404)
+
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_file.value).format("1", "2"), status=404)
 
         self.expected = "404 Client Error: Not Found for url: {}"
 
@@ -133,6 +140,26 @@ class TestHTTPErrorRequests(BaseTestClass):
         url = "{}{}".format(API_HOST_URL, URLS.participate_in_a_challenge.value).format("2", "3")
         expected = "{}{}".format(self.expected.format(url), "\n")
         assert response == expected
+
+    @responses.activate
+    def test_display_submission_details_for_http_error_404(self):
+        runner = CliRunner()
+        result = runner.invoke(submission, ['9'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.submission.value).format("9")
+        assert response == self.expected.format(url)
+
+    @responses.activate
+    def test_submission_when_file_for_http_error_404(self):
+        runner = CliRunner()
+        url = "{}{}".format(API_HOST_URL, URLS.submit_file.value).format("1", "2")
+        with runner.isolated_filesystem():
+            with open('test_file.txt', 'w') as f:
+                f.write('1 2 3 4 5 6')
+
+            result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "test_file.txt"])
+            response = result.output.rstrip()
+            assert response == self.expected.format(url)
 
 
 class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
@@ -283,6 +310,13 @@ class TestRequestForExceptions(BaseTestClass):
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format("2", "3"),
                       body=Exception('...'))
 
+        # Submission URLS
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"), body=Exception('...'))
+
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_file.value).format("1", "2"),
+                      body=Exception('...'))
+
     @responses.activate
     def test_display_challenge_list_for_request_exception(self):
         runner = CliRunner()
@@ -342,3 +376,19 @@ class TestRequestForExceptions(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'participate', '3'])
         assert result.exit_code == -1
+
+    @responses.activate
+    def test_display_submission_details_for_request_exception(self):
+        runner = CliRunner()
+        result = runner.invoke(submission, ['9'])
+        assert result.exit_code == -1
+
+    @responses.activate
+    def test_submission_when_file_for_http_error_404(self):
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open('test_file.txt', 'w') as f:
+                f.write('1 2 3 4 5 6')
+
+            result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "test_file.txt"])
+            assert result.exit_code == -1
