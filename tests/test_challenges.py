@@ -3,6 +3,7 @@ import responses
 
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
+from datetime import datetime
 
 from evalai.challenges import (challenge,
                                challenges)
@@ -301,49 +302,54 @@ class TestDisplayChallengePhases(BaseTestClass):
         assert response == phase
 
 
-class TestSubmission(BaseTestClass):
+class TestDisplaySubmission(BaseTestClass):
 
     def setup(self):
         json_data = json.loads(submission_response.submission)
 
         url = "{}{}"
-        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submissions.value).format("3", "7"),
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.my_submissions.value).format("3", "7"),
                       json=json_data, status=200)
         self.submissions = json_data["results"]
 
     @responses.activate
-    def test_submissions(self):
-        table = BeautifulTable()
-        attributes = ["participant_team_name", "method_name", "execution_time", "status", "submitted_at"]
-        table.column_headers = attributes
+    def test_display_my_submission_details(self):
+        table = BeautifulTable(max_width=80)
+        attributes = ["id", "participant_team_name", "execution_time", "status"]
+        columns_attributes = ["ID", "Participant Team", "Execution Time(sec)", "Status", "Submitted At", "Method Name"]
+        table.column_headers = columns_attributes
+
         for submission in self.submissions:
-            team_name = submission["participant_team_name"]
-            method_name = submission["method_name"]
-            execution_time = submission["execution_time"]
-            status = submission["status"]
-            submitted = submission["submitted_at"].split("T")[0]
-            value = [team_name, method_name, execution_time, status, submitted]
-            table.append_row(value)
+            # Format date
+            date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            date = date.strftime('%D %r')
+
+            # Check for empty method name
+            method_name = submission["method_name"] if submission["method_name"] else "None"
+            values = list(map(lambda item: submission[item], attributes))
+            values.append("{} {}".format(date, "UTC"))
+            values.append(method_name)
+            table.append_row(values)
         output = str(table).rstrip()
         runner = CliRunner()
         result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
-        response_table = result.output.rstrip()
-        assert response_table == output
+        response = result.output.rstrip()
+        assert response == output
 
     @responses.activate
-    def test_leaderboard_single_argument(self):
+    def test_display_my_submission_details_with_single_argument(self):
         output = ("Usage: challenge phase [OPTIONS] PHASE COMMAND [ARGS]...\n"
                   "\nError: Invalid value for \"PHASE\": submissions is not a valid integer\n")
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'phase', 'submissions'])
-        response_table = result.output
-        assert response_table == output
+        response = result.output
+        assert response == output
 
     @responses.activate
-    def test_split_string_argument(self):
+    def test_display_my_submission_details_with_string_argument(self):
         output = ("Usage: challenge phase [OPTIONS] PHASE COMMAND [ARGS]...\n"
                   "\nError: Invalid value for \"PHASE\": two is not a valid integer\n")
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'phase', 'two'])
-        response_table = result.output
-        assert response_table == output
+        response = result.output
+        assert response == output

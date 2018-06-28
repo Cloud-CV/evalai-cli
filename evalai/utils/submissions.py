@@ -3,6 +3,7 @@ import sys
 
 from beautifultable import BeautifulTable
 from click import echo, style
+from datetime import datetime
 
 from evalai.utils.auth import get_request_header
 from evalai.utils.common import validate_token
@@ -10,30 +11,36 @@ from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL, EVALAI_ERROR_CODES
 
 
-def pretty_print_submission_table(submissions):
+def pretty_print_my_submissions_data(submissions):
     """
     Funcion to print the submissions for a particular Challenge.
     """
-    table = BeautifulTable()
-    attributes = ["participant_team_name", "method_name", "execution_time", "status", "submitted_at"]
-    table.column_headers = attributes
-
+    table = BeautifulTable(max_width=80)
+    attributes = ["id", "participant_team_name", "execution_time", "status"]
+    columns_attributes = ["ID", "Participant Team", "Execution Time(sec)", "Status", "Submitted At", "Method Name"]
+    table.column_headers = columns_attributes
+    if len(submissions) == 0:
+        echo(style("\nSorry, you have not made any submissions to this challenge phase.\n", bold=True))
+        sys.exit(1)
     for submission in submissions:
-        team_name = submission["participant_team_name"]
-        method_name = submission["method_name"]
-        execution_time = submission["execution_time"]
-        status = submission["status"]
-        submitted = submission["submitted_at"].split("T")[0]
-        value = [team_name, method_name, execution_time, status, submitted]
-        table.append_row(value)
+        # Format date
+        date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        date = date.strftime('%D %r')
+
+        # Check for empty method name
+        method_name = submission["method_name"] if submission["method_name"] else "None"
+        values = list(map(lambda item: submission[item], attributes))
+        values.append("{} {}".format(date, "UTC"))
+        values.append(method_name)
+        table.append_row(values)
     echo(table)
 
 
-def display_your_submissions(challenge_id, phase_id):
+def display_my_submission_details(challenge_id, phase_id):
     """
-    Function display the details of a particular submission.
+    Function to display the details of a particular submission.
     """
-    url = URLS.submissions.value
+    url = URLS.my_submissions.value
     url = "{}{}".format(API_HOST_URL, url)
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
@@ -52,7 +59,7 @@ def display_your_submissions(challenge_id, phase_id):
         echo(err)
         sys.exit(1)
 
-    response_json = response.json()
+    response = response.json()
 
-    submissions = response_json["results"]
-    pretty_print_submission_table(submissions)
+    submissions = response["results"]
+    pretty_print_my_submissions_data(submissions)
