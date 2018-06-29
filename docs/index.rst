@@ -10,7 +10,9 @@ Welcome to EvalAI CLI's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   introduction
+   installation
+   configure-host
 
 Indices and tables
 ==================
