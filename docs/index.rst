@@ -13,6 +13,7 @@ Welcome to EvalAI CLI's documentation!
    introduction
    installation
    configure-host
+   basic-commands
 
 Indices and tables
 ==================
