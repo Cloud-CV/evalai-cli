@@ -147,7 +147,7 @@ class TestHTTPErrorRequests(BaseTestClass):
         assert response == expected
 
     @responses.activate
-    def test_ddisplay_my_submission_details_for_http_error_404(self):
+    def test_display_my_submission_details_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
         response = result.output

@@ -4,6 +4,7 @@ import responses
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from datetime import datetime
+from dateutil import tz
 
 from evalai.challenges import (challenge,
                                challenges)
@@ -314,7 +315,7 @@ class TestDisplaySubmission(BaseTestClass):
 
     @responses.activate
     def test_display_my_submission_details(self):
-        table = BeautifulTable(max_width=80)
+        table = BeautifulTable(max_width=100)
         attributes = ["id", "participant_team_name", "execution_time", "status"]
         columns_attributes = ["ID", "Participant Team", "Execution Time(sec)", "Status", "Submitted At", "Method Name"]
         table.column_headers = columns_attributes
@@ -322,12 +323,18 @@ class TestDisplaySubmission(BaseTestClass):
         for submission in self.submissions:
             # Format date
             date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-            date = date.strftime('%D %r')
+            from_zone = tz.tzutc()
+            to_zone = tz.tzlocal()
+
+            # Convert to local timezone from UTC.
+            date = date.replace(tzinfo=from_zone)
+            converted_date = date.astimezone(to_zone)
+            date = converted_date.strftime('%D %r')
 
             # Check for empty method name
             method_name = submission["method_name"] if submission["method_name"] else "None"
             values = list(map(lambda item: submission[item], attributes))
-            values.append("{} {}".format(date, "UTC"))
+            values.append(date)
             values.append(method_name)
             table.append_row(values)
         output = str(table).rstrip()
