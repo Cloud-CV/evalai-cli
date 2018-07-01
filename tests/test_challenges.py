@@ -353,3 +353,22 @@ class TestDisplaySubmission(BaseTestClass):
         result = runner.invoke(challenge, ['2', 'phase', 'two'])
         response = result.output
         assert response == output
+
+
+class TestDisplaySubmissionWithoutSubmissionData(BaseTestClass):
+
+    def setup(self):
+        data = '{"count": 4, "next": null, "previous": null, "results": []}'
+        json_data = json.loads(data)
+
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.my_submissions.value).format("3", "7"),
+                      json=json_data, status=200)
+
+    @responses.activate
+    def test_display_my_submission_details_without_submissions(self):
+        expected = "\nSorry, you have not made any submissions to this challenge phase."
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
+        response = result.output.rstrip()
+        assert response == expected
