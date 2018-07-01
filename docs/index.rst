@@ -14,6 +14,8 @@ Welcome to EvalAI CLI's documentation!
    installation
    configure-host
    basic-commands
+   challenges
+   challenge
 
 Indices and tables
 ==================

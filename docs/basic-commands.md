@@ -1,10 +1,10 @@
 # Commands Overview
 
-The EvalAI CLI commands are designed with efficiency and convenience in mind. The design is easy to remember and remains the same throughout all the commands.
+The EvalAI CLI commands are designed with efficiency and convenience in mind. The design is easy to remember and remains the same throughout package.
 
 EvalAI is invoked by typing `evalai` on the terminal. You can view the different sub-commands by using `evalai --help` 
 
-The CLI is split into different sections or different subcommands.
+The CLI is split into multiple sections according to functionality.
 
 - Challenges: View the different challenges sorted by time and participated.
 
@@ -14,52 +14,55 @@ The CLI is split into different sections or different subcommands.
 
 - Submissions: View with submissions.
 
-## Passing arguments and flags.
 
-### Flags
+## Flags
 
-Flags are optional additions used to specify a condition to return the results based on that condition. Flags are used in the CLI by passing it after the command is passed.
+Flags are optional additions passed to a command to specify a specific condition and to return the results based on that.
 
-For example, for viewing all the challenges, you may use the command,
+#### Example
 
-    `evalai challenges`
+For viewing all the challenges, you use the command:
+
+    evalai challenges
 
 Which is going to return all the challenges.
 
-But suppose you want to view only the challenges that you've participated in, you pass the flag `--participant` to the command.
+But suppose you want to view only the challenges that you've participated in, you pass in the flag `--participant` to the command.
 
-    `evalai challenges --participant`
+    evalai challenges --participant
 
 Which will return only the challenges you've participated in.
 
 
-### Arguments
+## Arguments
 
 Some commands used for viewing details about a specific object such as:
 
-- Details about a challenge.
+- Challenge: View phases, splits, details, leaderboard.
 
-- Details of a phase.
+- Phase: View details, make submissions.
 
-- Use a particular team.
+- Teams: Create teams, participate in challenges.
 
-- View submissions for a challenge.
+- Submissions: Viewing submission.
 
-These type of object specific commands needs to be passed mandatory object ID's. These are passed as arguments which have to be an Integer and should belong to the object 
-you're trying to operate on.
+These type of object specific commands needs you to pass the object ID related to them to do operations on them.
+These are passed as arguments which have to be an INTEGER and should be of belong to the object
+you're trying to operate on, otherwise it'd can't recognise the object or would make a wrong operation.
 
-For example,
 
-If you want to view the phases of a particular challenge, you need to fetch the ID of the particular challenge you want to view.
+#### Example
 
-You do that by taking the ID returned by the command
+If you want to view the phases of a particular challenge, you need to mention the ID of the particular challenge that the phases belong to.
 
-    `evalai challenges`
+You do that by executing the command
 
-returns the details of the challenges along with the ID's. You take that ID and pass it on to the phase command.
+    evalai challenges
 
-    `evalai challenge CHALLENGE_ID phases`
+which will return the details of the challenges along with the ID's. You take that ID and pass it on to the view the phases.
 
-returns you the phases of that particular challenge.
+    evalai challenge CHALLENGE_ID phases
+
+which will return the phases of that particular challenge.
 
 This is all the object specific commands are designed.
