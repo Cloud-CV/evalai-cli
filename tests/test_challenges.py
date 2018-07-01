@@ -5,12 +5,12 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
-from beautifultable import BeautifulTable
 
 from evalai.challenges import (challenge,
                                challenges)
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
+from evalai.utils.common import convert_UTC_date_to_local
 from tests.data import challenge_response, submission_response
 from .base import BaseTestClass
 
@@ -84,7 +84,7 @@ class TestDisplayChallenges(BaseTestClass):
         assert response_table == self.output
 
 
-class TestChallengesWithNoChallengeData(BaseTestClass):
+class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
 
     def setup(self):
 
@@ -205,11 +205,11 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
 
             heading = "{} {}".format(challenge_title, challenge_id)
             description = "{}\n".format(challenge_data["short_description"])
-            challenge_end_date = "End Date : " + challenge_data["end_date"].split("T")[0]
-            challenge_end_date = subtitle.format(challenge_end_date)
-            challenge = "{}{}{}{}".format(heading, description, challenge_end_date, br)
+            end_date = "End Date : " + challenge_data["end_date"].split("T")[0]
+            end_date = subtitle.format(end_date)
+            challenge_data = "{}{}{}{}".format(heading, description, end_date, br)
 
-            self.output = "{}{}".format(self.output, challenge)
+            self.output = "{}{}".format(self.output, challenge_data)
 
     @responses.activate
     def test_display_host_challenge_list(self):
@@ -361,6 +361,17 @@ class TestDisplaySubmission(BaseTestClass):
         output = str(table).rstrip()
         runner = CliRunner()
         result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
+        response = result.output.rstrip()
+        assert response == output
+
+    @responses.activate
+    def test_display_my_submission_details_with_single_argument(self):
+        output = ("Usage: challenge phase [OPTIONS] PHASE COMMAND [ARGS]...\n"
+                  "\nError: Invalid value for \"PHASE\": submissions is not a valid integer\n")
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['2', 'phase', 'submissions'])
+        response = result.output
+        assert response == output
 
 
 class TestDisplayLeaderboard(BaseTestClass):
@@ -377,14 +388,15 @@ class TestDisplayLeaderboard(BaseTestClass):
     def test_display_leaderboard(self):
         attributes = self.leaderboard[0]["leaderboard__schema"]["labels"]
 
-        table = BeautifulTable()
-        attributes = ["Rank", "Team"] + attributes + ["Last Submitted"]
+        table = BeautifulTable(max_width=150)
+        attributes = ["Rank", "Participant Team"] + attributes + ["Last Submitted"]
         table.column_headers = attributes
 
         for rank, result in enumerate(self.leaderboard, start=1):
             name = result['submission__participant_team__team_name']
             scores = result['result']
-            last_submitted = result['submission__submitted_at'].split("T")[0]
+            last_submitted = convert_UTC_date_to_local(result['submission__submitted_at'])
+
             value = [rank, name] + scores + [last_submitted]
             table.append_row(value)
 
