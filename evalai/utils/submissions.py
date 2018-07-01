@@ -3,13 +3,11 @@ import sys
 
 from beautifultable import BeautifulTable
 from click import echo, style
-from datetime import datetime
-from dateutil import tz
 
 from evalai.utils.auth import get_request_header
 from evalai.utils.config import API_HOST_URL, EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
-from evalai.utils.common import validate_token
+from evalai.utils.common import validate_token, convert_UTC_date_to_local
 
 
 def make_submission(challenge_id, phase_id, file):
@@ -20,7 +18,7 @@ def make_submission(challenge_id, phase_id, file):
     url = url.format(challenge_id, phase_id)
 
     headers = get_request_header()
-    file_data = {'input_file': file}
+    input_file = {'input_file': file}
     data = {
             'status': 'submitting',
            }
@@ -29,7 +27,7 @@ def make_submission(challenge_id, phase_id, file):
         response = requests.post(
                                 url,
                                 headers=headers,
-                                files=file_data,
+                                files=input_file,
                                 data=data,
                                 )
         response.raise_for_status()
@@ -44,8 +42,10 @@ def make_submission(challenge_id, phase_id, file):
         echo(err)
         sys.exit(1)
     response = response.json()
-    echo(style("\nYour file {} with the ID {} was successfully submitted.\n\n".format(file.name, response["id"]),
+    echo(style("\nYour file {} with the ID {} is successfully submitted.\n".format(file.name, response["id"]),
                fg="green", bold=True))
+    echo(style("You can use `evalai submission {}` to view this submission's status.\n".format(response["id"]),
+               bold=True))
 
 
 def pretty_print_my_submissions_data(submissions):
@@ -61,16 +61,7 @@ def pretty_print_my_submissions_data(submissions):
         sys.exit(1)
 
     for submission in submissions:
-        # Format date
-        date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        from_zone = tz.tzutc()
-        to_zone = tz.tzlocal()
-
-        # Convert to local timezone from UTC.
-        date = date.replace(tzinfo=from_zone)
-        converted_date = date.astimezone(to_zone)
-        date = converted_date.strftime('%D %r')
-
+        date = convert_UTC_date_to_local(submission['submitted_at'])
         # Check for empty method name
         method_name = submission["method_name"] if submission["method_name"] else "None"
         values = list(map(lambda item: submission[item], attributes))
@@ -113,18 +104,15 @@ def pretty_print_submission_details(submission):
     """
     Function to print details of a submission
     """
-    team_title = "\n{}".format(style(submission['participant_team_name'],
-                                     bold=True, fg="green"))
-    sid = "Submission ID: {}\n".format(style(str(submission['id']),
-                                       bold=True, fg="blue"))
-    team_name = "{} {}".format(team_title, sid)
+    team_name = "\n{}".format(style(submission['participant_team_name'], bold=True, fg="green"))
+    sid = "Submission ID: {}\n".format(style(str(submission['id']), bold=True, fg="blue"))
+    team_name = "{} {}".format(team_name, sid)
 
     status = style("\nSubmission Status : {}\n".format(submission['status']), bold=True)
     execution_time = style("\nExecution Time (sec) : {}\n".format(submission['execution_time']), bold=True)
 
-    date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-    date = date.strftime('%D %r')
-    submitted_at = style("\nSubmitted At : {} {}\n".format(date, "UTC"), bold=True)
+    date = convert_UTC_date_to_local(submission['submitted_at'])
+    submitted_at = style("\nSubmitted At : {}\n".format(date), bold=True)
     submission = "{}{}{}{}".format(team_name, status, execution_time, submitted_at)
     echo(submission)
 

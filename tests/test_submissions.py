@@ -3,6 +3,7 @@ import responses
 
 from click.testing import CliRunner
 from datetime import datetime
+from dateutil import tz
 
 from evalai.challenges import challenge
 from evalai.submissions import submission
@@ -32,9 +33,16 @@ class TestGetSubmissionDetails(BaseTestClass):
 
         status = "\nSubmission Status : {}\n".format(self.submission['status'])
         execution_time = "\nExecution Time (sec) : {}\n".format(self.submission['execution_time'])
+
         date = datetime.strptime(self.submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        date = date.strftime('%D %r')
-        submitted_at = "\nSubmitted At : {} {}\n".format(date, "UTC")
+        from_zone = tz.tzutc()
+        to_zone = tz.tzlocal()
+
+        date = date.replace(tzinfo=from_zone)
+        converted_date = date.astimezone(to_zone)
+
+        date = converted_date.strftime('%D %r')
+        submitted_at = "\nSubmitted At : {}\n".format(date)
         submission_data = "{}{}{}{}\n".format(team, status, execution_time, submitted_at)
 
         runner = CliRunner()
@@ -80,8 +88,10 @@ class TestMakeSubmission(BaseTestClass):
         assert response == expected
 
     @responses.activate
-    def test_make_submission_is_valid(self):
-        expected = ("Your file {} with the ID {} was successfully submitted.".format("test_file.txt", "9"))
+    def test_make_submission_when_file_is_valid(self):
+        expected = ("Your file {} with the ID {} is successfully submitted.\n\n"
+                    "You can use `evalai submission {}` to view this submission's status.").format("test_file.txt",
+                                                                                                   "9", "9")
 
         runner = CliRunner()
         with runner.isolated_filesystem():

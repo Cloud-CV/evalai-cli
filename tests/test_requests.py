@@ -181,6 +181,39 @@ class TestHTTPErrorRequests(BaseTestClass):
             assert response == self.expected.format(url)
 
 
+class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
+
+    def setup(self):
+
+        error_data = json.loads(teams_response.object_error)
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
+                      json=error_data, status=406)
+
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.make_submission.value).format("1", "2"),
+                      json=error_data, status=406)
+
+        self.expected = "Error: Sorry, the object does not exist."
+
+    @responses.activate
+    def test_display_submission_details_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(submission, ['9'])
+        response = result.output.rstrip()
+        assert response == self.expected
+
+    @responses.activate
+    def test_make_submission_for_object_does_not_exist(self):
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open('test_file.txt', 'w') as f:
+                f.write('1 2 3 4 5 6')
+
+            result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "test_file.txt"])
+            response = result.output.rstrip()
+            assert response == self.expected
+
+
 class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
 
     def setup(self):
@@ -368,7 +401,6 @@ class TestRequestForExceptions(BaseTestClass):
         # Submission URLS
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.my_submissions.value).format("3", "7"),
                       body=RequestException('...'))
-        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"), body=Exception('...'))
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
                       body=RequestException('RequestException'))
