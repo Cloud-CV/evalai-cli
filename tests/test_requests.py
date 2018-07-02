@@ -59,9 +59,9 @@ class TestHTTPErrorRequests(BaseTestClass):
         # Submission URLS
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.my_submissions.value).format("3", "7"), status=404)
 
-        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"), status=404)
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.get_submission.value).format("9"), status=404)
 
-        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_a_file.value).format("1", "2"), status=404)
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.make_submission.value).format("1", "2"), status=404)
 
         self.expected = "404 Client Error: Not Found for url: {}"
 
@@ -165,13 +165,13 @@ class TestHTTPErrorRequests(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(submission, ['9'])
         response = result.output.rstrip()
-        url = "{}{}".format(API_HOST_URL, URLS.submission.value).format("9")
+        url = "{}{}".format(API_HOST_URL, URLS.get_submission.value).format("9")
         assert response == self.expected.format(url)
 
     @responses.activate
-    def test_submit_a_file_for_http_error_404(self):
+    def test_make_submission_for_http_error_404(self):
         runner = CliRunner()
-        url = "{}{}".format(API_HOST_URL, URLS.submit_a_file.value).format("1", "2")
+        url = "{}{}".format(API_HOST_URL, URLS.make_submission.value).format("1", "2")
         with runner.isolated_filesystem():
             with open('test_file.txt', 'w') as f:
                 f.write('1 2 3 4 5 6')
@@ -370,8 +370,11 @@ class TestRequestForExceptions(BaseTestClass):
                       body=RequestException('...'))
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"), body=Exception('...'))
 
-        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_a_file.value).format("1", "2"),
-                      body=Exception('...'))
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
+                      body=RequestException('RequestException'))
+
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.make_submission.value).format("1", "2"),
+                      body=RequestException('RequestException'))
 
     @responses.activate
     def test_display_challenge_list_for_request_exception(self):
@@ -455,14 +458,16 @@ class TestRequestForExceptions(BaseTestClass):
     def test_display_submission_details_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(submission, ['9'])
-        assert result.exit_code == -1
+        response = result.output.strip()
+        assert response == "RequestException"
 
     @responses.activate
-    def test_submit_a_file_for_request_exception(self):
+    def test_make_submission_for_request_exception(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
             with open('test_file.txt', 'w') as f:
                 f.write('1 2 3 4 5 6')
 
             result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "test_file.txt"])
-            assert result.exit_code == -1
+            response = result.output.strip()
+            assert response == "RequestException"

@@ -2,6 +2,7 @@ import json
 import responses
 
 from click.testing import CliRunner
+from datetime import datetime
 
 from evalai.challenges import challenge
 from evalai.submissions import submission
@@ -12,14 +13,14 @@ from evalai.utils.urls import URLS
 from .base import BaseTestClass
 
 
-class TestSubmission(BaseTestClass):
+class TestGetSubmissionDetails(BaseTestClass):
 
     def setup(self):
 
         self.submission = json.loads(submission_response.submission_result)
 
         url = "{}{}"
-        responses.add(responses.GET, url.format(API_HOST_URL, URLS.submission.value).format("9"),
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
                       json=self.submission, status=200)
 
     @responses.activate
@@ -29,13 +30,11 @@ class TestSubmission(BaseTestClass):
 
         team = "{} {}".format(team_title, sid)
 
-        status = "\nSubmission Status : {}\n".format(
-                                    self.submission['status'])
-        execution_time = "\nSubmission Status : {}\n".format(
-                                    self.submission['execution_time'])
-        submitted_at = "\nSubmission Status : {}\n".format(
-                                    self.submission['submitted_at'].split('T')[0])
-
+        status = "\nSubmission Status : {}\n".format(self.submission['status'])
+        execution_time = "\nExecution Time (sec) : {}\n".format(self.submission['execution_time'])
+        date = datetime.strptime(self.submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        date = date.strftime('%D %r')
+        submitted_at = "\nSubmitted At : {} {}\n".format(date, "UTC")
         submission_data = "{}{}{}{}\n".format(team, status, execution_time, submitted_at)
 
         runner = CliRunner()
@@ -62,17 +61,17 @@ class TestSubmission(BaseTestClass):
         assert response == expected
 
 
-class TestSubmitAFile(BaseTestClass):
+class TestMakeSubmission(BaseTestClass):
 
     def setup(self):
         self.submission = json.loads(submission_response.submission_result)
 
         url = "{}{}"
-        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_a_file.value).format("1", "2"),
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.make_submission.value).format("1", "2"),
                       json=self.submission, status=200)
 
     @responses.activate
-    def test_submit_a_file_when_file_is_not_valid(self):
+    def test_make_submission_when_file_is_not_valid(self):
         expected = ("Usage: challenge phase submit [OPTIONS] FILE\n"
                     "\nError: Invalid value for \"FILE\": Could not open file: file: No such file or directory\n")
         runner = CliRunner()
@@ -81,8 +80,8 @@ class TestSubmitAFile(BaseTestClass):
         assert response == expected
 
     @responses.activate
-    def test_submit_a_file_when_file_is_valid(self):
-        expected = ("\nYour file {} was successfully submitted.\n\n".format("test_file.txt"))
+    def test_make_submission_is_valid(self):
+        expected = ("Your file {} with the ID {} was successfully submitted.".format("test_file.txt", "9"))
 
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -91,4 +90,4 @@ class TestSubmitAFile(BaseTestClass):
 
             result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "test_file.txt"])
             assert result.exit_code == 0
-            assert result.output == expected
+            assert result.output.strip() == expected

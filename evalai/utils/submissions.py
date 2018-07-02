@@ -12,11 +12,11 @@ from evalai.utils.urls import URLS
 from evalai.utils.common import validate_token
 
 
-def submit_a_file(challenge_id, phase_id, file):
+def make_submission(challenge_id, phase_id, file):
     """
-    Function submit a file to a challenge
+    Function to submit a file to a challenge
     """
-    url = "{}{}".format(API_HOST_URL, URLS.submit_a_file.value)
+    url = "{}{}".format(API_HOST_URL, URLS.make_submission.value)
     url = url.format(challenge_id, phase_id)
 
     headers = get_request_header()
@@ -44,7 +44,7 @@ def submit_a_file(challenge_id, phase_id, file):
         echo(err)
         sys.exit(1)
     response = response.json()
-    echo(style("\nYour file {} was successfully submitted.\n".format(file.name),
+    echo(style("\nYour file {} with the ID {} was successfully submitted.\n\n".format(file.name, response["id"]),
                fg="green", bold=True))
 
 
@@ -117,12 +117,15 @@ def pretty_print_submission_details(submission):
                                      bold=True, fg="green"))
     sid = "Submission ID: {}\n".format(style(str(submission['id']),
                                        bold=True, fg="blue"))
-    team = "{} {}".format(team_title, sid)
+    team_name = "{} {}".format(team_title, sid)
 
     status = style("\nSubmission Status : {}\n".format(submission['status']), bold=True)
-    execution_time = style("\nSubmission Status : {}\n".format(submission['execution_time']), bold=True)
-    submitted_at = style("\nSubmission Status : {}\n".format(submission['submitted_at'].split('T')[0]), bold=True)
-    submission = "{}{}{}{}".format(team, status, execution_time, submitted_at)
+    execution_time = style("\nExecution Time (sec) : {}\n".format(submission['execution_time']), bold=True)
+
+    date = datetime.strptime(submission['submitted_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+    date = date.strftime('%D %r')
+    submitted_at = style("\nSubmitted At : {} {}\n".format(date, "UTC"), bold=True)
+    submission = "{}{}{}{}".format(team_name, status, execution_time, submitted_at)
     echo(submission)
 
 
@@ -130,7 +133,7 @@ def display_submission_details(submission_id):
     """
     Function to display details of a particular submission
     """
-    url = "{}{}".format(API_HOST_URL, URLS.submission.value)
+    url = "{}{}".format(API_HOST_URL, URLS.get_submission.value)
     url = url.format(submission_id)
 
     headers = get_request_header()
