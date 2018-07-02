@@ -8,6 +8,7 @@ from evalai.utils.challenges import (
                                     display_ongoing_challenge_list,
                                     display_past_challenge_list,
                                     display_participated_or_hosted_challenges,
+                                    display_challenge_details,
                                     display_challenge_phase_list,
                                     display_challenge_phase_detail,
                                     display_challenge_phase_split_list,
@@ -68,7 +69,7 @@ def challenge(ctx, challenge):
     """
     ctx.obj = Challenge(challenge=challenge)
     if ctx.invoked_subcommand is None:
-        print("SUPPP")
+        display_challenge_details(challenge)
 
 
 @challenges.command()
