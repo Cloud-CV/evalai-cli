@@ -10,6 +10,7 @@ from evalai.utils.challenges import (
                                     display_challenge_phase_detail,)
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
+from evalai.utils.submissions import submit_file
 
 
 class Challenge(object):
@@ -144,6 +145,30 @@ def participate(ctx, team):
     Invoked by running `evalai challenge CHALLENGE participate TEAM`
     """
     participate_in_a_challenge(ctx.challenge_id, team)
+
+
+@click.group(invoke_without_command=True)
+@click.pass_obj
+@click.argument('PHASE', type=int)
+def phase(ctx, phase):
+    """
+    Displays phases as a list.
+    Invoked by running `evalai challenge CHALLENGE phase PHASE`
+    """
+    ctx.phase_id = phase
+
+
+@phase.command()
+@click.pass_obj
+@click.argument('FILE', type=click.File('rb'))
+def submit(ctx, file):
+    """
+    Make a submission to a challenge.
+    """
+    """
+    Invoked by running `evalai challenge CHALLENGE phase PHASE submit FILE`
+    """
+    submit_file(ctx.challenge_id, ctx.phase_id, file)
 
 
 challenge.add_command(phase)
