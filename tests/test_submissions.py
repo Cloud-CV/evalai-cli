@@ -9,9 +9,10 @@ from tests.data import submission_response
 
 from evalai.utils.challenges import API_HOST_URL
 from evalai.utils.urls import URLS
+from .base import BaseTestClass
 
 
-class TestSubmission:
+class TestSubmission(BaseTestClass):
 
     def setup(self):
 
@@ -22,11 +23,11 @@ class TestSubmission:
                       json=self.submission, status=200)
 
     @responses.activate
-    def test_get_submission(self):
+    def test_display_submission_details(self):
         team_title = "\n{}".format(self.submission['participant_team_name'])
         sid = "Submission ID: {}\n".format(str(self.submission['id']))
 
-        title = "{} {}".format(team_title, sid)
+        team = "{} {}".format(team_title, sid)
 
         status = "\nSubmission Status : {}\n".format(
                                     self.submission['status'])
@@ -35,15 +36,15 @@ class TestSubmission:
         submitted_at = "\nSubmission Status : {}\n".format(
                                     self.submission['submitted_at'].split('T')[0])
 
-        phase = "{}{}{}{}\n".format(title, status, execution_time, submitted_at)
+        submission_data = "{}{}{}{}\n".format(team, status, execution_time, submitted_at)
 
         runner = CliRunner()
         result = runner.invoke(submission, ['9'])
         response = result.output
-        assert response == phase
+        assert response == submission_data
 
     @responses.activate
-    def test_submission_string_argument(self):
+    def test_display_submission_details_with_a_string_argument(self):
         expected = ("Usage: submission [OPTIONS] SUBMISSION COMMAND [ARGS]...\n"
                     "\nError: Invalid value for \"SUBMISSION\": two is not a valid integer\n")
         runner = CliRunner()
@@ -52,7 +53,7 @@ class TestSubmission:
         assert response == expected
 
     @responses.activate
-    def test_submission_no_argument(self):
+    def test_display_submission_details_with_no_argument(self):
         expected = ("Usage: submission [OPTIONS] SUBMISSION COMMAND [ARGS]...\n"
                     "\nError: Missing argument \"SUBMISSION\".\n")
         runner = CliRunner()
@@ -61,17 +62,17 @@ class TestSubmission:
         assert response == expected
 
 
-class TestMakeSubmission:
+class TestSubmitAFile(BaseTestClass):
 
     def setup(self):
         self.submission = json.loads(submission_response.submission_result)
 
         url = "{}{}"
-        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_file.value).format("1", "2"),
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.submit_a_file.value).format("1", "2"),
                       json=self.submission, status=200)
 
     @responses.activate
-    def test_submit_not_file(self):
+    def test_submit_a_file_when_file_is_not_valid(self):
         expected = ("Usage: challenge phase submit [OPTIONS] FILE\n"
                     "\nError: Invalid value for \"FILE\": Could not open file: file: No such file or directory\n")
         runner = CliRunner()
@@ -80,8 +81,8 @@ class TestMakeSubmission:
         assert response == expected
 
     @responses.activate
-    def test_submit_file(self):
-        expected = ("\nYour file was successfully submitted.\n\n")
+    def test_submit_a_file_when_file_is_valid(self):
+        expected = ("\nYour file {} was successfully submitted.\n\n".format("test_file.txt"))
 
         runner = CliRunner()
         with runner.isolated_filesystem():

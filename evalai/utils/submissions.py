@@ -7,21 +7,20 @@ from datetime import datetime
 from dateutil import tz
 
 from evalai.utils.auth import get_request_header
-from evalai.utils.common import validate_token
-from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL, EVALAI_ERROR_CODES
+from evalai.utils.urls import URLS
+from evalai.utils.common import validate_token
 
 
-def submit_file(challenge_id, phase_id, file):
-
+def submit_a_file(challenge_id, phase_id, file):
     """
-    Function to create a new team by taking in the team name as input.
+    Function submit a file to a challenge
     """
-    url = "{}{}".format(API_HOST_URL, URLS.submit_file.value)
+    url = "{}{}".format(API_HOST_URL, URLS.submit_a_file.value)
     url = url.format(challenge_id, phase_id)
 
     headers = get_request_header()
-    file = {'input_file': file}
+    file_data = {'input_file': file}
     data = {
             'status': 'submitting',
            }
@@ -30,20 +29,23 @@ def submit_file(challenge_id, phase_id, file):
         response = requests.post(
                                 url,
                                 headers=headers,
-                                files=file,
+                                files=file_data,
                                 data=data,
                                 )
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        echo(style("Error: " + response.json()['error'], fg="red", bold=True))
+        if (response.status_code in EVALAI_ERROR_CODES):
+            validate_token(response.json())
+            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+        else:
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
         sys.exit(1)
-    response_json = response.json()
-    if validate_token(response_json):
-        echo(style("\nYour file was successfully submitted.\n",
-                   fg="green", bold=True))
+    response = response.json()
+    echo(style("\nYour file {} was successfully submitted.\n".format(file.name),
+               fg="green", bold=True))
 
 
 def pretty_print_my_submissions_data(submissions):
@@ -109,30 +111,29 @@ def display_my_submission_details(challenge_id, phase_id):
 
 def pretty_print_submission_details(submission):
     """
-    Pretty prints details of submission
+    Function to print details of a submission
     """
     team_title = "\n{}".format(style(submission['participant_team_name'],
                                      bold=True, fg="green"))
     sid = "Submission ID: {}\n".format(style(str(submission['id']),
                                        bold=True, fg="blue"))
-    title = "{} {}".format(team_title, sid)
+    team = "{} {}".format(team_title, sid)
 
     status = style("\nSubmission Status : {}\n".format(submission['status']), bold=True)
     execution_time = style("\nSubmission Status : {}\n".format(submission['execution_time']), bold=True)
     submitted_at = style("\nSubmission Status : {}\n".format(submission['submitted_at'].split('T')[0]), bold=True)
-    phase = "{}{}{}{}".format(title, status, execution_time, submitted_at)
-    echo(phase)
+    submission = "{}{}{}{}".format(team, status, execution_time, submitted_at)
+    echo(submission)
 
 
 def display_submission_details(submission_id):
     """
-    Function to fetch the details of a particular submission
+    Function to display details of a particular submission
     """
     url = "{}{}".format(API_HOST_URL, URLS.submission.value)
     url = url.format(submission_id)
 
     headers = get_request_header()
-
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -146,8 +147,6 @@ def display_submission_details(submission_id):
     except requests.exceptions.RequestException as err:
         echo(err)
         sys.exit(1)
-
     response = response.json()
 
-    if validate_token(response):
-        pretty_print_submission_details(response)
+    pretty_print_submission_details(response)
