@@ -59,7 +59,7 @@ def challenges(ctx, participant, host):
         display_all_challenge_list()
 
 
-@click.group()
+@click.group(invoke_without_command=True)
 @click.pass_context
 @click.argument('CHALLENGE', type=int)
 def challenge(ctx, challenge):
@@ -67,6 +67,8 @@ def challenge(ctx, challenge):
     Display challenge specific details.
     """
     ctx.obj = Challenge(challenge=challenge)
+    if ctx.invoked_subcommand is None:
+        print("SUPPP")
 
 
 @challenges.command()
