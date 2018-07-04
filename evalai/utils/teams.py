@@ -34,7 +34,6 @@ def display_participant_teams():
     headers = get_request_header()
 
     url = "{}{}".format(API_HOST_URL, URLS.participant_team_list.value)
-
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
