@@ -25,8 +25,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = u'EvalAI CLI'
-copyright = u'2018, Adarsh S'
-author = u'Adarsh S'
+copyright = u'2018, CloudCV'
+author = u'CloudCV Team'
 
 # The short X.Y version
 version = u''

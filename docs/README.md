@@ -1,5 +1,7 @@
 # Updating the documentation
 
+`cd docs`
+
 Install dependencies:
 
 `pip install -r requirements.txt`
