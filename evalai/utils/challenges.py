@@ -2,6 +2,7 @@ import requests
 import sys
 
 from bs4 import BeautifulSoup
+from beautifultable import BeautifulTable
 from click import echo, style
 
 from evalai.utils.auth import get_request_header
@@ -295,20 +296,20 @@ def display_challenge_phase_detail(challenge_id, phase_id):
     pretty_print_challenge_phase_data(phase)
 
 
-def pretty_print_challenge_phase_split_data(splits):
+def pretty_print_challenge_phase_split_data(phase_splits):
     """
     Function to print the details of a Challenge Phase Split.
     """
-    for split in splits:
-        br = style("----------------------------------------"
-                   "--------------------------", bold=True)
+    table = BeautifulTable(max_width=100)
+    attributes = ["id", "dataset_split_name", "challenge_phase_name"]
+    columns_attributes = ["Challenge Phase ID", "Dataset Split", "Challenge Phase Name"]
+    table.column_headers = columns_attributes
 
-        dataset_split_name = "{}".format(style(split["dataset_split_name"], bold=True, fg="green"))
-        dataset_split_id = "ID: {}\n\n".format(style(str(split["dataset_split"]), bold=True))
-        dataset_split_name = "Data set split: {}\n".format(dataset_split_name)
-        challenge_phase_name = "\nChallenge Phase: {}\n\n".format(split["challenge_phase_name"])
-        challenge_phase_split = "\n{}{}{}{}".format(dataset_split_id, dataset_split_name, challenge_phase_name, br)
-        echo(challenge_phase_split)
+    for split in phase_splits:
+        if split['visibility'] == 3:
+            values = list(map(lambda item: split[item], attributes))
+            table.append_row(values)
+    echo(table)
 
 
 def display_challenge_phase_split_list(challenge_id):

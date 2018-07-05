@@ -423,7 +423,7 @@ class TestRequestForExceptions(BaseTestClass):
 
         # Phase Split URLS
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_split_detail.value).format("1"),
-                      body=Exception('...'))
+                      body=RequestException('...'))
 
     @responses.activate
     def test_display_challenge_list_for_request_exception(self):
@@ -525,4 +525,5 @@ class TestRequestForExceptions(BaseTestClass):
     def test_display_challenge_phase_split_list_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['1', 'phase', '2', 'splits'])
-        assert result.exit_code == -1
+        response = result.output.strip()
+        assert response == "..."

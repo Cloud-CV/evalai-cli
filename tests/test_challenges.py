@@ -375,19 +375,19 @@ class TestDisplayChallengePhaseSplit(BaseTestClass):
     @responses.activate
     def test_display_challenge_phase_split(self):
         output = ""
+        table = BeautifulTable(max_width=100)
+        attributes = ["id", "dataset_split_name", "challenge_phase_name"]
+        columns_attributes = ["Challenge Phase ID", "Dataset Split", "Challenge Phase Name"]
+        table.column_headers = columns_attributes
+
         for split in self.splits:
-            br = ("----------------------------------------"
-                  "--------------------------")
-            dataset_split_name = "{}".format(split["dataset_split_name"])
-            dataset_split_id = "ID: {}\n\n".format(str(split["dataset_split"]))
-            dataset_split_name = "Data set split: {}\n".format(dataset_split_name)
-            challenge_phase_name = "\nChallenge Phase: {}\n\n".format(split["challenge_phase_name"])
-            challenge_phase_split = "\n{}{}{}{}\n".format(dataset_split_id, dataset_split_name,
-                                                          challenge_phase_name, br)
-            output = output + challenge_phase_split
+            if split['visibility'] == 3:
+                values = list(map(lambda item: split[item], attributes))
+                table.append_row(values)
+        output = str(table)
         runner = CliRunner()
         result = runner.invoke(challenge, ['1', 'phase', '2', 'splits'])
-        response = result.output
+        response = result.output.rstrip()
         assert response == output
 
     @responses.activate
