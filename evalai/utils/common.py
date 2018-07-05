@@ -38,9 +38,9 @@ def validate_token(response):
 
 
 def validate_date_format(date):
-    for format in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"):
+    for date_format in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"):
         try:
-            return datetime.strptime(date, format)
+            return datetime.strptime(date, date_format)
         except ValueError:
             pass
     raise ValueError('Invalid date format. Please check again!')
