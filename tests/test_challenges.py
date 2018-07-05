@@ -5,6 +5,7 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
+from beautifultable import BeautifulTable
 
 from evalai.challenges import (challenge,
                                challenges)
@@ -83,12 +84,13 @@ class TestDisplayChallenges(BaseTestClass):
         assert response_table == self.output
 
 
-class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
+class TestChallengesWithNoChallengeData(BaseTestClass):
 
     def setup(self):
 
         participant_team_data = json.loads(challenge_response.challenge_participant_teams)
         host_team_data = json.loads(challenge_response.challenge_host_teams)
+        empty_leaderboard = json.loads(challenge_response.empty_leaderboard)
 
         url = "{}{}"
 
@@ -111,6 +113,9 @@ class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_split_detail.value).format("1"),
                       json=[], status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.leaderboard.value).format("1"),
+                      json=empty_leaderboard, status=200)
 
         self.output = "Sorry, no challenges found!\n"
 
@@ -156,6 +161,13 @@ class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
         response = result.output
         assert response == "Sorry, no Challenge Phase Splits found.\n"
 
+    @responses.activate
+    def test_display_leaderboard_with_no_challenge_data(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['2', 'leaderboard', '1'])
+        response = result.output.rstrip()
+        assert response == "Sorry, no Leaderboard results found."
+
 
 class TestParticipantOrHostTeamChallenges(BaseTestClass):
 
@@ -193,11 +205,11 @@ class TestParticipantOrHostTeamChallenges(BaseTestClass):
 
             heading = "{} {}".format(challenge_title, challenge_id)
             description = "{}\n".format(challenge_data["short_description"])
-            end_date = "End Date : " + challenge_data["end_date"].split("T")[0]
-            end_date = subtitle.format(end_date)
-            challenge_data = "{}{}{}{}".format(heading, description, end_date, br)
+            challenge_end_date = "End Date : " + challenge_data["end_date"].split("T")[0]
+            challenge_end_date = subtitle.format(challenge_end_date)
+            challenge = "{}{}{}{}".format(heading, description, challenge_end_date, br)
 
-            self.output = "{}{}".format(self.output, challenge_data)
+            self.output = "{}{}".format(self.output, challenge)
 
     @responses.activate
     def test_display_host_challenge_list(self):
@@ -349,15 +361,55 @@ class TestDisplaySubmission(BaseTestClass):
         output = str(table).rstrip()
         runner = CliRunner()
         result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
+
+
+class TestDisplayLeaderboard(BaseTestClass):
+
+    def setup(self):
+        json_data = json.loads(challenge_response.leaderboard)
+
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.leaderboard.value).format("1"),
+                      json=json_data, status=200)
+        self.leaderboard = json_data["results"]
+
+    @responses.activate
+    def test_display_leaderboard(self):
+        attributes = self.leaderboard[0]["leaderboard__schema"]["labels"]
+
+        table = BeautifulTable()
+        attributes = ["Rank", "Team"] + attributes + ["Last Submitted"]
+        table.column_headers = attributes
+
+        for rank, result in enumerate(self.leaderboard, start=1):
+            name = result['submission__participant_team__team_name']
+            scores = result['result']
+            last_submitted = result['submission__submitted_at'].split("T")[0]
+            value = [rank, name] + scores + [last_submitted]
+            table.append_row(value)
+
+        output = str(table).rstrip()
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['2', 'leaderboard', '1'])
         response = result.output.rstrip()
         assert response == output
 
     @responses.activate
-    def test_display_my_submission_details_with_single_argument(self):
-        output = ("Usage: challenge phase [OPTIONS] PHASE COMMAND [ARGS]...\n"
-                  "\nError: Invalid value for \"PHASE\": submissions is not a valid integer\n")
+    def test_test_display_leaderboard_with_string_argument(self):
+        output = ("Usage: challenge leaderboard [OPTIONS] CPS\n"
+                  "\nError: Invalid value for \"CPS\": two is not a valid integer\n")
         runner = CliRunner()
-        result = runner.invoke(challenge, ['2', 'phase', 'submissions'])
+        result = runner.invoke(challenge, ['2', 'leaderboard', 'two'])
+        response = result.output
+        assert response == output
+
+    @responses.activate
+    def test_display_leaderboard_with_single_argument(self):
+        output = ("Usage: challenge leaderboard [OPTIONS] CPS\n"
+                  "\nError: Missing argument \"CPS\".\n")
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['2', 'leaderboard'])
         response = result.output
         assert response == output
 

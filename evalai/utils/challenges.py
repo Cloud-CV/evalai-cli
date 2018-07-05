@@ -319,6 +319,7 @@ def display_challenge_phase_split_list(challenge_id):
     url = URLS.challenge_phase_split_detail.value
     url = "{}{}".format(API_HOST_URL, url)
     url = url.format(challenge_id)
+
     headers = get_request_header()
     try:
         response = requests.get(url, headers=headers)
@@ -338,3 +339,50 @@ def display_challenge_phase_split_list(challenge_id):
         pretty_print_challenge_phase_split_data(phase_splits)
     else:
         echo("Sorry, no Challenge Phase Splits found.")
+
+
+def pretty_print_leaderboard_data(attributes, results):
+    """
+    Pretty print the leaderboard for a particular CPS.
+    """
+    leaderboard_table = BeautifulTable()
+    attributes = ["Rank", "Team"] + attributes + ["Last Submitted"]
+    leaderboard_table.column_headers = attributes
+
+    for rank, result in enumerate(results, start=1):
+        name = result['submission__participant_team__team_name']
+        scores = result['result']
+        last_submitted = result['submission__submitted_at'].split("T")[0]
+        leaderboard_row = [rank, name] + scores + [last_submitted]
+        leaderboard_table.append_row(leaderboard_row)
+    echo(leaderboard_table)
+
+
+def display_leaderboard(challenge_id, phase_split_id):
+    """
+    Function to display the Leaderboard of a particular CPS.
+    """
+    url = "{}{}".format(API_HOST_URL, URLS.leaderboard.value)
+    url = url.format(phase_split_id)
+    headers = get_request_header()
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        if (response.status_code in EVALAI_ERROR_CODES):
+            validate_token(response.json())
+            echo(style("Error: {}".format(response.json()["error"], fg="red", bold=True)))
+        else:
+            echo(err)
+    except requests.exceptions.RequestException as err:
+        echo(err)
+        sys.exit(1)
+
+    response = response.json()
+
+    results = response["results"]
+    if len(results) != 0:
+        attributes = results[0]["leaderboard__schema"]["labels"]
+        pretty_print_leaderboard_data(attributes, results)
+    else:
+        echo("Sorry, no Leaderboard results found.")
