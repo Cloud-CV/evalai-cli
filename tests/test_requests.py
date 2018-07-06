@@ -338,14 +338,17 @@ class TestDisplayChallengePhasesWhenObjectDoesNotExist(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, ['10', 'phases'])
         response = result.output.rstrip()
-        assert response == self.expected
+        expected = "\n{}\n\n{}".format(self.expected, "Use `evalai challenges` to fetch the active challenges.")
+        assert response == expected
 
     @responses.activate
     def test_display_challenge_phase_detail_for_object_does_not_exist(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['10', 'phase', '20'])
         response = result.output.rstrip()
-        assert response == self.expected
+        expected = "\n{}\n\n{}".format(self.expected, "Use `evalai challenges` to fetch the active challenges.")
+        expected = "{}\n\n{}".format(expected, "Use `evalai challenge CHALLENGE phases` to fetch the active phases.")
+        assert response == expected
 
 
 class TestGetParticipantOrHostTeamChallengesHTTPErrorRequests(BaseTestClass):
