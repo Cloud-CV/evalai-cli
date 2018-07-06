@@ -292,7 +292,9 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'participate', '3'])
         response = result.output.rstrip()
-        assert response == self.expected
+        expected = "\n{}\n\n{}".format(self.expected, "Use `evalai challenges` to fetch the active challenges.")
+        expected = "{}\n\n{}".format(expected, "Use `evalai teams` to fetch your participant teams.")
+        assert response == expected
 
 
 class TestTeamsWhenTeamNameAlreadyExists(BaseTestClass):
