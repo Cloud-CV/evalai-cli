@@ -1,4 +1,7 @@
 import click
+import sys
+
+from click import echo
 
 from evalai.utils.teams import (
                                 create_team,
@@ -21,14 +24,21 @@ def teams(ctx, host):
 
 
 @teams.command()
-@click.option('--host', '-h', is_flag=True,
-              help="Create a host team.")
-def create(host):
+@click.argument('TEAM', type=str)
+def create(team):
     """
     Create a participant or host team.
 
     Invoked by running `evalai teams create`
     """
+    host = False
+    if team not in ("host", "participant"):
+        echo("Sorry, wrong argument. Please choose participant or host.")
+        sys.exit(1)
+
     team_name = click.prompt("Enter team name: ", type=str)
     if click.confirm("Please confirm the team name - %s" % (team_name), abort=True):
+        if team == "host":
+            host = True
+
         create_team(team_name, host)

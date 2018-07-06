@@ -64,7 +64,7 @@ def display_teams(host):
         echo("Sorry, no teams found!")
 
 
-def create_team(team_name, host):
+def create_team(team_name, host=False):
     """
     Function to create a new team by taking in the team name as input.
     """

@@ -143,7 +143,7 @@ class TestHTTPErrorRequests(BaseTestClass):
         user_prompt_text = ("Enter team name: : TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
+        result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\n")
         response = result.output
         url = "{}{}".format(API_HOST_URL, URLS.participant_team_list.value)
         expected = "{}{}".format(self.expected.format(url), "\n")
@@ -280,7 +280,7 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
         user_prompt_text = ("Enter team name: : TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
+        result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\n")
         response = result.output.rstrip()
         expected = "{}{}".format(user_prompt_text, self.expected)
         assert response == expected
@@ -308,7 +308,7 @@ class TestTeamsWhenTeamNameAlreadyExists(BaseTestClass):
         user_prompt_text = ("Enter team name: : TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
+        result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\n")
         response = result.output.rstrip()
         expected = "Error: participant team with this team name already exists."
         expected = "{}{}".format(user_prompt_text, expected)
@@ -509,7 +509,7 @@ class TestRequestForExceptions(BaseTestClass):
     @responses.activate
     def test_create_team_for_request_exception(self):
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
+        result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\n")
         output = ("Enter team name: : TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y")
         assert result.output.strip() == output

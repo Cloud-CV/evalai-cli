@@ -17,6 +17,7 @@ class TestTeams:
     def setup(self):
         team_list_data = json.loads(teams_response.teams_list)
         team_created_data = json.loads(teams_response.create_team)
+        host_team = json.loads(teams_response.host_teams)
 
         url = "{}{}"
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_team_list.value),
@@ -25,18 +26,25 @@ class TestTeams:
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participant_team_list.value),
                       json=team_created_data, status=201)
 
+        responses.add(responses.POST, url.format(API_HOST_URL, URLS.create_host_team.value),
+                      json=team_created_data, status=201)
+
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format("2", "3"),
                       json=team_list_data, status=201)
 
-        self.teams = team_list_data["results"]
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_team_list.value),
+                      json=host_team, status=201)
+
+        self.participant_teams = team_list_data["results"]
+        self.host_teams = host_team["results"]
 
     @responses.activate
-    def test_teams_list(self):
+    def test_display_participant_teams_list(self):
         table = BeautifulTable(max_width=200)
         attributes = ["id", "team_name", "created_by"]
         columns_attributes = ["ID", "Team Name", "Created By", "Members"]
         table.column_headers = columns_attributes
-        for team in self.teams:
+        for team in self.participant_teams:
             values = list(map(lambda item: team[item], attributes))
             members = ", ".join(map(lambda member: member["member_name"], team["members"]))
             values.append(members)
@@ -48,12 +56,39 @@ class TestTeams:
         assert response == output
 
     @responses.activate
-    def test_create_team_for_option_yes(self):
+    def test_display_host_teams_list(self):
+        table = BeautifulTable(max_width=200)
+        attributes = ["id", "team_name", "created_by"]
+        columns_attributes = ["ID", "Team Name", "Created By", "Members"]
+        table.column_headers = columns_attributes
+        for team in self.host_teams:
+            values = list(map(lambda item: team[item], attributes))
+            members = ", ".join(map(lambda member: member["user"], team["members"]))
+            values.append(members)
+            table.append_row(values)
+        output = str(table)
+        runner = CliRunner()
+        result = runner.invoke(teams, ["--host"])
+        response = result.output.rstrip()
+        assert response == output
+
+    @responses.activate
+    def test_create_participant_team_for_option_yes(self):
         output = ("Enter team name: : TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
                   "\nYour participant team TestTeam was successfully created.\n\n")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
+        result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\n")
+        response = result.output
+        assert response == output
+
+    @responses.activate
+    def test_create_host_team_for_option_yes(self):
+        output = ("Enter team name: : TeamTest\n"
+                  "Please confirm the team name - TeamTest [y/N]: y\n"
+                  "\nYour host team TestTeam was successfully created.\n\n")
+        runner = CliRunner()
+        result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\n")
         response = result.output
         assert response == output
 
@@ -63,7 +98,7 @@ class TestTeams:
                   "Please confirm the team name - TeamTest [y/N]: n\n"
                   "Aborted!\n")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create'], input="TeamTest\nn\n")
+        result = runner.invoke(teams, ['create', 'host'], input="TeamTest\nn\n")
         response = result.output
         assert response == output
 
