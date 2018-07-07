@@ -11,9 +11,6 @@ from evalai.utils.urls import URLS
 from evalai.utils.config import EVALAI_ERROR_CODES
 
 
-API_HOST_URL = get_host_url()
-
-
 def pretty_print_team_data(teams):
     """
     Function to print the team data
@@ -36,7 +33,7 @@ def display_participant_teams():
     """
     headers = get_request_header()
 
-    url = "{}{}".format(API_HOST_URL, URLS.participant_team_list.value)
+    url = "{}{}".format(get_host_url(), URLS.participant_team_list.value)
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -63,7 +60,7 @@ def create_participant_team(team_name):
     """
     Function to create a new team by taking in the team name as input.
     """
-    url = "{}{}".format(API_HOST_URL, URLS.participant_team_list.value)
+    url = "{}{}".format(get_host_url(), URLS.participant_team_list.value)
 
     headers = get_request_header()
     headers['Content-Type'] = 'application/json'
@@ -104,7 +101,7 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
     Function to participate in a particular challenge.
     """
 
-    url = "{}{}".format(API_HOST_URL, URLS.participate_in_a_challenge.value)
+    url = "{}{}".format(get_host_url(), URLS.participate_in_a_challenge.value)
     url = url.format(challenge_id, participant_team_id)
 
     headers = get_request_header()
