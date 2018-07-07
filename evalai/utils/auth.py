@@ -10,8 +10,8 @@ def get_user_auth_token():
     """
     Loads token to be used for sending requests.
     """
-    if os.path.exists(AUTH_TOKEN_PATH):
-        with open(str(AUTH_TOKEN_PATH), 'r') as TokenObj:
+    if os.path.exists(AUTH_TOKEN_FILE_PATH):
+        with open(str(AUTH_TOKEN_FILE_PATH), 'r') as TokenObj:
             try:
                 data = TokenObj.read()
             except (OSError, IOError) as e:
@@ -35,3 +35,18 @@ def get_request_header():
     }
 
     return header
+
+
+def get_host_url():
+    """
+    Returns the host url.
+    """
+    if not os.path.exists(HOST_URL_FILE_PATH):
+        return "http://localhost:8000"
+    else:
+        with open(HOST_URL_FILE_PATH, 'r') as fr:
+            try:
+                data = fr.read()
+                return str(data)
+            except (OSError, IOError) as e:
+                echo(e)
