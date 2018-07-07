@@ -11,4 +11,3 @@ exclude_lines =
 omit =
     */python?.?/*
     */tests/*
-    setup.py

@@ -24,14 +24,14 @@ def host(set_host):
                     fw.write(set_host)
                 except (OSError, IOError) as e:
                     echo(e)
-                echo(style("{} was set!".format(set_host), bold=True))
+                echo(style("{} is set as the host url!".format(set_host), bold=True))
         else:
-            echo(style("Sorry, please enter a valid EvalAI host url.\n"
-                 "Example: https://evalapi.cloudcv.org", bold=True))
+            echo(style("Sorry, please enter a valid url.\n"
+                       "Example: https://evalapi.cloudcv.org", bold=True))
     else:
         if not os.path.exists(HOST_URL_FILE_PATH):
-            echo(style("You haven't configured a Host URL for the CLI to use.\n"
-                 "The CLI would be using http://localhost:8000 as the default.", bold=True))
+            echo(style("You haven't configured a Host URL for the CLI.\n"
+                       "The CLI would be using http://localhost:8000 as the default url.", bold=True))
         else:
             with open(HOST_URL_FILE_PATH, 'r') as fr:
                 try:

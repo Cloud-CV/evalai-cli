@@ -3,7 +3,7 @@ import click
 from click import echo
 
 from .challenges import challenge, challenges
-from .configure import host
+from .set_host import host
 from .submissions import submission
 from .teams import teams
 

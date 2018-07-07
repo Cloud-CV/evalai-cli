@@ -5,7 +5,7 @@ import shutil
 from click.testing import CliRunner
 
 from evalai.challenges import challenge, challenges
-from evalai.configure import host
+from evalai.set_host import host
 from evalai.utils.urls import URLS
 from evalai.utils.config import (API_HOST_URL,
                                  AUTH_TOKEN_DIR,
@@ -98,15 +98,15 @@ class TestHostConfig(BaseTestClass):
             os.remove(HOST_URL_FILE_PATH)
 
     def test_get_default_host(self):
-        expected = ("You haven't configured a Host URL for the CLI to use.\n"
-                    "The CLI would be using http://localhost:8000 as the default.\n")
+        expected = ("You haven't configured a Host URL for the CLI.\n"
+                    "The CLI would be using http://localhost:8000 as the default url.\n")
         runner = CliRunner()
         result = runner.invoke(host)
         assert expected == result.output
         assert result.exit_code == 0
 
     def test_set_host_wrong_url(self):
-        expected = ("Sorry, please enter a valid EvalAI host url.\n"
+        expected = ("Sorry, please enter a valid url.\n"
                     "Example: https://evalapi.cloudcv.org\n")
         runner = CliRunner()
         result = runner.invoke(host, ['-sh', 'http:/evalapi.cloudcv'])
@@ -114,7 +114,7 @@ class TestHostConfig(BaseTestClass):
         assert result.exit_code == 0
 
     def test_set_host_url(self):
-        expected = "{} was set!\n".format("https://evalapi.cloudcv.org")
+        expected = "{} is set as the host url!\n".format("https://evalapi.cloudcv.org")
         runner = CliRunner()
         result = runner.invoke(host, ['-sh', 'https://evalapi.cloudcv.org'])
         assert expected == result.output
