@@ -5,7 +5,6 @@ import sys
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
 from click import echo, style
-from datetime import datetime
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (clean_data,
@@ -203,31 +202,29 @@ def pretty_print_challenge_details(challenge):
 
     challenge_title = "\n{} {}\n\n".format(challenge_title, challenge_id)
 
-    date = datetime.strptime(challenge["start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    date = date.strftime('%D %r')
+    date = convert_UTC_date_to_local(challenge["start_date"])
     start_date = style(date, bold=True)
     start_date = "Start Date: {}\n\n".format(start_date)
 
-    date = datetime.strptime(challenge["end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    date = date.strftime('%D %r')
+    date = convert_UTC_date_to_local(challenge["end_date"])
     end_date = style(date, bold=True)
     end_date = "End Date: {}\n\n".format(end_date)
 
     team = style(challenge["creator"]["team_name"], bold=True)
     team = "Organized By: {}\n\n".format(team)
 
-    description = style(challenge["description"])
+    description = BeautifulSoup(challenge["description"], "lxml").text.strip()
     description = "{}\n{}\n\n".format(style("Description", bold=True, fg="yellow"), description)
 
-    submission_guidelines = style(challenge["submission_guidelines"])
+    submission_guidelines = BeautifulSoup(challenge["submission_guidelines"], "lxml").text.strip()
     submission_guidelines = "{}\n{}\n\n".format(style("Submission Guidelines", bold=True, fg="yellow"),
                                                 submission_guidelines)
 
-    evaluation_details = style(challenge["evaluation_details"])
+    evaluation_details = BeautifulSoup(challenge["evaluation_details"], "lxml").text.strip()
     evaluation_details = "{}\n{}\n\n".format(style("Evaluation Details", bold=True, fg="yellow"),
                                              evaluation_details)
 
-    terms_and_conditions = style(challenge["terms_and_conditions"])
+    terms_and_conditions = BeautifulSoup(challenge["terms_and_conditions"], "lxml").text.strip()
     terms_and_conditions = "{}\n{}\n".format(style("Terms and Conditions", bold=True, fg="yellow"),
                                              terms_and_conditions)
 
@@ -249,9 +246,11 @@ def display_challenge_details(challenge):
         response = requests.get(url, headers=header)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        if (response.status_code == 401):
+        if (response.status_code in EVALAI_ERROR_CODES):
             validate_token(response.json())
-        echo(err)
+            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+        else:
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)

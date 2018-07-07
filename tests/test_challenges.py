@@ -84,6 +84,54 @@ class TestDisplayChallenges(BaseTestClass):
         assert response_table == self.output
 
 
+class TestDisplayChallengeDetails(BaseTestClass):
+
+    def setup(self):
+
+        self.challenge_data = json.loads(challenge_response.challenge_details)
+
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_details.value.format("1")),
+                      json=self.challenge_data, status=200)
+
+    @responses.activate
+    def test_display_challenge_details(self):
+
+        challenge_title = self.challenge_data["title"]
+        challenge_id = "ID: {}".format(str(self.challenge_data["id"]))
+
+        challenge_title = "\n{} {}\n\n".format(challenge_title, challenge_id)
+
+        date = convert_UTC_date_to_local(self.challenge_data["start_date"])
+        start_date = "Start Date: {}\n\n".format(date)
+
+        date = convert_UTC_date_to_local(self.challenge_data["end_date"])
+        end_date = "End Date: {}\n\n".format(date)
+
+        team = self.challenge_data["creator"]["team_name"]
+        team = "Organized By: {}\n\n".format(team)
+
+        description = self.challenge_data["description"]
+        description = "{}\n{}\n\n".format("Description", description)
+
+        submission_guidelines = self.challenge_data["submission_guidelines"]
+        submission_guidelines = "{}\n{}\n\n".format("Submission Guidelines", submission_guidelines)
+
+        evaluation_details = self.challenge_data["evaluation_details"]
+        evaluation_details = "{}\n{}\n\n".format("Evaluation Details", evaluation_details)
+
+        terms_and_conditions = self.challenge_data["terms_and_conditions"]
+        terms_and_conditions = "{}\n{}\n".format("Terms and Conditions", terms_and_conditions)
+
+        challenge_details = "{}{}{}{}{}{}{}{}\n".format(challenge_title, start_date, end_date, team, description,
+                                                        submission_guidelines, evaluation_details, terms_and_conditions)
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, ["1"])
+        response = result.output
+        assert response == challenge_details
+
+
 class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
 
     def setup(self):
@@ -519,10 +567,10 @@ class TestDisplayChallengePhaseSplit(BaseTestClass):
 
     @responses.activate
     def test_display_challenge_phase_split_list_with_a_single_argument(self):
-        output = ("Usage: challenge [OPTIONS] CHALLENGE COMMAND [ARGS]...\n"
-                  "\nError: Missing command.\n")
+        output = ("Usage: challenge phase [OPTIONS] PHASE COMMAND [ARGS]...\n"
+                  "\nError: Missing argument \"PHASE\".\n")
         runner = CliRunner()
-        result = runner.invoke(challenge, ['2'])
+        result = runner.invoke(challenge, ['2', 'phase'])
         response = result.output
         assert response == output
 
