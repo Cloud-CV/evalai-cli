@@ -12,8 +12,12 @@ from evalai.utils.common import (clean_data,
                                  convert_UTC_date_to_local,
                                  validate_date_format
                                  )
+from evalai.utils.auth import get_request_header, get_host_url
+from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
-from evalai.utils.config import API_HOST_URL, EVALAI_ERROR_CODES
+
+
+API_HOST_URL = get_host_url()
 
 
 def pretty_print_challenge_data(challenge):
@@ -42,7 +46,6 @@ def display_challenges(url):
     """
     Function to fetch & display the challenge list based on API
     """
-
     header = get_request_header()
     try:
         response = requests.get(url, headers=header)
@@ -70,7 +73,7 @@ def display_all_challenge_list():
     """
     Displays the list of all challenges from the backend
     """
-    url = "{}{}".format(API_HOST_URL, URLS.challenge_list.value)
+    url = "{}{}".format(get_host_url(), URLS.challenge_list.value)
     display_challenges(url)
 
 

@@ -4,8 +4,8 @@ import validators
 
 from click import echo, style
 
-from evalai.settings import (EVALAI_FILE_PATH,
-                             HOST_URL_FILE_PATH,)
+from evalai.utils.config import (AUTH_TOKEN_DIR,
+                                 HOST_URL_FILE_PATH,)
 
 
 @click.group(invoke_without_command=True)
@@ -17,8 +17,8 @@ def host(set_host):
     """
     if set_host is not None:
         if validators.url(set_host):
-            if not os.path.exists(EVALAI_FILE_PATH):
-                os.makedirs(EVALAI_FILE_PATH)
+            if not os.path.exists(AUTH_TOKEN_DIR):
+                os.makedirs(AUTH_TOKEN_DIR)
             with open(HOST_URL_FILE_PATH, 'w+') as fw:
                 try:
                     fw.write(set_host)

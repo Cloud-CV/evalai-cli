@@ -5,10 +5,13 @@ import sys
 from beautifultable import BeautifulTable
 from click import echo, style
 
-from evalai.utils.auth import get_request_header
+from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import validate_token
 from evalai.utils.urls import URLS
-from evalai.utils.config import API_HOST_URL, EVALAI_ERROR_CODES
+from evalai.utils.config import EVALAI_ERROR_CODES
+
+
+API_HOST_URL = get_host_url()
 
 
 def pretty_print_team_data(teams):

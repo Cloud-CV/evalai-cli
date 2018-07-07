@@ -3,15 +3,17 @@ import json
 import sys
 
 from click import echo, style
-from evalai.utils.config import AUTH_TOKEN_PATH
+from evalai.utils.config import (AUTH_TOKEN_PATH,
+                                 API_HOST_URL,
+                                 HOST_URL_FILE_PATH,)
 
 
 def get_user_auth_token():
     """
     Loads token to be used for sending requests.
     """
-    if os.path.exists(AUTH_TOKEN_FILE_PATH):
-        with open(str(AUTH_TOKEN_FILE_PATH), 'r') as TokenObj:
+    if os.path.exists(AUTH_TOKEN_PATH):
+        with open(str(AUTH_TOKEN_PATH), 'r') as TokenObj:
             try:
                 data = TokenObj.read()
             except (OSError, IOError) as e:
@@ -42,7 +44,7 @@ def get_host_url():
     Returns the host url.
     """
     if not os.path.exists(HOST_URL_FILE_PATH):
-        return "http://localhost:8000"
+        return API_HOST_URL
     else:
         with open(HOST_URL_FILE_PATH, 'r') as fr:
             try:
