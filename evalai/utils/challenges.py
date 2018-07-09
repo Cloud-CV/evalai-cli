@@ -5,6 +5,7 @@ import sys
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
 from click import echo, style
+from datetime import datetime
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (clean_data,
@@ -194,48 +195,15 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
 
 
 def pretty_print_challenge_details(challenge):
-    """
-    Function to pretty print the challenge details.
-    """
-    # challenge_title = style(challenge["title"], bold=True, fg="green")
-    # challenge_id = "ID: {}".format(style(str(challenge["id"]), bold=True))
-
-    # challenge_title = "\n{} {}\n\n".format(challenge_title, challenge_id)
-
-    # date = convert_UTC_date_to_local(challenge["start_date"])
-    # start_date = style(date, bold=True)
-    # start_date = "Start Date: {}\n\n".format(start_date)
-
-    # date = convert_UTC_date_to_local(challenge["end_date"])
-    # end_date = style(date, bold=True)
-    # end_date = "End Date: {}\n\n".format(end_date)
-
-    # team = style(challenge["creator"]["team_name"], bold=True)
-    # team = "Organized By: {}\n\n".format(team)
-
-    # description = BeautifulSoup(challenge["description"], "lxml").text.strip()
-    # description = "{}\n{}\n\n".format(style("Description", bold=True, fg="yellow"), description)
-
-    # submission_guidelines = BeautifulSoup(challenge["submission_guidelines"], "lxml").text.strip()
-    # submission_guidelines = "{}\n{}\n\n".format(style("Submission Guidelines", bold=True, fg="yellow"),
-    #                                             submission_guidelines)
-
-    # evaluation_details = BeautifulSoup(challenge["evaluation_details"], "lxml").text.strip()
-    # evaluation_details = "{}\n{}\n\n".format(style("Evaluation Details", bold=True, fg="yellow"),
-    #                                          evaluation_details)
-
-    # terms_and_conditions = BeautifulSoup(challenge["terms_and_conditions"], "lxml").text.strip()
-    # terms_and_conditions = "{}\n{}\n".format(style("Terms and Conditions", bold=True, fg="yellow"),
-    #                                          terms_and_conditions)
-
-    # challenge_details = "{}{}{}{}{}{}{}{}".format(challenge_title, start_date, end_date, team, description,
-    #                                               submission_guidelines, evaluation_details, terms_and_conditions)
-    # echo(challenge_details)
-
     table = BeautifulTable(max_width=210)
-    attributes = ["title", "start_date", "end_date", "description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
-    table.column_headers = attributes
-    values = list(map(lambda item: challenge[item], attributes))
+    attributes = ["description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
+    table.column_headers = ["Title", "Start Date", "End Date", "Description", "Submission Guidelines",
+                            "Evaluation Details", "Terms and Conditions"]
+    values = []
+    start_date = convert_UTC_date_to_local(challenge["start_date"]).split(" ")[0]
+    end_date = convert_UTC_date_to_local(challenge["end_date"]).split(" ")[0]
+    values.extend([challenge["title"], start_date, end_date])
+    values.extend(list(map(lambda item: clean_data(challenge[item]), attributes)))
     table.append_row(values)
     echo(table)
 

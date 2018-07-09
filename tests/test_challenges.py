@@ -96,40 +96,23 @@ class TestDisplayChallengeDetails(BaseTestClass):
 
     @responses.activate
     def test_display_challenge_details(self):
-
-        challenge_title = self.challenge_data["title"]
-        challenge_id = "ID: {}".format(str(self.challenge_data["id"]))
-
-        challenge_title = "\n{} {}\n\n".format(challenge_title, challenge_id)
-
-        date = convert_UTC_date_to_local(self.challenge_data["start_date"])
-        start_date = "Start Date: {}\n\n".format(date)
-
-        date = convert_UTC_date_to_local(self.challenge_data["end_date"])
-        end_date = "End Date: {}\n\n".format(date)
-
-        team = self.challenge_data["creator"]["team_name"]
-        team = "Organized By: {}\n\n".format(team)
-
-        description = self.challenge_data["description"]
-        description = "{}\n{}\n\n".format("Description", description)
-
-        submission_guidelines = self.challenge_data["submission_guidelines"]
-        submission_guidelines = "{}\n{}\n\n".format("Submission Guidelines", submission_guidelines)
-
-        evaluation_details = self.challenge_data["evaluation_details"]
-        evaluation_details = "{}\n{}\n\n".format("Evaluation Details", evaluation_details)
-
-        terms_and_conditions = self.challenge_data["terms_and_conditions"]
-        terms_and_conditions = "{}\n{}\n".format("Terms and Conditions", terms_and_conditions)
-
-        challenge_details = "{}{}{}{}{}{}{}{}\n".format(challenge_title, start_date, end_date, team, description,
-                                                        submission_guidelines, evaluation_details, terms_and_conditions)
+        table = BeautifulTable(max_width=210)
+        attributes = ["description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
+        column_attributes = ["Title", "Start Date", "End Date", "Description", "Submission Guidelines",
+                             "Evaluation Details", "Terms and Conditions"]
+        table.column_headers = column_attributes
+        values = []
+        start_date = convert_UTC_date_to_local(self.challenge_data["start_date"]).split(" ")[0]
+        end_date = convert_UTC_date_to_local(self.challenge_data["end_date"]).split(" ")[0]
+        values.extend([self.challenge_data["title"], start_date, end_date])
+        values.extend(list(map(lambda item: clean_data(self.challenge_data[item]), attributes)))
+        table.append_row(values)
+        expected = str(table)
 
         runner = CliRunner()
         result = runner.invoke(challenge, ["1"])
-        response = result.output
-        assert response == challenge_details
+        response = result.output.strip()
+        assert response == expected
 
 
 class TestDisplayChallengesWithNoChallengeData(BaseTestClass):
