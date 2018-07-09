@@ -1,3 +1,4 @@
+import json
 import requests
 import sys
 
@@ -275,7 +276,7 @@ def pretty_print_challenge_phase_data(phase):
     echo(challenge_phase)
 
 
-def display_challenge_phase_detail(challenge_id, phase_id):
+def display_challenge_phase_detail(challenge_id, phase_id, is_json):
     """
     Function to print details of a challenge phase.
     """
@@ -301,7 +302,11 @@ def display_challenge_phase_detail(challenge_id, phase_id):
     response = response.json()
 
     phase = response
-    pretty_print_challenge_phase_data(phase)
+    if is_json:
+        phase_json = json.dumps(phase, indent=4, sort_keys=True)
+        echo(phase_json)
+    else:
+        pretty_print_challenge_phase_data(phase)
 
 
 def pretty_print_challenge_phase_split_data(phase_splits):
