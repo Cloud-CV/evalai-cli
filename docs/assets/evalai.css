@@ -928,3 +928,86 @@ footer ul.primary-nav li:last-child a {
     color: #000;
 }
 
+.title {
+    color: #000;
+    float: left;
+    margin-top: 6px;
+    margin-left: 15px;
+    font-size: 20px;
+    font-weight: 600
+}
+
+.jumbotron-style {
+    background-color: #3F51B5;
+    margin-bottom: 0px;
+}
+
+.container-style {
+    text-align: center;
+    color: #fff
+}
+
+.btn-style {
+    margin-bottom: 32px;
+}
+
+.a-style {
+    position: absolute; top: 75px; right: 0; border: 0;
+}
+
+.section-style {
+    background-color: #f7f7f7;
+}
+
+#code-label {
+    padding-top: 20px;
+}
+
+.code-container-style {
+    color: #555; margin-bottom: 20px; font-size: 16px; line-height: 140%;
+}
+
+.code-margin {
+    margin-bottom: 20px;
+}
+
+#codebg {
+    background-color: #fff;
+}
+
+#h3-style {
+    font-size: 30px;
+}
+
+#title-style {
+    font-size: 40px;
+    margin-bottom: 30px;
+    margin-top: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.22em;
+}
+
+#img-pos {
+    height: 53px;
+    margin-top:-6px;
+}
+
+#footer-pos {
+    float: left;
+}
+
+#footer-link {
+    color: #000; float: left; margin-top: 6px; margin-left: 15px; font-size: 20px; font-weight: 600;
+}
+
+#footer-margin {
+    margin-top: 20px;
+}
+
+#example-style {
+    font-size: 50px;
+}
+
+#class-padding {
+    padding: 108px 0;
+}
