@@ -1,30 +1,34 @@
 import click
 
 from evalai.utils.teams import (
-                                create_participant_team,
-                                display_participant_teams,
+                                create_team,
+                                display_teams,
                                )
 
 
 @click.group(invoke_without_command=True)
 @click.pass_context
-def teams(ctx):
+@click.option('--host', '-h', is_flag=True,
+              help="View your host teams.")
+def teams(ctx, host):
     """
-    List all the participant teams of a user.
+    List all the participant/host teams of a user.
 
     Invoked by running `evalai teams`
     """
     if ctx.invoked_subcommand is None:
-        display_participant_teams()
+        display_teams(host)
 
 
 @teams.command()
-def create():
+@click.option('--host', '-h', is_flag=True,
+              help="Create a host team.")
+def create(host):
     """
-    Create a participant team.
+    Create a participant or host team.
 
     Invoked by running `evalai teams create`
     """
     team_name = click.prompt("Enter team name: ", type=str)
     if click.confirm("Please confirm the team name - %s" % (team_name), abort=True):
-        create_participant_team(team_name)
+        create_team(team_name, host)

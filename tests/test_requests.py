@@ -139,7 +139,7 @@ class TestHTTPErrorRequests(BaseTestClass):
         assert response == expected
 
     @responses.activate
-    def test_create_participant_team_for_http_error_404(self):
+    def test_create_team_for_http_error_404(self):
         user_prompt_text = ("Enter team name: : TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n")
         runner = CliRunner()
@@ -276,7 +276,7 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
         assert response == self.expected
 
     @responses.activate
-    def test_create_participant_team_for_object_does_not_exist(self):
+    def test_create_team_for_object_does_not_exist(self):
         user_prompt_text = ("Enter team name: : TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n")
         runner = CliRunner()
@@ -507,7 +507,7 @@ class TestRequestForExceptions(BaseTestClass):
         assert result.exit_code == -1
 
     @responses.activate
-    def test_create_participant_team_for_request_exception(self):
+    def test_create_team_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
         output = ("Enter team name: : TeamTest\n"

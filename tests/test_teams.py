@@ -48,17 +48,17 @@ class TestTeams:
         assert response == output
 
     @responses.activate
-    def test_create_participant_team_for_option_yes(self):
+    def test_create_team_for_option_yes(self):
         output = ("Enter team name: : TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "\nThe team TestTeam was successfully created.\n\n")
+                  "\nYour participant team TestTeam was successfully created.\n\n")
         runner = CliRunner()
         result = runner.invoke(teams, ['create'], input="TeamTest\ny\n")
         response = result.output
         assert response == output
 
     @responses.activate
-    def test_create_participant_team_for_option_no(self):
+    def test_create_team_for_option_no(self):
         output = ("Enter team name: : TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: n\n"
                   "Aborted!\n")
