@@ -114,12 +114,24 @@ class TestTeams:
         assert response == output
 
     @responses.activate
-    def test_create_host_team_for_option_yes_with_team_url(self):
+    def test_create_host_team_for_option_yes_with_valid_team_url(self):
+        output = ("Enter team name: TeamTest\n"
+                  "Please confirm the team name - TeamTest [y/N]: y\n"
+                  "Do you want to enter the Team URL - TeamTest [y/N]: Y\n"
+                  "Team URL: http://testteam.com\n"
+                  "\nYour host team TestTeam was successfully created.")
+        runner = CliRunner()
+        result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\nY\nhttp://testteam.com\n")
+        response = result.output.strip()
+        assert response == output
+
+    @responses.activate
+    def test_create_host_team_for_option_yes_with_invalid_team_url(self):
         output = ("Enter team name: TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
                   "Do you want to enter the Team URL - TeamTest [y/N]: Y\n"
                   "Team URL: TestURL\n"
-                  "\nYour host team TestTeam was successfully created.")
+                  "\nSorry, please enter a valid link.")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\nY\nTestURL\n")
         response = result.output.strip()

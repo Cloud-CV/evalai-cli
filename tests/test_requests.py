@@ -427,10 +427,11 @@ class TestRequestForExceptions(BaseTestClass):
 
         # Teams URLS
 
-        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_team_list.value), body=Exception('...'))
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.participant_team_list.value),
+                      body=RequestException('...'))
 
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participant_team_list.value),
-                      body=Exception('...'))
+                      body=RequestException('...'))
 
         responses.add(responses.POST, url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format("2", "3"),
                       body=RequestException('...'))
@@ -513,10 +514,7 @@ class TestRequestForExceptions(BaseTestClass):
     def test_create_team_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\nN")
-        output = ("Enter team name: TeamTest\n"
-                  "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "Do you want to enter the Team URL - TeamTest [y/N]: N")
-        assert result.output.strip() == output
+        assert result.exit_code == 1
 
     @responses.activate
     def test_participate_in_a_challenge_for_request_exception(self):

@@ -1,5 +1,6 @@
 import click
 import sys
+import validators
 
 from click import echo, style
 
@@ -53,6 +54,9 @@ def create(team):
         team_url = ""
         if click.confirm("Do you want to enter the Team URL - {}".format(team_name)):
             team_url = click.prompt('Team URL', type=str)
+            if not validators.url(team_url):
+                echo(style("\nSorry, please enter a valid link.\n", bold=True))
+                sys.exit(1)
 
         is_host = (team == "host")
         create_team(team_name, team_url, is_host)

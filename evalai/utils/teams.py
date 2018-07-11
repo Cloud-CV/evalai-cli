@@ -21,7 +21,6 @@ def pretty_print_team_data(teams, is_host):
     table.column_headers = columns_attributes
     for team in teams:
         values = list(map(lambda item: team[item], attributes))
-        members = ""
         if is_host:
             members = ", ".join(map(lambda member: member["user"], team["members"]))
         else:
@@ -83,11 +82,9 @@ def create_team(team_name, team_url, is_host):
     headers['Content-Type'] = 'application/json'
 
     data = {}
+    data["team_name"] = team_name
     if team_url:
-        data["team_name"] = team_name
         data["team_url"] = team_url
-    else:
-        data["team_name"] = team_name
     data = json.dumps(data)
     try:
         response = requests.post(
