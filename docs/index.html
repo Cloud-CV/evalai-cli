@@ -89,6 +89,33 @@
             <div class="text">pip install evalai</div>
         </div>
 
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4><b>Configure your Auth Token.</b></h4>
+              <br>
+            </div>
+        </div>
+        <ol>
+        <li>
+            <p>Open web browser and hit the url <a href="https://evalai.cloudcv.org/" rel="nofollow">https://evalai.cloudcv.org/</a>.</p>
+        </li>
+        <li>
+            <p>Login with your credentials and move to the profile section.</p>
+        </li>
+        <li>
+            <p>Click on <code>Get your Auth Token</code> to get the authentication token &amp; download it as a JSON file.</p>
+        </li>
+        <li>
+            <p>Create a folder with name <code>.evalai</code> in your home directory by using the command <code>mkdir ~/.evalai</code>.</p>
+        </li>
+        <li>
+            <p>Place the downloaded authentication token in the new created folder <code>mv ~/Downloads/token.json ~/.evalai/</code>.</p>
+        </li>
+        </ol>
+        <br>
+
         <div class="row">
             <div class="col-md-12" id="code-label">
               <h4 class="code-container-style"><b>Configure the Host URL.</b></h4>
@@ -143,16 +170,6 @@
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>Display challenges sorted by the time period (past/ongoing/future).</b></h4>
-            </div>
-        </div>
-        <div class="command code-margin">
-            <div class="label">Run this command:</div>  
-            <div class="text" id="codebg">evalai challenges past/ongoing/future</div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12" id="code-label">
               <h4 class="code-container-style"><b>Display all the past challenges.</b></h4>
             </div>
         </div>
@@ -179,6 +196,16 @@
         <div class="command code-margin">
             <div class="label">Run this command:</div>  
             <div class="text" id="codebg">evalai challenges ongoing</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4 class="code-container-style"><b>Display details of the challenge with ID 1.</b></h4>
+            </div>
+        </div>
+        <div class="command code-margin">
+            <div class="label">Run this command:</div>  
+            <div class="text" id="codebg">evalai challenge 1</div>
         </div>
 
         <br>
@@ -211,17 +238,17 @@
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>Submit a file to the Phase 4 of the Challenge 1 .</b></h4>
+              <h4 class="code-container-style"><b>Make a submission to the Phase 4 of the Challenge 1 .</b></h4>
             </div>
         </div>
         <div class="command code-margin">
             <div class="label">Run this command:</div>  
-            <div class="text" id="codebg">evalai challenge 1 phase 4 submit result.json</div>
+            <div class="text" id="codebg">evalai challenge 1 phase 4 submit --file result.json</div>
         </div>
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>Get all the challenge phase splits of the challenge 1 with phase 4.</b></h4>
+              <h4 class="code-container-style"><b>Get all the phase splits of the challenge 1 with phase 4.</b></h4>
             </div>
         </div>
         <div class="command code-margin">
@@ -231,7 +258,7 @@
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>Print the leaderboard of Challenge 1 with Challenge Phase Split 4</b></h4>
+              <h4 class="code-container-style"><b>View the leaderboard of Challenge 1 with Challenge Phase Split 4</b></h4>
             </div>
         </div>
         <div class="command code-margin">
@@ -241,12 +268,22 @@
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>View the submissions to a Phase 4 of the challenge 1</b></h4>
+              <h4 class="code-container-style"><b>View all the submissions to Phase 4 of the challenge 1</b></h4>
             </div>
         </div>
         <div class="command code-margin">
             <div class="label">Run this command:</div>  
             <div class="text" id="codebg">evalai challenge 1 phase 4 submissions</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4 class="code-container-style"><b>View all the submissions to Phase 4 of the challenge 1 between 06/15/18 and 06/25/18</b></h4>
+            </div>
+        </div>
+        <div class="command code-margin">
+            <div class="label">Run this command:</div>  
+            <div class="text" id="codebg">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</div>
         </div>
 
         <div class="row">
@@ -263,22 +300,54 @@
         <h3 id="h3-style">Teams</h3>
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>View your teams.</b></h4>
+              <h4 class="code-container-style"><b>View your participant teams</b></h4>
             </div>
         </div>
         <div class="command code-margin">
             <div class="label">Run this command:</div>  
-            <div class="text" id="codebg">evalai teams</div>
+            <div class="text" id="codebg">evalai teams --participant</div>
         </div>
 
         <div class="row">
             <div class="col-md-12" id="code-label">
-              <h4 class="code-container-style"><b>Create a team.</b></h4>
+              <h4 class="code-container-style"><b>View your host teams</b></h4>
             </div>
         </div>
         <div class="command code-margin">
             <div class="label">Run this command:</div>  
-            <div class="text" id="codebg">evalai teams create</div>
+            <div class="text" id="codebg">evalai teams --host</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4 class="code-container-style"><b>Create a participant team</b></h4>
+            </div>
+        </div>
+        <div class="command code-margin">
+            <div class="label">Run this command:</div>  
+            <div class="text" id="codebg">evalai teams create participant</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4 class="code-container-style"><b>Create a host team</b></h4>
+            </div>
+        </div>
+        <div class="command code-margin">
+            <div class="label">Run this command:</div>  
+            <div class="text" id="codebg">evalai teams create host</div>
+        </div>
+
+        <br>
+        <h3 id="h3-style">Stats</h3>
+        <div class="row">
+            <div class="col-md-12" id="code-label">
+              <h4 class="code-container-style"><b>View stats of your hosted challenge with ID 12</b></h4>
+            </div>
+        </div>
+        <div class="command code-margin">
+            <div class="label">Run this command:</div>  
+            <div class="text" id="codebg">evalai challenge 12 stats</div>
         </div>
 
     </div>
@@ -310,27 +379,7 @@
     <script src="./assets/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="./assets/bootstrap.min.js"></script>
-
     
-    <script type="text/javascript">
-      $(document).ready(function() {
-          // Highlight the home tab
-          $(function () {
-            $('ul.primary-nav li a').removeClass('active');
-            $('ul.primary-nav li a.home').addClass('active');
-          });
-      });
-      function scroll_to_anchor(anchor_id){
-          var tag = $("#"+ anchor_id);
-          $('html,body').animate({scrollTop: tag.offset().top},'fast');
-      }
-
-      $("#main-button").click(function() {
-         scroll_to_anchor('examples');
-      });
-    </script>
-
-
-  
+    <script src="./assets/active.js"></script>
 
 </body></html>
