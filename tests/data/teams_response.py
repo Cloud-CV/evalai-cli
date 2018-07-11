@@ -14,7 +14,8 @@ teams_list = """
                     "status": "Self"
                 }
             ],
-            "team_name": "OASIS"
+            "team_name": "OASIS",
+            "team_url": ""
         },
         {
             "created_by": "admin",
@@ -26,7 +27,8 @@ teams_list = """
                     "status": "Self"
                 }
             ],
-            "team_name": "ROSES"
+            "team_name": "ROSES",
+            "team_url": ""
         }
     ]
 }
