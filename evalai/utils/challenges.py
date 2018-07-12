@@ -107,8 +107,7 @@ def display_ongoing_challenge_list():
                              challenges))
 
     if len(challenges) != 0:
-        for challenge in challenges:
-            pretty_print_challenge_data(challenge)
+        pretty_print_challenge_data(challenges)
     else:
         echo("Sorry, no challenges found!")
 
