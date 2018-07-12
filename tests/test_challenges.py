@@ -96,15 +96,15 @@ class TestDisplayChallengeDetails(BaseTestClass):
 
     @responses.activate
     def test_display_challenge_details(self):
-        table = BeautifulTable(max_width=210)
+        table = BeautifulTable(max_width=200)
         attributes = ["description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
-        column_attributes = ["Title", "Start Date", "End Date", "Description", "Submission Guidelines",
+        column_attributes = ["Start Date", "End Date", "Description", "Submission Guidelines",
                              "Evaluation Details", "Terms and Conditions"]
         table.column_headers = column_attributes
         values = []
         start_date = convert_UTC_date_to_local(self.challenge_data["start_date"]).split(" ")[0]
         end_date = convert_UTC_date_to_local(self.challenge_data["end_date"]).split(" ")[0]
-        values.extend([self.challenge_data["title"], start_date, end_date])
+        values.extend([start_date, end_date])
         values.extend(list(map(lambda item: clean_data(self.challenge_data[item]), attributes)))
         table.append_row(values)
         expected = str(table)

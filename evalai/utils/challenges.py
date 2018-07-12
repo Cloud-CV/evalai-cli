@@ -195,14 +195,14 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
 
 
 def pretty_print_challenge_details(challenge):
-    table = BeautifulTable(max_width=210)
+    table = BeautifulTable(max_width=200)
     attributes = ["description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
-    table.column_headers = ["Title", "Start Date", "End Date", "Description", "Submission Guidelines",
+    table.column_headers = ["Start Date", "End Date", "Description", "Submission Guidelines",
                             "Evaluation Details", "Terms and Conditions"]
     values = []
     start_date = convert_UTC_date_to_local(challenge["start_date"]).split(" ")[0]
     end_date = convert_UTC_date_to_local(challenge["end_date"]).split(" ")[0]
-    values.extend([challenge["title"], start_date, end_date])
+    values.extend([start_date, end_date])
     values.extend(list(map(lambda item: clean_data(challenge[item]), attributes)))
     table.append_row(values)
     echo(table)
@@ -213,7 +213,7 @@ def display_challenge_details(challenge):
     Function to display challenge details.
     """
     url = URLS.challenge_details.value
-    url = "{}{}".format(API_HOST_URL, url)
+    url = "{}{}".format(get_host_url(), url)
     url = url.format(challenge)
 
     header = get_request_header()
