@@ -610,9 +610,9 @@ class TestDisplayLeaderboard(BaseTestClass):
     @responses.activate
     def test_display_leaderboard(self):
         attributes = self.leaderboard[0]["leaderboard__schema"]["labels"]
-
         table = BeautifulTable(max_width=150)
         attributes = ["Rank", "Participant Team"] + attributes + ["Last Submitted"]
+        attributes = list(map(lambda item: str(item), attributes))
         table.column_headers = attributes
 
         for rank, result in enumerate(self.leaderboard, start=1):

@@ -419,8 +419,8 @@ def pretty_print_leaderboard_data(attributes, results):
     """
     leaderboard_table = BeautifulTable(max_width=150)
     attributes = ["Rank", "Participant Team"] + attributes + ["Last Submitted"]
+    attributes = list(map(lambda item: str(item), attributes))
     leaderboard_table.column_headers = attributes
-
     for rank, result in enumerate(results, start=1):
         name = result['submission__participant_team__team_name']
         scores = result['result']
@@ -440,7 +440,7 @@ def display_leaderboard(challenge_id, phase_split_id):
     url = url.format(phase_split_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
