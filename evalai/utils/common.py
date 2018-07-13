@@ -66,4 +66,4 @@ def clean_data(data):
     """
     data = BeautifulSoup(data, "lxml").text.strip()
     data = ' '.join(data.split())
-    return data
+    return data.encode("utf-8")

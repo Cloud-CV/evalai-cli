@@ -39,6 +39,7 @@ setup(
         'python-dateutil==2.7.3',
         'requests==2.18.4',
         'responses==0.9.0',
+        'validators==0.12.2',
     ],
 
     namespace_packages=[],
