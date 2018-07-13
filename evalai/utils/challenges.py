@@ -17,14 +17,11 @@ from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
 
 
-requests.packages.urllib3.disable_warnings()
-
-
 def pretty_print_challenge_data(challenges):
     """
     Function to print the challenge data
     """
-    table = BeautifulTable(max_width=210)
+    table = BeautifulTable(max_width=200)
     attributes = ["id", "title", "short_description"]
     columns_attributes = ["ID", "Title", "Short Description", "Creator", "Start Date", "End Date"]
     table.column_headers = columns_attributes
@@ -35,7 +32,7 @@ def pretty_print_challenge_data(challenges):
         end_date = convert_UTC_date_to_local(challenge["end_date"])
         values.extend([creator, start_date, end_date])
         table.append_row(values)
-    print(table)
+    echo(table)
 
 
 def display_challenges(url):
@@ -44,7 +41,7 @@ def display_challenges(url):
     """
     header = get_request_header()
     try:
-        response = requests.get(url, headers=header, verify=False)
+        response = requests.get(url, headers=header)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code == 401):
@@ -211,8 +208,7 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
                                      challenges))
             if challenges:
                 echo(style("\nParticipated Challenges\n", bold=True))
-                for challenge in challenges:
-                    pretty_print_challenge_data(challenge)
+                pretty_print_challenge_data(challenges)
             else:
                 echo("Sorry, no challenges found!")
         else:
