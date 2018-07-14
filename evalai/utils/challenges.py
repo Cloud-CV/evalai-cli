@@ -440,14 +440,15 @@ def display_leaderboard(challenge_id, phase_split_id):
     url = url.format(phase_split_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
             validate_token(response.json())
-            echo(style("Error: {}".format(response.json()["error"], fg="red", bold=True)))
+            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
         else:
             echo(err)
+        sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(err)
         sys.exit(1)
