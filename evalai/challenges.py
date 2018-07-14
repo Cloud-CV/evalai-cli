@@ -13,7 +13,8 @@ from evalai.utils.challenges import (
                                     display_challenge_phase_list,
                                     display_challenge_phase_detail,
                                     display_challenge_phase_split_list,
-                                    display_leaderboard,)
+                                    display_leaderboard,
+                                    display_challenge_stats,)
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
 from evalai.utils.submissions import make_submission
@@ -209,6 +210,18 @@ def submit(ctx, file):
         submission_metadata["publication_url"] = click.prompt(style('Publication URL', fg="yellow"),
                                                               type=str, default="")
     make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
+
+
+@challenge.command()
+@click.pass_obj
+def stats(ctx):
+    """
+    View stats of a challenge.
+    """
+    """
+    Invoked by running `evalai challenges CHALLENGE stats`
+    """
+    display_challenge_stats(ctx.challenge_id)
 
 
 challenge.add_command(phase)

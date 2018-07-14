@@ -486,3 +486,92 @@ def display_leaderboard(challenge_id, phase_split_id):
         pretty_print_leaderboard_data(attributes, results)
     else:
         echo("Sorry, no Leaderboard results found.")
+
+
+def pretty_print_challenge_stats(stats):
+    """
+    Pretty print the leaderboard for a particular CPS.
+    """
+    table = BeautifulTable(max_width=150)
+    table.column_headers = ["ID", "Phase", "Total Submissions", "Latest Submission At"]
+    for key in stats:
+        values = []
+        values.append(stats[key][0]["challenge_phase"])
+        values.append(key)
+        values.append(stats[key][0]["participant_team_submission_count"])
+        if ("last_submission_timestamp_in_challenge_phase" in stats[key][1].keys()):
+            values.append(stats[key][1]["last_submission_timestamp_in_challenge_phase"])
+        else:
+            values.append("You don't have any submissions in this challenge phase!")
+        table.append_row(values)
+    echo(table)
+
+
+def display_challenge_stats(challenge_id):
+    """
+    Function to display the stats of a challenge.
+    """
+    url = URLS.challenge_phase_list.value
+    url = "{}{}".format(get_host_url(), url)
+    url = url.format(challenge_id)
+    headers = get_request_header()
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        if (response.status_code in EVALAI_ERROR_CODES):
+            validate_token(response.json())
+            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+        else:
+            echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException as err:
+        echo(err)
+        sys.exit(1)
+
+    response = response.json()
+    challenge_phases = response["results"]
+
+    stats = {}
+    for phase in challenge_phases:
+        stats[phase["name"]] = []
+        count_stats_url = URLS.count_stats.value
+        url = "{}{}".format(get_host_url(), count_stats_url)
+        url = url.format(challenge_id, phase["id"])
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            if (response.status_code in EVALAI_ERROR_CODES):
+                validate_token(response.json())
+                echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+            else:
+                echo(err)
+            sys.exit(1)
+        except requests.exceptions.RequestException as err:
+            echo(err)
+            sys.exit(1)
+
+        response = response.json()
+        stats[phase["name"]].append(response)
+
+        last_submission_stats_url = URLS.last_submission_stats.value
+        url = "{}{}".format(get_host_url(), last_submission_stats_url)
+        url = url.format(challenge_id, phase["id"])
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            if (response.status_code in EVALAI_ERROR_CODES):
+                validate_token(response.json())
+                echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+            else:
+                echo(err)
+            sys.exit(1)
+        except requests.exceptions.RequestException as err:
+            echo(err)
+            sys.exit(1)
+
+        response = response.json()
+        stats[phase["name"]].append(response)
+    pretty_print_challenge_stats(stats)
