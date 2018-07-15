@@ -499,8 +499,10 @@ def pretty_print_challenge_stats(stats):
         values.append(stats[key][0]["challenge_phase"])
         values.append(key)
         values.append(stats[key][0]["participant_team_submission_count"])
-        if ("last_submission_timestamp_in_challenge_phase" in stats[key][1].keys()):
-            values.append(stats[key][1]["last_submission_timestamp_in_challenge_phase"])
+        label = "last_submission_timestamp_in_challenge_phase"
+        if (label in stats[key][1].keys() and
+                stats[key][1][label] != "You dont have any submissions in this challenge phase!"):
+            values.append(convert_UTC_date_to_local(stats[key][1][label]))
         else:
             values.append("You don't have any submissions in this challenge phase!")
         table.append_row(values)
