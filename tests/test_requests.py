@@ -142,7 +142,7 @@ class TestHTTPErrorRequests(BaseTestClass):
     def test_create_team_for_http_error_404(self):
         user_prompt_text = ("Enter team name: TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n"
-                            "Do you want to enter the Team URL - TeamTest [y/N]: N\n")
+                            "Do you want to enter the Team URL [y/N]: N\n")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\nN")
         response = result.output
@@ -280,7 +280,7 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
     def test_create_team_for_object_does_not_exist(self):
         user_prompt_text = ("Enter team name: TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n"
-                            "Do you want to enter the Team URL - TeamTest [y/N]: N\n")
+                            "Do you want to enter the Team URL [y/N]: N\n")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\nN")
         response = result.output.rstrip()
@@ -309,7 +309,7 @@ class TestTeamsWhenTeamNameAlreadyExists(BaseTestClass):
     def test_participate_in_a_challenge_for_team_name_exists(self):
         user_prompt_text = ("Enter team name: TeamTest\n"
                             "Please confirm the team name - TeamTest [y/N]: y\n"
-                            "Do you want to enter the Team URL - TeamTest [y/N]: N\n")
+                            "Do you want to enter the Team URL [y/N]: N\n")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\nN")
         response = result.output.rstrip()

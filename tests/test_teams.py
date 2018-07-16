@@ -67,7 +67,6 @@ class TestTeams:
         table.column_headers = columns_attributes
         for team in self.host_teams:
             values = list(map(lambda item: team[item], attributes))
-            members = ""
             members = ", ".join(map(lambda member: member["user"], team["members"]))
             values.append(members)
             if team["team_url"]:
@@ -85,7 +84,7 @@ class TestTeams:
     def test_create_participant_team_for_option_yes(self):
         output = ("Enter team name: TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "Do you want to enter the Team URL - TeamTest [y/N]: N\n"
+                  "Do you want to enter the Team URL [y/N]: N\n"
                   "\nYour participant team TestTeam was successfully created.")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'participant'], input="TeamTest\ny\nN")
@@ -96,7 +95,7 @@ class TestTeams:
     def test_create_host_team_for_option_yes(self):
         output = ("Enter team name: TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "Do you want to enter the Team URL - TeamTest [y/N]: N\n"
+                  "Do you want to enter the Team URL [y/N]: N\n"
                   "\nYour host team TestTeam was successfully created.")
         runner = CliRunner()
         result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\nN")
@@ -117,7 +116,7 @@ class TestTeams:
     def test_create_host_team_for_option_yes_with_valid_team_url(self):
         output = ("Enter team name: TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "Do you want to enter the Team URL - TeamTest [y/N]: Y\n"
+                  "Do you want to enter the Team URL [y/N]: Y\n"
                   "Team URL: http://testteam.com\n"
                   "\nYour host team TestTeam was successfully created.")
         runner = CliRunner()
@@ -129,11 +128,13 @@ class TestTeams:
     def test_create_host_team_for_option_yes_with_invalid_team_url(self):
         output = ("Enter team name: TeamTest\n"
                   "Please confirm the team name - TeamTest [y/N]: y\n"
-                  "Do you want to enter the Team URL - TeamTest [y/N]: Y\n"
+                  "Do you want to enter the Team URL [y/N]: Y\n"
                   "Team URL: TestURL\n"
-                  "\nSorry, please enter a valid link.")
+                  "Sorry, please enter a valid link.\n"
+                  "Team URL: http://testteam.com\n"
+                  "\nYour host team TestTeam was successfully created.")
         runner = CliRunner()
-        result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\nY\nTestURL\n")
+        result = runner.invoke(teams, ['create', 'host'], input="TeamTest\ny\nY\nTestURL\nhttp://testteam.com")
         response = result.output.strip()
         assert response == output
 

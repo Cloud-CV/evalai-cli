@@ -52,11 +52,11 @@ def create(team):
     team_name = click.prompt("Enter team name", type=str)
     if click.confirm("Please confirm the team name - {}".format(team_name), abort=True):
         team_url = ""
-        if click.confirm("Do you want to enter the Team URL - {}".format(team_name)):
+        if click.confirm("Do you want to enter the Team URL".format(team_name)):
             team_url = click.prompt('Team URL', type=str)
-            if not validators.url(team_url):
-                echo(style("\nSorry, please enter a valid link.\n", bold=True))
-                sys.exit(1)
+            while not (validators.url(team_url) or validators.domain(team_url)):
+                echo("Sorry, please enter a valid link.")
+                team_url = click.prompt('Team URL', type=str)
 
         is_host = (team == "host")
         create_team(team_name, team_url, is_host)
