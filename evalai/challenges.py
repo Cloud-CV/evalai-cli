@@ -26,6 +26,16 @@ class Challenge(object):
     """
 
     def __init__(self, challenge=None, phase=None, subcommand=None):
+        """
+        Args
+        ----------
+        challenge: int
+            Challenge ID to be stored.
+        phase: int
+            Phase ID to be stored.
+        subcommand: string
+            Subcommand to be stored.
+        """
         self.challenge_id = challenge
         self.phase_id = phase
         self.subcommand = subcommand
@@ -37,6 +47,12 @@ class PhaseGroup(click.Group):
     """
 
     def invoke(self, ctx):
+        """
+        Args
+        ----------
+        ctx: Context Object
+            Parses Subcommands to be stored in Challenge Object.
+        """
         if "--json" in tuple(ctx.protected_args):
             ctx.protected_args = []
             ctx.params["json"] = True
@@ -60,7 +76,34 @@ def challenges(ctx, participant, host):
     Lists challenges
     """
     """
-    Invoked by running `evalai challenges`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    participant (optional flag): Bool
+        Returns participated challenges
+
+    host (optional flag): Bool
+        Returns hosted challenges
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular challenges.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+    ValueError
+        Invalid Date Format
+
+    Command
+    -------
+    evalai challenges
     """
     if participant or host:
         display_participated_or_hosted_challenges(host, participant)
@@ -75,6 +118,32 @@ def challenge(ctx, challenge):
     """
     Display challenge specific details.
     """
+    """
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    CHALLENGE (Argument): Int
+        Challenge ID
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular challenge details
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+    ValueError
+        Invalid Date Format
+    Command
+    -------
+    evalai challenge CHALLENGE <OPTIONAL COMMANDS>
+    """
     ctx.obj = Challenge(challenge=challenge)
     if ctx.invoked_subcommand is None:
         display_challenge_details(challenge)
@@ -86,7 +155,23 @@ def ongoing():
     List all active challenges
     """
     """
-    Invoked by running `evalai challenges ongoing`
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular ongoing challenges.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+    ValueError
+        Invalid Date Format
+
+    Command
+    -------
+    evalai challenge ongoing
     """
     display_ongoing_challenge_list()
 
@@ -97,7 +182,21 @@ def past():
     List all past challenges
     """
     """
-    Invoked by running `evalai challenges past`
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular past challenges.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+
+    Command
+    -------
+    evalai challenge past
     """
     display_past_challenge_list()
 
@@ -108,7 +207,21 @@ def future():
     List all upcoming challenges
     """
     """
-    Invoked by running `evalai challenges future`
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular upcoming challenges.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+
+    Command
+    -------
+    evalai challenge future
     """
     display_future_challenge_list()
 
@@ -120,7 +233,26 @@ def phases(ctx):
     List all phases of a challenge
     """
     """
-    Invoked by running `evalai challenges CHALLENGE phases`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular phases.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+
+    Command
+    -------
+    evalai challenge CHALLENGE phases
     """
     display_challenge_phase_list(ctx.challenge_id)
 
@@ -134,7 +266,32 @@ def phase(ctx, json, phase):
     List phase details of a phase
     """
     """
-    Invoked by running `evalai challenges CHALLENGE phase PHASE`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    json (optional flag): Bool
+        Returns phase details as json.
+
+    PHASE (Argument): Int
+        PHASE ID
+
+    Returns
+    -------
+    Phase Description: String
+        Phase Description
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error.
+    requests.exceptions.RequestException
+        Server throws request exception.
+
+    Command
+    -------
+    evalai challenge CHALLENGE phase PHASE <OPTIONAL COMMANDS>
     """
     ctx.phase_id = phase
     if len(ctx.subcommand) == 0:
@@ -160,7 +317,28 @@ def submissions(ctx, start_date, end_date):
     Display submissions to a particular challenge.
     """
     """
-    Invoked by running `evalai challenge CHALLENGE phase PHASE submissions`.
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular submissions to a challenge
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+    ValueError
+        Invalid Date Format
+
+    Command
+    -------
+    evalai challenge CHALLENGE phase PHASE submissions
     """
     display_my_submission_details(
         ctx.challenge_id, ctx.phase_id, start_date, end_date
@@ -174,7 +352,28 @@ def splits(ctx):
     View the phase splits of a challenge.
     """
     """
-    Invoked by running `evalai challenge CHALLENGE phase PHASE splits`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular phase splits of a phase
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+    ValueError
+        Invalid Date Format
+
+    Command
+    -------
+    evalai challenge CHALLENGE phase PHASE splits
     """
     display_challenge_phase_split_list(ctx.challenge_id)
 
@@ -187,7 +386,31 @@ def leaderboard(ctx, cps):
     Displays the Leaderboard to a Challenge Phase Split.
     """
     """
-    Invoked by running `evalai challenge CHALLENGE leaderboard CPS`.
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    CPS (Argument): Int
+        Challenge Phase Split ID
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular leaderboard of the Challenge Phase Split
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+    ValueError
+        Invalid Date Format
+
+    Command
+    -------
+    evalai challenge CHALLENGE leaderboard CPS
     """
     display_leaderboard(ctx.challenge_id, cps)
 
@@ -200,7 +423,29 @@ def participate(ctx, team):
     Participate in a challenge.
     """
     """
-    Invoked by running `evalai challenge CHALLENGE participate TEAM`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    TEAM (Argument): Int
+        Team ID
+
+    Returns
+    -------
+    String
+       Participation status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Command
+    -------
+    evalai challenge CHALLENGE participate TEAM
     """
     participate_in_a_challenge(ctx.challenge_id, team)
 
@@ -215,7 +460,29 @@ def submit(ctx, file):
     Make submission to a challenge.
     """
     """
-    Invoked by running `evalai challenge CHALLENGE phase PHASE submit FILE`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    file (required flag): click.File
+        File for submission
+
+    Returns
+    -------
+    String
+       File submission status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Command
+    -------
+    evalai challenge CHALLENGE participate PHASE submit --file FILE
     """
     submission_metadata = {}
     if click.confirm("Do you want to include the Submission Details?"):
