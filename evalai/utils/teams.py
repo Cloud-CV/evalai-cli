@@ -26,7 +26,7 @@ def pretty_print_team_data(teams, is_host):
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular teams.
+       Tabular teams
     """
     table = BeautifulTable(max_width=200)
     attributes = ["id", "team_name", "created_by"]
@@ -117,7 +117,7 @@ def create_team(team_name, team_url, is_host):
     Args
     ----------
     team_name: String
-        New team name.
+        New team name
 
     Returns
     -------
@@ -208,7 +208,7 @@ def create_team(team_name, team_url, is_host):
 
 def participate_in_a_challenge(challenge_id, participant_team_id):
     """
-    Request participation in a particular challenge.
+    Request participation in a particular challenge
 
     Args
     ----------

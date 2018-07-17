@@ -288,9 +288,9 @@ def display_participated_or_hosted_challenges(
     Args
     ----------
     is_host: Bool
-        Flag to display host challenges.
+        Flag to display host challenges
     is_participant: Bool
-        Flag to display participant challenges.
+        Flag to display participant challenges
 
     Raises
     -------
@@ -359,7 +359,7 @@ def pretty_print_challenge_details(challenge):
 
     Args
     ----------
-    challenge: dict
+    challenge: Dict
         Challenge details as json
 
     Returns
@@ -407,7 +407,7 @@ def display_challenge_details(challenge):
     Args
     ----------
     challenge: Int
-        Challenge ID.
+        Challenge ID
 
     Raises
     -------
@@ -492,12 +492,12 @@ def pretty_print_all_challenge_phases(phases):
 
 def display_challenge_phase_list(challenge_id):
     """
-    Fetch and display all challenge phases for a particular challenge.
+    Fetch and display all challenge phases for a particular challenge
 
     Args
     ----------
     challenge_id: Int
-        Challenge ID.
+        Challenge ID
 
     Raises
     -------
@@ -558,7 +558,7 @@ def display_challenge_phase_list(challenge_id):
 
 def pretty_print_challenge_phase_data(phase):
     """
-    Pretty print the details of a challenge phase.
+    Pretty print the details of a challenge phase
 
     Args
     ----------
@@ -628,15 +628,15 @@ def pretty_print_challenge_phase_data(phase):
 
 def display_challenge_phase_detail(challenge_id, phase_id, is_json):
     """
-    Fetch and display details of a challenge phase.
+    Fetch and display details of a challenge phase
 
     Args
     ----------
     challenge_id: Int
-        Challenge ID.
+        Challenge ID
 
     phase_id: Int
-        Phase ID.
+        Phase ID
 
     is_json: Bool
         Flag to return details as JSON
@@ -695,7 +695,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
 
 def pretty_print_challenge_phase_split_data(phase_splits):
     """
-    Pretty print the details of a Challenge Phase Split.
+    Pretty print the details of a Challenge Phase Split
 
     Args
     ----------
@@ -725,12 +725,12 @@ def pretty_print_challenge_phase_split_data(phase_splits):
 
 def display_challenge_phase_split_list(challenge_id):
     """
-    Fetch and display Challenge Phase Splits of a particular challenge.
+    Fetch and display Challenge Phase Splits of a particular challenge
 
     Args
     ----------
     challenge_id: Int
-        Challenge ID.
+        Challenge ID
 
     Raises
     -------
@@ -782,7 +782,7 @@ def display_challenge_phase_split_list(challenge_id):
 
 def pretty_print_leaderboard_data(attributes, results):
     """
-    Pretty print the leaderboard for a particular CPS.
+    Pretty print the leaderboard for a particular CPS
 
     Args
     ----------
@@ -817,15 +817,15 @@ def pretty_print_leaderboard_data(attributes, results):
 
 def display_leaderboard(challenge_id, phase_split_id):
     """
-    Fetch and display the Leaderboard of a particular CPS.
+    Fetch and display the Leaderboard of a particular CPS
 
     Args
     ----------
     challenge_id: Int
-        Challenge ID.
+        Challenge ID
 
     phase_split_id: Int
-        Challenge Phase Split ID.
+        Challenge Phase Split ID
 
     Raises
     -------

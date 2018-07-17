@@ -15,7 +15,7 @@ from evalai.utils.teams import create_team, display_teams
 )
 def teams(ctx, host, participant):
     """
-    List all the participant/host teams of a user.
+    List all the participant/host teams of a user
     """
     """
     Args
@@ -26,7 +26,7 @@ def teams(ctx, host, participant):
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular teams.
+       Tabular teams
 
     Raises
     -------
@@ -57,10 +57,10 @@ def teams(ctx, host, participant):
 @click.argument("TEAM", type=str)
 def create(team):
     """
-    Create a participant or host team.
+    Create a participant or host team
     """
     """
-    Create a participant team.
+    Create a participant team
     """
     """
     Returns

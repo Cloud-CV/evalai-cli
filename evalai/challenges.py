@@ -22,19 +22,19 @@ from evalai.utils.submissions import make_submission
 
 class Challenge(object):
     """
-    Stores user input ID's.
+    Stores user input ID's
     """
 
     def __init__(self, challenge=None, phase=None, subcommand=None):
         """
         Args
         ----------
-        challenge: int
-            Challenge ID to be stored.
-        phase: int
-            Phase ID to be stored.
+        challenge: Int
+            Challenge ID to be stored
+        phase: Int
+            Phase ID to be stored
         subcommand: string
-            Subcommand to be stored.
+            Subcommand to be stored
         """
         self.challenge_id = challenge
         self.phase_id = phase
@@ -43,15 +43,16 @@ class Challenge(object):
 
 class PhaseGroup(click.Group):
     """
-    Fetch the submcommand data in the phase group.
+    Fetch the submcommand data in the phase group
     """
 
     def invoke(self, ctx):
         """
+        Parses Subcommands to be stored in Challenge Object
+
         Args
         ----------
         ctx: Context Object
-            Parses Subcommands to be stored in Challenge Object.
         """
         if "--json" in tuple(ctx.protected_args):
             ctx.protected_args = []
@@ -90,7 +91,7 @@ def challenges(ctx, participant, host):
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular challenges.
+       Tabular challenges
 
     Raises
     -------
@@ -116,7 +117,7 @@ def challenges(ctx, participant, host):
 @click.argument("CHALLENGE", type=int)
 def challenge(ctx, challenge):
     """
-    Display challenge specific details.
+    Display challenge specific details
     """
     """
     Args
@@ -135,11 +136,12 @@ def challenge(ctx, challenge):
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
     ValueError
         Invalid Date Format
+
     Command
     -------
     evalai challenge CHALLENGE <OPTIONAL COMMANDS>
@@ -158,14 +160,14 @@ def ongoing():
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular ongoing challenges.
+       Tabular ongoing challenges
 
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
     ValueError
         Invalid Date Format
 
@@ -190,9 +192,9 @@ def past():
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
 
     Command
     -------
@@ -210,14 +212,14 @@ def future():
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular upcoming challenges.
+       Tabular upcoming challenges
 
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
 
     Command
     -------
@@ -241,14 +243,14 @@ def phases(ctx):
     Returns
     -------
     BeautifuleTable: BeautifulTable Object (string)
-       Tabular phases.
+       Tabular phases
 
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
 
     Command
     -------
@@ -272,7 +274,7 @@ def phase(ctx, json, phase):
         Click Context Object
 
     json (optional flag): Bool
-        Returns phase details as json.
+        Returns phase details as json
 
     PHASE (Argument): Int
         PHASE ID
@@ -285,9 +287,9 @@ def phase(ctx, json, phase):
     Raises
     -------
     requests.exceptions.HTTPError
-        Server throws 4XX error.
+        Server throws 4XX error
     requests.exceptions.RequestException
-        Server throws request exception.
+        Server throws request exception
 
     Command
     -------
@@ -314,7 +316,7 @@ def phase(ctx, json, phase):
 )
 def submissions(ctx, start_date, end_date):
     """
-    Display submissions to a particular challenge.
+    Display submissions to a particular challenge
     """
     """
     Args
@@ -349,7 +351,7 @@ def submissions(ctx, start_date, end_date):
 @click.pass_obj
 def splits(ctx):
     """
-    View the phase splits of a challenge.
+    View the phase splits of a challenge
     """
     """
     Args
@@ -383,7 +385,7 @@ def splits(ctx):
 @click.argument("CPS", type=int)
 def leaderboard(ctx, cps):
     """
-    Displays the Leaderboard to a Challenge Phase Split.
+    Displays the Leaderboard to a Challenge Phase Split
     """
     """
     Args
@@ -420,7 +422,7 @@ def leaderboard(ctx, cps):
 @click.argument("TEAM", type=int)
 def participate(ctx, team):
     """
-    Participate in a challenge.
+    Participate in a challenge
     """
     """
     Args
@@ -457,7 +459,7 @@ def participate(ctx, team):
 )
 def submit(ctx, file):
     """
-    Make submission to a challenge.
+    Make submission to a challenge
     """
     """
     Args

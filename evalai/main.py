@@ -15,7 +15,7 @@ from .login import login
 @click.pass_context
 def main(ctx):
     """
-    Welcome to the EvalAI CLI.
+    Welcome to the EvalAI CLI
     """
     if ctx.invoked_subcommand is None:
         welcome_text = (

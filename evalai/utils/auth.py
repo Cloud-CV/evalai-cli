@@ -52,7 +52,16 @@ def get_user_auth_token_by_login(username, password):
 
 def get_user_auth_token():
     """
-    Loads token to be used for sending requests.
+    Loads token to be used for sending requests
+
+    Returns
+    -------
+    token: str
+       Token of the user
+
+    Raises
+    -------
+    OSError, IOError: Error while operating on file system
     """
     if os.path.exists(AUTH_TOKEN_PATH):
         with open(str(AUTH_TOKEN_PATH), "r") as TokenObj:
@@ -78,7 +87,12 @@ def get_user_auth_token():
 
 def get_request_header():
     """
-    Returns user auth token formatted in header for sending requests.
+    Returns user auth token formatted in header for sending requests
+
+    Returns
+    -------
+    header: dict
+       Token of the user as a header
     """
     header = {"Authorization": "Token {}".format(get_user_auth_token())}
 
@@ -87,7 +101,16 @@ def get_request_header():
 
 def get_host_url():
     """
-    Returns the host url.
+    Returns the host url
+
+    Returns
+    -------
+    API_HOST_URL: str
+       Host URL the user has configured
+
+    Raises
+    -------
+    OSError, IOError: Error while operating on file system
     """
     if not os.path.exists(HOST_URL_FILE_PATH):
         return API_HOST_URL
