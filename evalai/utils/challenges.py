@@ -354,7 +354,11 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
             validate_token(response.json())
-            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+            echo(style("\nError: {}\n"
+                       "\nUse `evalai challenges` to fetch the active challenges.\n"
+                       "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                       "active phases.\n".format(response.json()["error"]),
+                       fg="red", bold=True))
         else:
             echo(err)
         sys.exit(1)
@@ -402,9 +406,11 @@ def display_challenge_phase_split_list(challenge_id):
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
             validate_token(response.json())
-            echo(style("\nError: {}".format(response.json()["error"]), fg="red", bold=True))
-            echo(style("\nUse `evalai challenges` to fetch the active challenges.", fg="red", bold=True))
-            echo(style("\nUse `evalai challenge CHALLENGE phases` to fetch the active phases.\n", fg="red", bold=True))
+            echo(style("\nError: {}\n"
+                       "\nUse `evalai challenges` to fetch the active challenges.\n"
+                       "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                       "active phases.\n".format(response.json()["error"]),
+                       fg="red", bold=True))
         else:
             echo(err)
         sys.exit(1)
