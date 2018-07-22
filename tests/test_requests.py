@@ -537,7 +537,7 @@ class TestRequestForExceptions(BaseTestClass):
     def test_participate_in_a_challenge_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'participate', '3'])
-        assert result.output.strip() == "..."
+        assert result.exit_code == 1
 
     @responses.activate
     def test_display_challenge_phase_list_for_request_exception(self):
@@ -555,7 +555,7 @@ class TestRequestForExceptions(BaseTestClass):
     def test_display_my_submission_details_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['3', 'phase', '7', 'submissions'])
-        assert result.output.strip() == "..."
+        assert result.exit_code == 1
 
     @responses.activate
     def test_display_submission_details_for_request_exception(self):
@@ -571,26 +571,22 @@ class TestRequestForExceptions(BaseTestClass):
                 f.write('1 2 3 4 5 6')
 
             result = runner.invoke(challenge, ['1', 'phase', '2', 'submit', "--file", "test_file.txt"], input="N")
-            response = result.output.rstrip()
-            expected = "Do you want to include the Submission Details? [y/N]: N\n{}".format("...")
-            assert response == expected
+            assert result.exit_code == 1
 
     @responses.activate
     def test_display_challenge_phase_split_list_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['1', 'phase', '2', 'splits'])
-        response = result.output.strip()
-        assert response == "..."
+        assert result.exit_code == 1
 
     @responses.activate
     def test_display_leaderboard_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ['2', 'leaderboard', '1'])
-        response = result.output.strip()
-        assert response == "..."
+        assert result.exit_code == 1
 
     @responses.activate
     def test_display_challenge_details_for_request_exception(self):
         runner = CliRunner()
         result = runner.invoke(challenge, ["1"])
-        assert result.output.strip() == "..."
+        assert result.exit_code == 1
