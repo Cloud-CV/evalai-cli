@@ -27,7 +27,7 @@ from evalai.utils.config import EVALAI_HOST_URLS, HOST_URL_FILE_PATH
 @click.argument("SUBMISSION_ID", type=int)
 def submission(submission_id):
     """
-    View submission specific details.
+    Details of a particular submission
     """
     """
     Invoked by `evalai submission SUBMISSION_ID`.

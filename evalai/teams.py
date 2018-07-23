@@ -18,7 +18,26 @@ def teams(ctx, host, participant):
     List all the participant/host teams of a user.
     """
     """
-    Invoked by running `evalai teams`
+    Args
+    ----------
+    ctx: Context Object
+        Click Context Object
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular teams.
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Command
+    -------
+    evalai teams --host/--participant
     """
     if ctx.invoked_subcommand is None:
         if host == participant:
@@ -41,7 +60,23 @@ def create(team):
     Create a participant or host team.
     """
     """
-    Invoked by running `evalai teams create`
+    Create a participant team.
+    """
+    """
+    Returns
+    -------
+    String: Team creation status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Command
+    -------
+    evalai teams create host/participant
     """
     is_host = False
     if team not in ("host", "participant"):
