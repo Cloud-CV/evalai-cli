@@ -44,6 +44,8 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                        fg="red", bold=True))
         else:
             echo(err)
+        if "input_file" in response.json():
+            echo(style(response.json()["input_file"][0], fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
