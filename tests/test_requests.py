@@ -130,6 +130,24 @@ class TestHTTPErrorRequests(BaseTestClass):
         assert response == self.expected.format(url)
 
     @responses.activate
+    def test_display_challenge_phase_detail_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phase', '20'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.challenge_phase_detail.value)
+        expected = self.expected.format(url).format('10', '20')
+        assert response == expected
+
+    @responses.activate
+    def test_display_challenge_phase_list_for_object_does_not_exist(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'phases'])
+        response = result.output.rstrip()
+        url = "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value)
+        expected = self.expected.format(url).format('10')
+        assert response == expected
+
+    @responses.activate
     def test_display_participant_team_for_http_error_404(self):
         runner = CliRunner()
         result = runner.invoke(teams, ["--participant"])
