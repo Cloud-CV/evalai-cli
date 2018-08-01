@@ -49,7 +49,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
     response = response.json()
     echo(style("\nYour file {} with the ID {} is successfully submitted.\n".format(file.name, response["id"]),
@@ -117,7 +117,7 @@ def display_my_submission_details(challenge_id, phase_id, start_date, end_date):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -166,7 +166,7 @@ def display_submission_details(submission_id):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
     response = response.json()
 

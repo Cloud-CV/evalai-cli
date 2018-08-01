@@ -50,7 +50,7 @@ def display_challenges(url):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -95,7 +95,7 @@ def display_ongoing_challenge_list():
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -138,7 +138,7 @@ def get_participant_or_host_teams(url):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -163,7 +163,7 @@ def get_participant_or_host_team_challenges(url, teams):
             sys.exit(1)
         except requests.exceptions.RequestException as err:
             echo(style("\nCould not establish a connection to EvalAI."
-                       " Please check the Host URL.\n", bold=True, bg="red"))
+                       " Please check the Host URL.\n", bold=True, fg="red"))
             sys.exit(1)
         response = response.json()
         challenges += response['results']
@@ -254,7 +254,7 @@ def display_challenge_details(challenge):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -299,7 +299,7 @@ def display_challenge_phase_list(challenge_id):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -370,7 +370,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
@@ -423,7 +423,7 @@ def display_challenge_phase_split_list(challenge_id):
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     phase_splits = response.json()
@@ -470,7 +470,7 @@ def display_leaderboard(challenge_id, phase_split_id):
             echo(err)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
-                   " Please check the Host URL.\n", bold=True, bg="red"))
+                   " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
 
     response = response.json()
