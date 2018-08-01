@@ -2,7 +2,6 @@ import json
 import os
 import responses
 
-import os.path as osp
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
 
@@ -21,7 +20,7 @@ from tests.base import BaseTestClass
 
 class TestGetUserAuthToken(BaseTestClass):
 
-    token_file = osp.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
+    token_file = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
 
     def setup(self):
         with open(self.token_file) as fo:
