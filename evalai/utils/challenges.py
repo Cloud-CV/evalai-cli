@@ -1,6 +1,7 @@
 import json
 import requests
 import sys
+import urllib3
 
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
@@ -15,6 +16,9 @@ from evalai.utils.common import (clean_data,
                                  )
 from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
+
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def pretty_print_challenge_data(challenges):
@@ -41,7 +45,7 @@ def display_challenges(url):
     """
     header = get_request_header()
     try:
-        response = requests.get(url, headers=header)
+        response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code == 401):
@@ -86,7 +90,7 @@ def display_ongoing_challenge_list():
 
     header = get_request_header()
     try:
-        response = requests.get(url, headers=header)
+        response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code == 401):
@@ -129,7 +133,7 @@ def get_participant_or_host_teams(url):
     header = get_request_header()
 
     try:
-        response = requests.get(url, headers=header)
+        response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code == 401):
@@ -154,7 +158,7 @@ def get_participant_or_host_team_challenges(url, teams):
     for team in teams:
         header = get_request_header()
         try:
-            response = requests.get(url.format(team['id']), headers=header)
+            response = requests.get(url.format(team['id']), headers=header, verify=False)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             if (response.status_code == 401):
@@ -242,7 +246,7 @@ def display_challenge_details(challenge):
 
     header = get_request_header()
     try:
-        response = requests.get(url, headers=header)
+        response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -286,7 +290,7 @@ def display_challenge_phase_list(challenge_id):
     url = url.format(challenge_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -355,7 +359,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
     headers = get_request_header()
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -408,7 +412,7 @@ def display_challenge_phase_split_list(challenge_id):
     url = url.format(challenge_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -439,8 +443,8 @@ def pretty_print_leaderboard_data(attributes, results):
     """
     leaderboard_table = BeautifulTable(max_width=150)
     attributes = ["Rank", "Participant Team"] + attributes + ["Last Submitted"]
+    attributes = list(map(lambda item: str(item), attributes))
     leaderboard_table.column_headers = attributes
-
     for rank, result in enumerate(results, start=1):
         name = result['submission__participant_team__team_name']
         scores = result['result']
@@ -460,14 +464,15 @@ def display_leaderboard(challenge_id, phase_split_id):
     url = url.format(phase_split_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
             validate_token(response.json())
-            echo(style("Error: {}".format(response.json()["error"], fg="red", bold=True)))
+            echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
         else:
             echo(err)
+        sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(style("\nCould not establish a connection to EvalAI."
                    " Please check the Host URL.\n", bold=True, fg="red"))

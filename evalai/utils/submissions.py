@@ -1,5 +1,6 @@
 import requests
 import sys
+import urllib3
 
 from beautifultable import BeautifulTable
 from click import echo, style
@@ -13,6 +14,9 @@ from evalai.utils.common import (validate_token,
                                  convert_UTC_date_to_local)
 
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
 def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     """
     Function to submit a file to a challenge
@@ -24,14 +28,15 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     input_file = {'input_file': file}
     data = {
             'status': 'submitting',
-            **submission_metadata,
            }
+    data = dict(data, **submission_metadata)
     try:
         response = requests.post(
                                 url,
                                 headers=headers,
                                 files=input_file,
                                 data=data,
+                                verify=False
                                 )
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -102,7 +107,7 @@ def display_my_submission_details(challenge_id, phase_id, start_date, end_date):
     headers = get_request_header()
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -152,7 +157,7 @@ def display_submission_details(submission_id):
 
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
