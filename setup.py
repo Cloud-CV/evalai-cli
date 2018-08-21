@@ -1,12 +1,14 @@
 #!/usr/bin/env python
+import io
+
 from setuptools import setup, find_packages
 
 
 PROJECT = 'evalai'
 
 
-long_description = \
-    'https://github.com/Cloud-CV/evalai_cli/blob/master/README.md'
+with io.open('README.md', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name=PROJECT,
