@@ -439,6 +439,7 @@ def pretty_print_leaderboard_data(attributes, results):
     """
     leaderboard_table = BeautifulTable(max_width=150)
     attributes = ["Rank", "Participant Team"] + attributes + ["Last Submitted"]
+    attributes = list(map(lambda item: str(item), attributes))
     leaderboard_table.column_headers = attributes
 
     for rank, result in enumerate(results, start=1):
