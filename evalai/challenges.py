@@ -22,11 +22,15 @@ from evalai.utils.submissions import make_submission
 
 class Challenge(object):
     """
-    Stores user input ID's
+    Custom context object that can be accessed in subcommand
     """
 
     def __init__(self, challenge=None, phase=None, subcommand=None):
         """
+        Description
+        ----------
+        Stores user input ID's
+
         Args
         ----------
         challenge: Int
@@ -35,6 +39,18 @@ class Challenge(object):
             Phase ID to be stored
         subcommand: string
             Subcommand to be stored
+
+        Raises
+        ----------
+        ClickException
+
+        Returns
+        ----------
+        None
+
+        Reference
+        ----------
+        https://pocoo-click.readthedocs.io/en/latest/complex/
         """
         self.challenge_id = challenge
         self.phase_id = phase
@@ -43,16 +59,30 @@ class Challenge(object):
 
 class PhaseGroup(click.Group):
     """
-    Fetch the submcommand data in the phase group
+    Custom group for subcommand.
     """
 
     def invoke(self, ctx):
         """
+        Description
+        ----------
         Parses Subcommands to be stored in Challenge Object
 
         Args
         ----------
         ctx: Context Object
+
+        Raises
+        ----------
+        ClickException
+
+        Returns
+        ----------
+        None
+
+        Reference
+        ----------
+        https://pocoo-click.readthedocs.io/en/latest/advanced/
         """
         if "--json" in tuple(ctx.protected_args):
             ctx.protected_args = []

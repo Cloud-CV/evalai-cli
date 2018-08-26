@@ -23,6 +23,8 @@ requests.packages.urllib3.disable_warnings()
 
 def pretty_print_challenge_data(challenges):
     """
+    Description
+    ----------
     Pretty print the challenge data
 
     Args
@@ -63,6 +65,8 @@ def pretty_print_challenge_data(challenges):
 
 def display_challenges(url):
     """
+    Description
+    ----------
     Fetch and display the challenge list based on the URL
 
     Args
