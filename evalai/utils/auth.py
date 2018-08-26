@@ -52,7 +52,13 @@ def get_user_auth_token_by_login(username, password):
 
 def get_user_auth_token():
     """
+    Description
+    ----------
     Loads token to be used for sending requests
+
+    Args
+    ----------
+    None
 
     Returns
     -------
@@ -87,12 +93,22 @@ def get_user_auth_token():
 
 def get_request_header():
     """
+    Description
+    ----------
     Returns user auth token formatted in header for sending requests
+
+    Args
+    ----------
+    None
 
     Returns
     -------
     header: dict
        Token of the user as a header
+
+    Raises
+    ----------
+    None
     """
     header = {"Authorization": "Token {}".format(get_user_auth_token())}
 
@@ -101,7 +117,13 @@ def get_request_header():
 
 def get_host_url():
     """
+    Description
+    ----------
     Returns the host url
+
+    Args
+    ----------
+    None
 
     Returns
     -------
