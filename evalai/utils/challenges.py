@@ -224,12 +224,9 @@ def display_participated_or_hosted_challenges(is_host=False, is_participant=Fals
 def pretty_print_challenge_details(challenge):
     table = BeautifulTable(max_width=200)
     attributes = ["description", "submission_guidelines", "evaluation_details", "terms_and_conditions"]
-    table.column_headers = ["Start Date", "End Date", "Description", "Submission Guidelines",
+    table.column_headers = ["Description", "Submission Guidelines",
                             "Evaluation Details", "Terms and Conditions"]
     values = []
-    start_date = convert_UTC_date_to_local(challenge["start_date"]).split(" ")[0]
-    end_date = convert_UTC_date_to_local(challenge["end_date"]).split(" ")[0]
-    values.extend([start_date, end_date])
     values.extend(list(map(lambda item: clean_data(challenge[item]), attributes)))
     table.append_row(values)
     echo(table)
@@ -245,6 +242,7 @@ def display_challenge_details(challenge):
 
     header = get_request_header()
     try:
+        print(challenge,url)
         response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -259,7 +257,6 @@ def display_challenge_details(challenge):
         echo(style("\nCould not establish a connection to EvalAI."
                    " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
-
     response = response.json()
     pretty_print_challenge_details(response)
 
