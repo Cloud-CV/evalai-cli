@@ -20,3 +20,9 @@ notifications:
     on_success: change  # [always|never|change]
     on_failure: always  # [always|never|change]
     slack: cloudcv:gy3CGQGNXLwXOqVyzXGZfdea
+
+deploy:
+  provider: pypi
+  user: cloudcv
+  password:
+    secure: Kp0c/FcFHEyHfKBuS09TZUPDuuEii5dyn19GOj8+4waqS2lv2JObD6mIu9cKSC7vQ82waFdihKVMhiOSCCIywNoBFdqsH6q+9tacRLFI1pcwbq6zauxJ/jFua64S4Sv/Mna2XTDTlFkP5hP0BXxKQCAY2UMA/hatgZG4gM8i8exNr0ZRcUSt/Y9V7QgWG3Oretu+ky9nQ5UgOFVkYVaoZTQDmbbLStI178Sn5De9A+yuXRbsApYramfrNEvDJtgerJBlTWa9zDNoa5MN11bDl+sOXJgq365Yr3qpRT3PF2vmX8pTgY0vuL6bYMSmpHIED0m8Pw4aPLIEPc+DCAhoe4nRKotoE9hMUeOGnRbH3fg2ldyFi6c2cQa82QKQ5JOPjtWrwF1/2m7RTJXW6zh/DCC6YmxjRtN75ff4Tp5G20Leuhp89C9f3SIfjJsrYbMTP5UTFrHdVrlk3L0ePYv72HheX1O0TQPPE1sIS0BlYdEHITkidf1Y6y3GetLIU+X+M/Ue67oolICDnIm6WMzucCB5aFdbe3qcWOIc8/fVYQDGSMbCm3+ne34iyuRZJIBtI4P4tutjyGoD7L1eemZ356gAkWef47eThhu7hrgaWdrIPJ1l7YLXTtoiGrChqGy5m7PCO8BLSzkA/VLjWA/rpzyd9mwu8+kGz5a6uGRtvaM=
