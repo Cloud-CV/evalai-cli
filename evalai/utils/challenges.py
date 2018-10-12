@@ -493,12 +493,13 @@ def pretty_print_challenge_stats(stats):
     Pretty print the stats for a challenge.
     """
     table = BeautifulTable(max_width=150)
-    table.column_headers = ["ID", "Phase", "Total Submissions", "Latest Submission At"]
+    table.column_headers = ["ID", "Phase", "Total Submissions", "Total Participant Teams", "Latest Submission At"]
     for key in stats:
         values = []
         values.append(stats[key][0]["challenge_phase"])
         values.append(key)
         values.append(stats[key][0]["participant_team_submission_count"])
+        values.append(stats[key][2]["participant_team_count"])
         label = "last_submission_timestamp_in_challenge_phase"
         if (label in stats[key][1].keys() and
                 stats[key][1][label] != "You dont have any submissions in this challenge phase!"):
@@ -576,4 +577,25 @@ def display_challenge_stats(challenge_id):
 
         response = response.json()
         stats[phase["name"]].append(response)
+
+        analytics_url = URLS.analytics.value
+        url = "{}{}".format(get_host_url(), analytics_url)
+        url = url.format(challenge_id, phase["id"])
+        try:
+            response = requests.get(url, headers=headers, verify=False)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            if (response.status_code in EVALAI_ERROR_CODES):
+                validate_token(response.json())
+                echo(style("Error: {}".format(response.json()["error"]), fg="red", bold=True))
+            else:
+                echo(err)
+            sys.exit(1)
+        except requests.exceptions.RequestException as err:
+            echo(err)
+            sys.exit(1)
+
+        response = response.json()
+        stats[phase["name"]].append(response)
+
     pretty_print_challenge_stats(stats)

@@ -23,3 +23,4 @@ class URLS(Enum):
     leaderboard = "/api/jobs/challenge_phase_split/{}/leaderboard/"
     count_stats = "/api/analytics/challenge/{}/challenge_phase/{}/count"
     last_submission_stats = "/api/analytics/challenge/{}/challenge_phase/{}/last_submission_datetime_analysis/"
+    analytics = "/api/analytics/challenge/{}/challenge_phase/{}/analytics"
