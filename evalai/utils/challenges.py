@@ -490,7 +490,7 @@ def display_leaderboard(challenge_id, phase_split_id):
 
 def pretty_print_challenge_stats(stats):
     """
-    Pretty print the leaderboard for a particular CPS.
+    Pretty print the stats for a challenge.
     """
     table = BeautifulTable(max_width=150)
     table.column_headers = ["ID", "Phase", "Total Submissions", "Latest Submission At"]
@@ -518,7 +518,7 @@ def display_challenge_stats(challenge_id):
     url = url.format(challenge_id)
     headers = get_request_header()
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if (response.status_code in EVALAI_ERROR_CODES):
@@ -541,7 +541,7 @@ def display_challenge_stats(challenge_id):
         url = "{}{}".format(get_host_url(), count_stats_url)
         url = url.format(challenge_id, phase["id"])
         try:
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, verify=False)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             if (response.status_code in EVALAI_ERROR_CODES):
@@ -561,7 +561,7 @@ def display_challenge_stats(challenge_id):
         url = "{}{}".format(get_host_url(), last_submission_stats_url)
         url = url.format(challenge_id, phase["id"])
         try:
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, verify=False)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             if (response.status_code in EVALAI_ERROR_CODES):
