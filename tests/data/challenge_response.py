@@ -434,3 +434,13 @@ last_submission_stats = """
     "last_submission_timestamp_in_challenge_phase": "2018-07-15T04:37:26.717957Z"
 }
 """
+
+challenge_analytics = """
+{
+  "total_submissions": 7195,
+  "participant_team_count": 159,
+  "flagged_submissions_count": 0,
+  "public_submissions_count": 0,
+  "challenge_phase": 199
+}
+"""
