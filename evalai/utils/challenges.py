@@ -242,6 +242,7 @@ def display_challenge_details(challenge):
 
     header = get_request_header()
     try:
+        print(challenge,url)
         response = requests.get(url, headers=header, verify=False)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -256,7 +257,6 @@ def display_challenge_details(challenge):
         echo(style("\nCould not establish a connection to EvalAI."
                    " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
-
     response = response.json()
     pretty_print_challenge_details(response)
 
