@@ -256,7 +256,6 @@ def display_challenge_details(challenge):
         echo(style("\nCould not establish a connection to EvalAI."
                    " Please check the Host URL.\n", bold=True, fg="red"))
         sys.exit(1)
-
     response = response.json()
     pretty_print_challenge_details(response)
 
