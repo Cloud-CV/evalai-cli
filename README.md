@@ -60,6 +60,53 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+## Development Setup for Windows
+
+### Step 1:
+
+1. Setup the development environment for EvalAI and make sure that it is running perfectly. For setting up EvalAI on Windows refer to [EvalAI Setup - Windows](https://evalai.readthedocs.io/en/latest/setup.html#windows-installation-instructions)
+
+2. Now, Open web browser and hit the url http://127.0.0.1:8888.
+
+3. Login with your credentials and move to the profile section.
+
+4. Click on `Get your Auth Token` to get the authentication token & download it as a JSON file.
+
+5. Create a folder with name ``.evalai`` in your home directory by using the command `make .evalai`.
+
+6. Place the downloaded authentication token in this folder by using the command `move ~/Downloads/token.json /.evalai/`.
+
+### Step 2:
+
+1. Clone the evalai-cli repository to your machine via git
+
+```bash
+git clone https://github.com/Cloud-CV/evalai-cli.git EvalAI-CLI
+```
+
+2. Create a virtual environment
+
+```bash
+cd EvalAI-CLI
+virtualenv -p python3 venv
+cd venv/scripts
+activate.bat   
+cd ../.. 
+```
+
+3. Install the package dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Install the package locally to try it out
+
+```bash
+pip install -e .
+```
+
+
 ## Contributing Guidelines
 
 If you are interested in contributing to EvalAI-CLI, follow our [contribution guidelines](https://github.com/Cloud-CV/evalai-cli/blob/master/.github/CONTRIBUTING.md).
