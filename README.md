@@ -16,7 +16,7 @@
 
 The goal of this package is to offer almost all the features available on the website within your terminal.
 
-## Development Setup
+## Development Setup for Linux
 
 ### Step 1:
 
