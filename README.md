@@ -50,7 +50,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Install the package locally to try it out
+4. Install the package dependencies which are needed to run the tests
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+5. Install the package locally to try it out
 
 ```bash
 pip install -e .
