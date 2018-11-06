@@ -39,7 +39,7 @@ The above step returns the following details.
 
 **Example Usage**
 
-``evalai challenges # Fetchs all the details of the challenges``
+``$ evalai challenges # Fetchs all the details of the challenges``
   
 ##### 2. For viewing specific challenge
 
@@ -56,7 +56,7 @@ The above step returns the following details.
 
 **Example Usage**
 
-``evalai challenge 3 # Fetch details of challenge with ID 3``
+``$ evalai challenge 3 # Fetch details of challenge with ID 3``
 
 ##### 3. For viewing the challenges that you've participated in.
 
@@ -68,7 +68,7 @@ Use participant/host as flag
 
 **Example Usage**
 
-`` evalai challenge --participate``
+``$ evalai challenge --participate``
 
 ##### 5. For viewing the ongoing/past/future challenges.
 
@@ -76,7 +76,7 @@ Use ongoing/past/future as an argument.
 
 **Example Usage**
 
-`` evalai challenge ongoing``
+``$ evalai challenge ongoing``
 
 ##### 6. For viewing the phase splits.
 
@@ -84,7 +84,7 @@ Use ongoing/past/future as an argument.
 
 **Example Usage**
 
-``evalai challenge 1 phase 1 splits``
+``$ evalai challenge 1 phase 1 splits``
 
 **Note** : [CHALLENGE] & [PHASE] are integer value. 
 
@@ -94,7 +94,7 @@ Use ongoing/past/future as an argument.
 
 **Example Usage**
 
-``evalai challenge 1 leaderboard 1``
+``$ evalai challenge 1 leaderboard 1``
 
 **Note** : **CHALLENGE** & **CPS** are integer values.
 
@@ -106,11 +106,11 @@ Use ongoing/past/future as an argument.
 
 **Example Usage**
 
-``evalai challenge 1 phase 1 submissions``
+``$ evalai challenge 1 phase 1 submissions``
 
 ##### 9. To view the current host url.
 
-``evalai host ``
+``$ evalai host ``
 
 ##### 10. To configure URL
 
@@ -118,7 +118,7 @@ Use ongoing/past/future as an argument.
 
 **Example Usage**
 
-``evalai host -sh http://localhost:8888``
+``$ evalai host -sh http://localhost:8888``
 
 ##### 11. For viewing the teams, the user is part of.
 
@@ -128,7 +128,7 @@ Use participant/host as flag
 
 **Example Usage**
 
-`` evalai teams --participate``
+``$ evalai teams --participate``
 
 ##### 12. For creating a team.
 
@@ -138,7 +138,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-`` evalai teams create --participate``
+``$ evalai teams create --participate``
 
 ##### 13. For registering a team in a challenge.
 
@@ -148,7 +148,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai challenge 1 participate 1``
+``$ evalai challenge 1 participate 1``
 
 ##### 14. For viewing phases of a challenge.
 
@@ -158,7 +158,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai challenge 1 phases``
+``$ evalai challenge 1 phases``
 
 ##### 15. For viewing a particular phase of a challenge
 
@@ -168,7 +168,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai challenge 1 phase 1``
+``$ evalai challenge 1 phase 1``
 
 ##### 16. For submitting a file in a challenge.
 
@@ -178,7 +178,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai challenge 1 phase 1 submit --file ../hello.txt``
+``$ evalai challenge 1 phase 1 submit --file ../hello.txt``
 
 ##### 17. For viewing your submission.
 
@@ -188,7 +188,7 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai submission 1``
+``$ evalai submission 1``
 
 ##### 18. For filtering submission by date.
 
@@ -198,4 +198,4 @@ Use participant/host as Argument
 
 **Example Usage**
 
-``evalai challenge 1 phase 1 submissions --start-date 1/1/18 --end-date 12/30/18``
+``$ evalai challenge 1 phase 1 submissions --start-date 1/1/18 --end-date 12/30/18``
