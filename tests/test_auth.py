@@ -34,7 +34,7 @@ class TestGetUserAuthToken(BaseTestClass):
     def test_get_user_auth_token_when_file_does_not_exist(self):
         expected = ("\nThe authentication token json file doesn't exists at the required path. "
                     "Please download the file from the Profile section of the EvalAI webapp and "
-                    "place it at ~/.evalai/token.json\n\n")
+                    "place it at ~/.evalai/token.json or run evalai token TOKEN\n\n")
         runner = CliRunner()
         result = runner.invoke(challenges)
         response = result.output
