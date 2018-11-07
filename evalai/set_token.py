@@ -2,7 +2,8 @@ import click
 
 from evalai.utils.config import AUTH_TOKEN_DIR
 @click.group(invoke_without_command=True)
-def token():
+@click.argument('TOKEN')
+def token(token):
     """
     Add or change your token.
     """
@@ -17,5 +18,3 @@ def token():
     f.close()
     print("Token successfully set!")
     return input_token
-
-# flake8: noqa
