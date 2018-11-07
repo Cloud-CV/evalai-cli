@@ -18,3 +18,5 @@ def token(token):
     f.close()
     print("Token successfully set!")
     return input_token
+
+# flake8: noqa
