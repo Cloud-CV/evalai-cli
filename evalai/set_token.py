@@ -7,9 +7,9 @@ def token():
     Add or change your token.
     """
     """
-    Invoked by `evalai token`.
+    Invoked by `evalai token TOKEN`.
     """
-    input_token = input("Enter your token: ")
+    input_token = token
     AUTH_TOKEN_PATH_NEW = "%s/token.json" % AUTH_TOKEN_DIR
     f=open(AUTH_TOKEN_PATH_NEW,"w+") 
     json_token = "{\"token\":\"%s\"}" % input_token
