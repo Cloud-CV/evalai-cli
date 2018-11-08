@@ -28,9 +28,11 @@ def main(ctx):
         echo(welcome_text)
 
 
-main.add_command(challenges) #ignore: cover
-main.add_command(challenge) #ignore: cover
-main.add_command(host) #ignore: cover
-main.add_command(token) #ignore: cover
-main.add_command(submission) #ignore: cover
-main.add_command(teams) #ignore: cover
+main.add_command(challenges)
+main.add_command(challenge) 
+main.add_command(host) 
+main.add_command(token) 
+main.add_command(submission) 
+main.add_command(teams) 
+
+# flake8: noqa
