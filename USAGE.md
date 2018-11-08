@@ -28,7 +28,7 @@ You need these type of object specific commands to pass the object ID related to
 
 ##### 1. For viewing all the current challenges
 
-``evalai challenges``
+``$ evalai challenges``
 The above step returns the following details.
 - ID
 - Title
@@ -43,7 +43,7 @@ The above step returns the following details.
   
 ##### 2. For viewing specific challenge
 
-``evalai challenge [CHALLENGE_ID]``
+``$ evalai challenge [CHALLENGE_ID]``
  The above step returns the following details.
 - Start date
 - End date
@@ -80,7 +80,7 @@ Use ongoing/past/future as an argument.
 
 ##### 6. For viewing the phase splits.
 
-``evalai challenge CHALLENGE phase PHASE splits``
+``$ evalai challenge CHALLENGE phase PHASE splits``
 
 **Example Usage**
 
@@ -90,7 +90,7 @@ Use ongoing/past/future as an argument.
 
 ##### 7. For viewing leaderboard.
 
-``evalai challenge CHALLENGE leaderboard CPS``
+``$ evalai challenge CHALLENGE leaderboard CPS``
 
 **Example Usage**
 
@@ -100,7 +100,7 @@ Use ongoing/past/future as an argument.
 
 ##### 8. For viewing user's submission.
 
-``evalai challenge CHALLENGE phase PHASE submissions``
+``$ evalai challenge CHALLENGE phase PHASE submissions``
 
 **Note** : **CHALLENGE** & **PHASE** are integer values.
 
@@ -114,7 +114,7 @@ Use ongoing/past/future as an argument.
 
 ##### 10. To configure URL
 
-``evalai host --set-host <URL>``
+``$ evalai host --set-host <URL>``
 
 **Example Usage**
 
@@ -122,7 +122,7 @@ Use ongoing/past/future as an argument.
 
 ##### 11. For viewing the teams, the user is part of.
 
-``evalai teams [FLAG]``
+``$ evalai teams [FLAG]``
 
 Use participant/host as flag
 
@@ -132,7 +132,7 @@ Use participant/host as flag
 
 ##### 12. For creating a team.
 
-``evalai teams create [ARGUEMENT]``
+``$ evalai teams create [ARGUEMENT]``
 
 Use participant/host as Argument
 
@@ -142,7 +142,7 @@ Use participant/host as Argument
 
 ##### 13. For registering a team in a challenge.
 
-``evalai challenge CHALLENEGE participate TEAM``
+``$ evalai challenge CHALLENEGE participate TEAM``
 
 **Note** : **CHALLENGE** & **TEAM** are integer values.
 
@@ -152,7 +152,7 @@ Use participant/host as Argument
 
 ##### 14. For viewing phases of a challenge.
 
-``evalai challenge CHALLENGE phases``
+``$ evalai challenge CHALLENGE phases``
 
 **Note** : **CHALLENGE** is an integer value.
 
@@ -162,7 +162,7 @@ Use participant/host as Argument
 
 ##### 15. For viewing a particular phase of a challenge
 
-``evalai challenge CHALLENGE phase PHASE``
+``$ evalai challenge CHALLENGE phase PHASE``
 
 **Note** : **CHALLENGE** & **PHASE** are integer values.
 
@@ -172,7 +172,7 @@ Use participant/host as Argument
 
 ##### 16. For submitting a file in a challenge.
 
-``evalai challenge CHALLENGE phase PHASE submit --file FILE``
+``$ evalai challenge CHALLENGE phase PHASE submit --file FILE``
 
 **Note** : **CHALLENGE** & **PHASE** are integer values.
 
@@ -182,7 +182,7 @@ Use participant/host as Argument
 
 ##### 17. For viewing your submission.
 
-``evalai submission SUBMISSION``
+``$ evalai submission SUBMISSION``
 
 **Note** : **SUBMISSION** is an integer value.
 
@@ -192,7 +192,7 @@ Use participant/host as Argument
 
 ##### 18. For filtering submission by date.
 
-``evalai challenge CHALLENGE phase PHASE submissions --start-date MM/DD/YY --end-date MM/DD/YY``
+``$ evalai challenge CHALLENGE phase PHASE submissions --start-date MM/DD/YY --end-date MM/DD/YY``
 
 **Note** : **CHALLENGE** & **PHASE** are integer values. Use `8` in month/date instead of `08`
 
