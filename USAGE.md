@@ -1,5 +1,5 @@
 # Basics
-Run `evalai --help` to list all the commands the that EvalAI-CLI can execute.
+EvalAI-CLI can be started using the command `evalai`. The command `evalai --help` is used to list all the commands the that EvalAI-CLI can execute.
 It gives the following output.
 
 ```` 
