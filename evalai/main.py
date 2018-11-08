@@ -28,9 +28,9 @@ def main(ctx):
         echo(welcome_text)
 
 
-main.add_command(challenges) #pragma: no cover
-main.add_command(challenge) #pragma: no cover
-main.add_command(host) #pragma: no cover
-main.add_command(token) #pragma: no cover
-main.add_command(submission) #pragma: no cover
-main.add_command(teams) #pragma: no cover
+main.add_command(challenges) #ignore: cover
+main.add_command(challenge) #ignore: cover
+main.add_command(host) #ignore: cover
+main.add_command(token) #ignore: cover
+main.add_command(submission) #ignore: cover
+main.add_command(teams) #ignore: cover
