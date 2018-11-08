@@ -29,32 +29,54 @@ The goal of this package is to offer almost all the features available on the we
 6. Place the downloaded authentication token in this folder by using the command `mv ~/Downloads/token.json ~/.evalai/`.
 
 ### Step 2:
+ - Installation with Docker:
 
-1. Clone the evalai-cli repository to your machine via git
+    1. Clone the evalai-cli repository to your machine via git
 
-```bash
-git clone https://github.com/Cloud-CV/evalai-cli.git EvalAI-CLI
-```
+    ```bash
+    git clone https://github.com/Cloud-CV/evalai-cli.git && cd evalai-cli
+    ```
 
-2. Create a virtual environment
+    2. Run Docker build
 
-```bash
-cd EvalAI-CLI
-virtualenv -p python3 venv
-source venv/bin/activate
-```
+    ```bash
+    docker build -t evalai-cli
+    ```
 
-3. Install the package dependencies
+    3. Make wrapper script executable and add to bin for easy call from terminal
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    chmod +x ./wrapper/evalai
+    sudo ln -sf ./wrapper/evalai /usr/local/bin/evalai
+    ```
 
-4. Install the package locally to try it out
+ - Manual Installation:
 
-```bash
-pip install -e .
-```
+    1. Clone the evalai-cli repository to your machine via git
+
+    ```bash
+    git clone https://github.com/Cloud-CV/evalai-cli.git EvalAI-CLI
+    ```
+
+    2. Create a virtual environment
+
+    ```bash
+    cd EvalAI-CLI
+    virtualenv -p python3 venv
+    source venv/bin/activate
+    ```
+
+    3. Install the package dependencies
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    4. Install the package locally to try it out
+
+    ```bash
+    pip install -e .
+    ```
 
 ## Contributing Guidelines
 

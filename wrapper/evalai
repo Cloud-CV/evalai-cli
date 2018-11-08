@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# evalai - a wrapper script for invoking `../evalai/main.py` from within a Docker image
+docker run --rm -ti evalai-cli "$@"
