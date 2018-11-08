@@ -39,3 +39,11 @@ Commands:
 |                    evalai challenge [CHALLENGE-ID] phase [PHASE] submit --file [FILE]                   	|            It is used for submitting a file in a challenge.           	|                                                                                                       	|                `$ evalai challenge 2 phase 1 submit --file ./main.py`               	|
 |                                      evalai submission [SUBMISSION]                                     	|             It is used for viewing the user's submission.             	|                                                                                                       	|                               `$ evalai submission 5`                               	|
 | evalai challenge [CHALLENGE-ID] phase [PHASE] submissions --start-date [MM/DD/YY] --end-date [MM/DD/YY] 	|   It is used for viewing submissions between a particular duration.   	|                                                                                                       	| `$ evalai challenge 2 phase 1 submissions --start-date 8/23/18 --end-date 11/27/18` 	|
+
+# Remarks
+
+* **CHALLENGE-ID**: It is an integer value.
+* **PHASE**: It is an integer value.
+* **CPS**: It is an integer value.
+* **TEAM**: It is an integer value.
+* **SUBMISSION**: It is an integer value.
