@@ -60,7 +60,7 @@ The above step returns the following details.
 
 ##### 3. For viewing the challenges that you've participated in.
 
-``evalai challenges --participant``
+``$ evalai challenges --participant``
 
 ##### 4. For viewing the challenges that you've hosted/participated.
 
