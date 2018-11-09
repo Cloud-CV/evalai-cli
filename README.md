@@ -40,14 +40,14 @@ The goal of this package is to offer almost all the features available on the we
     2. Run Docker build
 
     ```bash
-    docker build -t evalai-cli
+    sudo docker build -t evalai-cli .
     ```
 
     3. Make wrapper script executable and add to bin for easy call from terminal
 
     ```bash
     chmod +x ./wrapper/evalai
-    sudo ln -sf ./wrapper/evalai /usr/local/bin/evalai
+    sudo cp ./wrapper/evalai /usr/local/bin/evalai
     ```
 
  - Manual Installation:
