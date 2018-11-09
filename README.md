@@ -29,27 +29,6 @@ The goal of this package is to offer almost all the features available on the we
 6. Place the downloaded authentication token in this folder by using the command `mv ~/Downloads/token.json ~/.evalai/`.
 
 ### Step 2:
- - Installation with Docker:
-
-    1. Clone the evalai-cli repository to your machine via git
-
-    ```bash
-    git clone https://github.com/Cloud-CV/evalai-cli.git && cd evalai-cli
-    ```
-
-    2. Run Docker build
-
-    ```bash
-    sudo docker build -t evalai-cli .
-    ```
-
-    3. Make wrapper script executable and add to bin for easy call from terminal
-
-    ```bash
-    chmod +x ./wrapper/evalai
-    sudo cp ./wrapper/evalai /usr/local/bin/evalai
-    ```
-
  - Manual Installation:
 
     1. Clone the evalai-cli repository to your machine via git
@@ -76,6 +55,27 @@ The goal of this package is to offer almost all the features available on the we
 
     ```bash
     pip install -e .
+    ```
+
+ - Installation with Docker:
+
+    1. Clone the evalai-cli repository to your machine via git
+
+    ```bash
+    git clone https://github.com/Cloud-CV/evalai-cli.git && cd evalai-cli
+    ```
+
+    2. Run Docker build
+
+    ```bash
+    sudo docker build -t evalai-cli .
+    ```
+
+    3. Make wrapper script executable and add to bin for easy call from terminal
+
+    ```bash
+    chmod +x ./wrapper/evalai
+    sudo cp ./wrapper/evalai /usr/local/bin/evalai
     ```
 
 ## Contributing Guidelines
