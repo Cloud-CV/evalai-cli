@@ -7,8 +7,7 @@ source = evalai/
 exclude_lines =
     import
     @click.*
-    pragma: no cover
-    def __[a-zA-Z]+\(
+    main.add_command([a-z]*?)
 
 omit =
     */python?.?/*
