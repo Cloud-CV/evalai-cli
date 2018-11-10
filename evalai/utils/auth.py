@@ -51,3 +51,5 @@ def get_host_url():
                 return str(data)
             except (OSError, IOError) as e:
                 echo(e)
+
+# flake8: noqa
