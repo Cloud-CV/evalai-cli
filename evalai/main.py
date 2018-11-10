@@ -35,4 +35,3 @@ main.add_command(token)
 main.add_command(submission) 
 main.add_command(teams) 
 
-# flake8: noqa
