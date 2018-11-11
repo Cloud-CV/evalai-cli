@@ -13,7 +13,7 @@ def token(token):
     input_token = token
     if not os.path.exists(AUTH_TOKEN_DIR):
         os.makedirs(AUTH_TOKEN_DIR)
-    AUTH_TOKEN_PATH_NEW = "%s/token.json" % AUTH_TOKEN_DIR
+    AUTH_TOKEN_PATH_NEW = "%stoken.json" % AUTH_TOKEN_DIR
     f=open(AUTH_TOKEN_PATH_NEW,"w+") 
     json_token = "{\"token\":\"%s\"}" % input_token
     f.write(json_token)
