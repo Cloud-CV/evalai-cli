@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # evalai - a wrapper script for invoking `$ evalai` from within a Docker image
-docker run -ti evalai-cli "$@"
+sudo docker run --rm --network host -ti -v ~/.evalai:/root/.evalai evalai-cli "$@"
