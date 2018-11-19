@@ -47,8 +47,10 @@ source venv/bin/activate
 3. Install the package dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
+
+_Note: when using `evalai-cli` in production, use download the dependencies in `requirements-dev.txt` instead of `requirements-prod.txt`._
 
 4. Install the package locally to try it out
 
