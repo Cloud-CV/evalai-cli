@@ -50,7 +50,7 @@ source venv/bin/activate
 pip install -r requirements-dev.txt
 ```
 
-_Note: when using `evalai-cli` in production, use download the dependencies in `requirements-dev.txt` instead of `requirements-prod.txt`._
+_Note: when using `evalai-cli` in production, download the dependencies in `requirements.txt` instead of `requirements-dev.txt`._
 
 4. Install the package locally to try it out
 
