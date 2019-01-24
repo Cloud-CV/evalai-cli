@@ -427,6 +427,16 @@ challenge_count_stats = """
 """
 
 
+challenge_last_submission_stats = """
+    {
+        "last_submission_timestamp_in_challenge": "2019-01-24T14:05:34.693148Z",
+        "last_submission_timestamp_in_challenge_phase": "You dont have any submissions \
+        in this challenge phase!",
+        "challenge_phase": 349
+    }
+"""
+
+
 last_submission_stats = """
 {
     "challenge_phase": 1,
