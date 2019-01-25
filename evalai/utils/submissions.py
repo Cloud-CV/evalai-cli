@@ -48,7 +48,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                        "active phases.\n".format(response.json()["error"]),
                        fg="red", bold=True))
         else:
-            echo(err)
+            echo(style("\nError: You have not participated in the challenge\n"))
         if "input_file" in response.json():
             echo(style(response.json()["input_file"][0], fg="red", bold=True))
         sys.exit(1)
