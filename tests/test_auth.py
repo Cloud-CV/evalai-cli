@@ -51,6 +51,9 @@ class TestUserRequestWithInvalidToken(BaseTestClass):
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value),
                       json=invalid_token_data, status=401)
 
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format("10"),
+                      json=invalid_token_data, status=401)
+
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_teams.value),
                       json=invalid_token_data, status=401)
 
@@ -80,6 +83,14 @@ class TestUserRequestWithInvalidToken(BaseTestClass):
         result = runner.invoke(challenges, ['--host'])
         response = result.output.strip()
         assert response == expected
+
+    @responses.activate
+    def test_display_challenge_stats_when_token_is_invalid(self):
+        expected = "The authentication token you are using isn't valid. Please generate it again."
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'stats'])
+        response = result.output.rstrip()
+        assert response == self.expected
 
 
 class TestUserRequestWithExpiredToken(BaseTestClass):
