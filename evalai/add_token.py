@@ -13,7 +13,7 @@ from evalai.utils.config import (AUTH_TOKEN_DIR,
 
 @click.group(invoke_without_command=True)
 @click.argument('auth_token')
-def settoken(auth_token):
+def set_token(auth_token):
     """
     Configure EvalAI Token.
     """
@@ -30,7 +30,7 @@ def settoken(auth_token):
                 fw.write(auth_token)
             except (OSError, IOError) as e:
                 echo(e)
-            echo(style("Success: Authentication token is successfully set!", bold=True, fg="green"))
+            echo(style("Success: Authentication token is successfully set.", bold=True, fg="green"))
     else:
         echo(style("Error: Invalid Length. Enter a valid token of length: {}".format(LEN_OF_TOKEN), bold=True))
 
