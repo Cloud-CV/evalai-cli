@@ -723,3 +723,53 @@ class TestDisplaySubmissionWithoutSubmissionData(BaseTestClass):
         result = runner.invoke(challenge, ['two', 'participate', '3'])
         response = result.output
         assert response == output
+
+
+class TestDisplayChallengeStats(BaseTestClass):
+
+    def setup(self):
+        self.challenge_phase_list_json = json.loads(challenge_response.challenge_phase_stats)
+        self.challenge_count_stats_json = json.loads(challenge_response.challenge_count_stats)
+        self.last_submission_stats_json = json.loads(challenge_response.last_submission_stats)
+        self.challenge_analytics = json.loads(challenge_response.challenge_analytics)
+
+        url = "{}{}"
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_phase_list.value).format('1'),
+                      json=self.challenge_phase_list_json, status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.count_stats.value).format('1', '3'),
+                      json=self.challenge_count_stats_json, status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.last_submission_stats.value).format('1', '3'),
+                      json=self.last_submission_stats_json, status=200)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.analytics.value).format('1', '3'),
+                      json=self.challenge_analytics, status=200)
+
+    @responses.activate
+    def test_display_challenge_stats(self):
+        stats = {}
+        stats["Philip Phase"] = []
+        stats["Philip Phase"].append(self.challenge_count_stats_json)
+        stats["Philip Phase"].append(self.last_submission_stats_json)
+        stats["Philip Phase"].append(self.challenge_analytics)
+        table = BeautifulTable(max_width=150)
+        table.column_headers = ["ID", "Phase", "Total Submissions", "Total Participant Teams", "Latest Submission At"]
+        for key in stats:
+            values = []
+            values.append(stats[key][0]["challenge_phase"])
+            values.append(key)
+            values.append(stats[key][0]["participant_team_submission_count"])
+            values.append(stats[key][2]["participant_team_count"])
+            label = "last_submission_timestamp_in_challenge_phase"
+            if (label in stats[key][1].keys() and
+                    stats[key][1][label] != "You dont have any submissions in this challenge phase!"):
+                values.append(convert_UTC_date_to_local(stats[key][1][label]))
+            else:
+                values.append("You don't have any submissions in this challenge phase!")
+            table.append_row(values)
+        output = str(table)
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['1', 'stats'])
+        response = result.output.rstrip()
+        assert response == output

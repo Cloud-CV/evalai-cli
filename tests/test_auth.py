@@ -45,17 +45,20 @@ class TestUserRequestWithInvalidToken(BaseTestClass):
 
     def setup(self):
 
-        invalid_token_data = json.loads(challenge_response.invalid_token)
+        self.invalid_token_data = json.loads(challenge_response.invalid_token)
 
         url = "{}{}"
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.challenge_list.value),
-                      json=invalid_token_data, status=401)
+                      json=self.invalid_token_data, status=401)
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.host_teams.value),
-                      json=invalid_token_data, status=401)
+                      json=self.invalid_token_data, status=401)
 
         responses.add(responses.GET, url.format(API_HOST_URL, URLS.leaderboard.value).format("1"),
-                      json=invalid_token_data, status=401)
+                      json=self.invalid_token_data, status=401)
+
+        responses.add(responses.GET, url.format(API_HOST_URL, URLS.count_stats.value).format("1", "3"),
+                      json=self.invalid_token_data, status=401)
 
         self.expected = "\nThe authentication token you are using isn't valid. Please generate it again.\n\n"
 
@@ -78,6 +81,70 @@ class TestUserRequestWithInvalidToken(BaseTestClass):
         expected = "The authentication token you are using isn't valid. Please generate it again."
         runner = CliRunner()
         result = runner.invoke(challenges, ['--host'])
+        response = result.output.strip()
+        assert response == expected
+
+    @responses.activate
+    def test_display_challenge_stats_when_token_is_invalid(self):
+        expected = "The authentication token you are using isn't valid. Please generate it again."
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value).format("10"),
+                      json=self.invalid_token_data, status=401)
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['10', 'stats'])
+        response = result.output.strip()
+        assert response == expected
+
+    @responses.activate
+    def test_display_challenge_count_stats_when_token_is_invalid(self):
+        expected = "The authentication token you are using isn't valid. Please generate it again."
+        challenge_phase_list_json = json.loads(challenge_response.challenge_phase_stats)
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value).format("1"),
+                      json=challenge_phase_list_json, status=200)
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['1', 'stats'])
+        response = result.output.strip()
+        assert response == expected
+
+    @responses.activate
+    def test_display_challenge_last_submission_stats_when_token_is_invalid(self):
+        expected = "The authentication token you are using isn't valid. Please generate it again."
+        challenge_phase_list_json = json.loads(challenge_response.challenge_phase_stats)
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value).format("1"),
+                      json=challenge_phase_list_json, status=200)
+
+        challenge_count_stats_json = json.loads(challenge_response.challenge_count_stats)
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.count_stats.value).format('1', '3'),
+                      json=challenge_count_stats_json, status=200)
+
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.last_submission_stats.value).format('1', '3'),
+                      status=401)
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['1', 'stats'])
+        response = result.output.strip()
+        assert response == expected
+
+    @responses.activate
+    def test_display_challenge_analytics_stats_when_token_is_invalid(self):
+        expected = "The authentication token you are using isn't valid. Please generate it again."
+        challenge_phase_list_json = json.loads(challenge_response.challenge_phase_stats)
+        challenge_count_stats_json = json.loads(challenge_response.challenge_count_stats)
+        challenge_last_submission_stats_json = json.loads(challenge_response.challenge_last_submission_stats)
+
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.challenge_phase_list.value).format("1"),
+                      json=challenge_phase_list_json, status=200)
+
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.count_stats.value).format('1', '3'),
+                      json=challenge_count_stats_json, status=200)
+
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.last_submission_stats.value).format('1', '3'),
+                      json=challenge_last_submission_stats_json, status=200)
+
+        responses.add(responses.GET, "{}{}".format(API_HOST_URL, URLS.analytics.value).format('1', '3'),
+                      status=401)
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, ['1', 'stats'])
         response = result.output.strip()
         assert response == expected
 

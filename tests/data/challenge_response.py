@@ -392,3 +392,65 @@ empty_leaderboard = """
     ]
 }
 """
+
+challenge_phase_stats = """
+    {
+        "count": 2,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "challenge": 10,
+                "codename": "phase2",
+                "description": "Est nobis consequatur quam sint in nemo distinctio magni.\
+                 Eaque a natus laboriosam ipsa molestiae corrupti.",
+                "end_date": "2019-09-25T18:56:42.789372Z",
+                "id": 3,
+                "is_active": false,
+                "is_public": true,
+                "leaderboard_public": true,
+                "max_submissions": 100000,
+                "max_submissions_per_day": 100000,
+                "name": "Philip Phase",
+                "start_date": "2018-08-21T18:56:42.789363Z"
+            }
+        ]
+    }
+"""
+
+
+challenge_count_stats = """
+    {
+        "challenge_phase": 1,
+        "participant_team_submission_count": 1
+    }
+"""
+
+
+challenge_last_submission_stats = """
+    {
+        "last_submission_timestamp_in_challenge": "2019-01-24T14:05:34.693148Z",
+        "last_submission_timestamp_in_challenge_phase": "You dont have any submissions \
+        in this challenge phase!",
+        "challenge_phase": 349
+    }
+"""
+
+
+last_submission_stats = """
+{
+    "challenge_phase": 1,
+    "last_submission_timestamp_in_challenge": "2018-07-15T04:37:26.717957Z",
+    "last_submission_timestamp_in_challenge_phase": "2018-07-15T04:37:26.717957Z"
+}
+"""
+
+challenge_analytics = """
+{
+  "total_submissions": 7195,
+  "participant_team_count": 159,
+  "flagged_submissions_count": 0,
+  "public_submissions_count": 0,
+  "challenge_phase": 199
+}
+"""
