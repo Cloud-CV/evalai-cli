@@ -7,8 +7,7 @@ from evalai.utils.config import AUTH_TOKEN_PATH
 
 
 @click.group(invoke_without_command=True)
-@click.pass_context
-def gettoken(gettoken):
+def gettoken():
     """
     Get the EvalAI token.
     """
