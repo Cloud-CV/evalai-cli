@@ -17,7 +17,24 @@ $("#main-button").click(function() {
 
 $(document).ready(function() {
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    $.notify.addStyle('notification', {
+        html: "<div><span data-notify-text/></div>",
+        classes: {
+          base: {
+            "white-space": "nowrap",
+            "color": "white",
+            "background-color": "grey",
+            "padding": "5px",
+            "border-radius": "4px",
+            "width": "auto",
+            "font-weight": "300"
+          },
+          
+        }
+      });   
 });
+
+
 
 function CopyToClipboard(elementId) {
   var aux = document.createElement("input");
@@ -26,5 +43,7 @@ function CopyToClipboard(elementId) {
   aux.select();
   document.execCommand("copy");
   document.body.removeChild(aux);
-  $.notify("Command copied to clipboard",  "success");
+  $.notify("Command copied to clipboard", {
+      style: 'notification'
+  });
 }
