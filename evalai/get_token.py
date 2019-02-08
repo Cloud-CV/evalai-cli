@@ -4,6 +4,7 @@ import os
 from click import echo, style
 
 from evalai.utils.config import AUTH_TOKEN_PATH
+import json
 
 
 @click.group(invoke_without_command=True)
@@ -19,6 +20,7 @@ def get_token():
         with open(AUTH_TOKEN_PATH, 'r') as fr:
             try:
                 data = fr.read()
-                echo("Current token is {}".format(data))
+                tokenjson = json.loads(data)
+                echo("Current token is {}".format(tokenjson["token"]))
             except (OSError, IOError) as e:
                 echo(e)
