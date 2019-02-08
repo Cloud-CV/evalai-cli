@@ -26,5 +26,5 @@ function CopyToClipboard(elementId) {
   aux.select();
   document.execCommand("copy");
   document.body.removeChild(aux);
-  alert("Command Copied to Clipboard!")
+//   alert("Command Copied to Clipboard!")
 }
