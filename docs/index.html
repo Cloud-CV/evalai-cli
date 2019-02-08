@@ -134,7 +134,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges</div>
+                <div class="text" id="codebg">
+                    <span id="challengeDisplay">evalai challenges</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -143,7 +147,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges --participant</div>
+                <div class="text" id="codebg">
+                    <span id="challengeParticipantsDisplay">evalai challenges --participant</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeParticipantsDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -152,7 +160,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges --host</div>
+                <div class="text" id="codebg">
+                    <span id="challengeHostedDisplay">evalai challenges --host</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeHostedDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -161,7 +173,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges past</div>
+                <div class="text" id="codebg">
+                    <span id="pastChallengeDisplay">evalai challenges past</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('pastChallengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -170,7 +186,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges upcoming</div>
+                <div class="text" id="codebg">
+                    <span id="upcomingChallengeDisplay">evalai challenges upcoming</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('upcomingChallengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -179,7 +199,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenges ongoing</div>
+                <div class="text" id="codebg">
+                    <span id="ongoingChallengeDisplay">evalai challenges ongoing</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('ongoingChallengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -189,8 +213,8 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challenge1">evalai challenge 1</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challenge1')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="challengeDetails">evalai challenge 1</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -205,7 +229,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phases</div>
+                <div class="text" id="codebg">
+                    <span id="phasesDisplay">evalai challenge 1 phases</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('phasesDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -215,7 +243,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phase 4</div>
+                <div class="text" id="codebg">
+                    <span id="challengePhaseDetails">evalai challenge 1 phase 4</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengePhaseDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <br>
             <h3 id="h3-style"><a href="#leaderboard" class="sub-heading">Leaderboards and Submissions</a></h3>
@@ -227,7 +259,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phase 4 submit --file submission.json</div>
+                <div class="text" id="codebg">
+                    <span id="submission">evalai challenge 1 phase 4 submit --file submission.json</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('submission')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -236,7 +272,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phase 4 splits</div>
+                <div class="text" id="codebg">
+                    <span id="phaseSplitDetails">evalai challenge 1 phase 4 splits</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('phaseSplitDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -246,16 +286,25 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 leaderboard 4</div>
+                <div class="text" id="codebg">
+                    <span id="viewLeaderBoard">evalai challenge 1 leaderboard 4</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewLeaderBoard')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
                     <h4 class="code-container-style"><b>View all the submissions to Phase 4 of the challenge 1</b></h4>
                 </div>
             </div>
+            <!-- --------------------------- -->
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phase 4 submissions</div>
+                <div class="text" id="codebg">
+                        <span id="viewSubmissionOfPhase">evalai challenge 1 phase 4 submissions</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionOfPhase')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -265,7 +314,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</div>
+                <div class="text" id="codebg">
+                        <span id="viewSubmissionBetweenDates">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionBetweenDates')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -274,7 +327,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai submission 78</div>
+                <div class="text" id="codebg">
+                        <span id="viewSubmissionWithID">evalai submission 78</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionWithID')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <br>
             <h3 id="h3-style"><a href="#teams" class="sub-heading">Teams</a></h3>
@@ -286,7 +343,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai teams --participant</div>
+                <div class="text" id="codebg">
+                        <span id="viewParticipantTeams">evalai teams --participant</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewParticipantTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -295,7 +356,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai teams --host</div>
+                <div class="text" id="codebg">
+                        <span id="viewHostTeams">evalai teams --host</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewHostTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -304,7 +369,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai teams create participant</div>
+                <div class="text" id="codebg">
+                        <span id="createParticipantTeams">evalai teams create participant</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('createParticipantTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -313,7 +382,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai teams create host</div>
+                <div class="text" id="codebg">evalai teams create host
+                        <span id="createHostTeam">evalai teams create host</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('createHostTeam')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
             <br>
             <h3 id="h3-style"><a href="#statistics" class="sub-heading">Statistics</a></h3>
@@ -325,7 +398,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 12 stats</div>
+                <div class="text" id="codebg">
+                        <span id="statsOfHostedChallenges">evalai challenge 12 stats</span>
+                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('statsOfHostedChallenges')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                        </button>
+                </div>
             </div>
         </div>
     </section>
