@@ -7,7 +7,7 @@ from evalai.utils.config import AUTH_TOKEN_PATH
 
 
 @click.group(invoke_without_command=True)
-def gettoken():
+def get_token():
     """
     Get the EvalAI token.
     """
@@ -19,6 +19,6 @@ def gettoken():
         with open(AUTH_TOKEN_PATH, 'r') as fr:
             try:
                 data = fr.read()
-                echo(style("Current token: {}".format(data), bold=True))
+                echo("Current token is {}".format(data))
             except (OSError, IOError) as e:
                 echo(e)
