@@ -25,7 +25,7 @@ def set_token(auth_token):
             os.makedirs(AUTH_TOKEN_DIR)
         with open(AUTH_TOKEN_PATH, 'w+') as fw:
             try:
-                auth_token = {"token":"{}".format(auth_token)}
+                auth_token = {"token":"{}".format(auth_token)} # noqa
                 auth_token = json.dumps(auth_token)
                 fw.write(auth_token)
             except (OSError, IOError) as e:
@@ -33,4 +33,3 @@ def set_token(auth_token):
             echo(style("Success: Authentication token is successfully set.", bold=True, fg="green"))
     else:
         echo(style("Error: Invalid Length. Enter a valid token of length: {}".format(LEN_OF_TOKEN), bold=True))
-
