@@ -20,7 +20,7 @@ def get_token():
         with open(AUTH_TOKEN_PATH, 'r') as fr:
             try:
                 data = fr.read()
-                tokenjson = json.loads(data)
-                echo("Current token is {}".format(tokenjson["token"]))
+                tokendata = json.loads(data)
+                echo("Current token is {}".format(tokendata["token"]))
             except (OSError, IOError) as e:
                 echo(e)
