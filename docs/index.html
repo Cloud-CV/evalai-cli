@@ -21,16 +21,16 @@
             <a href="/" style="float: left;"><img style="height: 40px;" src="https://evalai.cloudcv.org/dist/images/evalai-logo-single.png"></a>
             <a href="/" style="color: #000; float: left; vertical-align: middle; margin-left: 15px; font-size: 28px; font-weight: 300">EvalAI</a>
         </div>
-        <a class="btn" href="">Docs</a>
+        <!-- <a class="btn" href="">Docs</a> -->
         <ul class="primary-nav">
-            <li><a class="support" href="https://evalai.cloudcv.org/contact">Contact Us</a></li>
-            <li><a class="github" href="https://github.com/Cloud-CV/EvalAI-CLI">GitHub</a></li>
-            <li><a class="github" href="https://evalai-forum.cloudcv.org/">Forum</a></li>
+            <li><a class="support" href="https://evalai.cloudcv.org/contact" target="_blank">Contact Us</a></li>
+            <li><a class="github" href="https://github.com/Cloud-CV/EvalAI-CLI" target="_blank">GitHub</a></li>
+            <li><a class="github" href="https://evalai-forum.cloudcv.org/" target="_blank">Forum</a></li>
         </ul>
     </header>
     <div class="jumbotron jumbotron-style">
         <div class="container container-style">
-            <h1 id="title-style">Use EvalAI through the command line</h1>
+            <h1 id="title-style">Use EvalAI through command line</h1>
             <p>Make submissions to a challenge with a single command</p>
             <p>Check the real-time status of your submissions through your terminal</p>
             <a id="main-button" class="btn btn-hero btn-style">See Examples</a>
@@ -40,17 +40,6 @@
     </div>
     <section class="install-wizard wrap section-style">
         <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <h3>What is <a href="https://evalai.cloudcv.org/">EvalAI?</a></h3>
-                </div>
-            </div>
-            <article class="markdown-body">
-                <p>EvalAI is an open source web application that helps researchers, students and data-scientists to
-                    create, collaborate and participate in various AI challenges organized round the globe.</p>
-            </article>
-            <br>
-            <br>
             <div class="row">
                 <div class="col-md-8">
                     <h3>What is <a href="https://github.com/Cloud-CV/evalai-cli">EvalAI-CLI?</a></h3>
@@ -72,7 +61,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4><b>Install EvalAI from <a href="https://pypi.org/project/evalai/">PyPI</a></b></h4>
+                    <h4><b>Install EvalAI from <a href="https://pypi.org/project/evalai/" target="_blank">PyPI</a></b></h4>
                     <br>
                 </div>
             </div>
@@ -86,34 +75,19 @@
                     <br>
                 </div>
             </div>
-            <ol>
-                <li>
-                    <p>Open web browser and hit the url <a href="https://evalai.cloudcv.org/" rel="nofollow">https://evalai.cloudcv.org/</a>.</p>
-                </li>
-                <li>
-                    <p>Login to your account and go to the profile section.</p>
-                </li>
-                <li>
-                    <p>Click on <code>Get your Auth Token</code> to get the authentication token &amp; download it as a
-                        JSON file.</p>
-                </li>
-                <li>
-                    <p>Create a folder with name <code>.evalai</code> in your home directory by using the command <code>mkdir ~/.evalai</code>.</p>
-                </li>
-                <li>
-                    <p>Place the downloaded authentication token file in the new created folder <code>mv token.json ~/.evalai/</code>.</p>
-                </li>
-            </ol>
-            <br>
+            <div class="command">
+                <div class="label">Run this command</div>
+                <div class="text">evalai set_token "40-characters-evalai-auth-token"</div>
+            </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Configure the Host URL (OPTIONAL)</b></h4>
-                    <p>Only run the following command if you want to use CLI with your forked version of EvalAI.</p>
+                    <h4><b>View your Auth Token</b></h4>
+                    <br>
                 </div>
             </div>
             <div class="command">
                 <div class="label">Run this command</div>
-                <div class="text">evalai host -sh https://evalapi.cloudcv.org</div>
+                <div class="text">evalai get_token</div>
             </div>
         </div>
     </section>
@@ -129,40 +103,40 @@
             <hr>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display all challenges</b></h4>
+                    <h4 class="code-container-style"><b>Display all ongoing challenges</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challengeDisplay">evalai challenges</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewOngoingChallenges">evalai challenges ongoing</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewOngoingChallenges')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display all challenges that you've participated in</b></h4>
+                    <h4 class="code-container-style"><b>Display details of a challenge with ID 1</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challengeParticipantsDisplay">evalai challenges --participant</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeParticipantsDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewChallengeDetailsWithID">evalai challenge 1</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewChallengeDetailsWithID')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display all challenges that you've hosted</b></h4>
+                    <h4 class="code-container-style"><b>Display all upcoming challenges</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challengeHostedDisplay">evalai challenges --host</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeHostedDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="upComingChallenge">evalai challenges upcoming</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('upComingChallenge')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -181,40 +155,40 @@
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display all upcoming challenges</b></h4>
+                    <h4 class="code-container-style"><b>Display all challenges that you've participated in</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="upcomingChallengeDisplay">evalai challenges upcoming</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('upcomingChallengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="participatedChallenge">evalai challenges --participant</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('participatedChallenge')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display all ongoing challenges</b></h4>
+                    <h4 class="code-container-style"><b>Display all challenges that you've hosted</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="ongoingChallengeDisplay">evalai challenges ongoing</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('ongoingChallengeDisplay')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="hostedChallenges">evalai challenges --host</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('hostedChallenges')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Display details of a challenge with ID 1</b></h4>
+                    <h4 class="code-container-style"><b>Display all challenges</b></h4>
                 </div>
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challengeDetails">evalai challenge 1</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengeDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewAllChallenges">evalai challenges</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewAllChallenges')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -244,8 +218,76 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="challengePhaseDetails">evalai challenge 1 phase 4</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challengePhaseDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewPhaseDetails">evalai challenge 1 phase 4</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewPhaseDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <br>
+            <h3 id="h3-style"><a href="#teams" class="sub-heading">Teams</a></h3>
+            <hr>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>Participate in a challenge with ID 1 and team ID 2</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="participatInChallenge">evalai challenge 1 participant 2</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('participatInChallenge')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>View your participant teams</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="viewParticipantTeams">evalai teams --participant</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewParticipantTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>View your host teams</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="viewHostTeams">evalai teams --host</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewHostTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>Create a participant team</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="createParticipantTeam">evalai teams create participant</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('createParticipantTeam')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>Create a host team</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="createHostTeam">evalai teams create host</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('createHostTeam')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -260,8 +302,21 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="submission">evalai challenge 1 phase 4 submit --file submission.json</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('submission')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="makeSubmission">evalai challenge 1 phase 4 submit --file submission.json</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('makeSubmission')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="code-label">
+                    <h4 class="code-container-style"><b>View status of a submission with ID 78</b></h4>
+                </div>
+            </div>
+            <div class="command code-margin">
+                <div class="label">Run this command</div>
+                <div class="text" id="codebg">
+                    <span id="viewSubmissionWithID">evalai submission 78</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionWithID')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -273,8 +328,8 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="phaseSplitDetails">evalai challenge 1 phase 4 splits</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('phaseSplitDetails')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewPhaseSplits">evalai challenge 1 phase 4 splits</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewPhaseSplits')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -287,8 +342,8 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                    <span id="viewLeaderBoard">evalai challenge 1 leaderboard 4</span>
-                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewLeaderBoard')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    <span id="viewLeaderboard">evalai challenge 1 leaderboard 4</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewLeaderboard')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
                     </button>
                 </div>
             </div>
@@ -300,9 +355,9 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                        <span id="viewSubmissionOfPhase">evalai challenge 1 phase 4 submissions</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionOfPhase')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
+                    <span id="viewPhaseSubmissions">evalai challenge 1 phase 4 submissions</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewPhaseSubmissions')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -314,81 +369,29 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                        <span id="viewSubmissionBetweenDates">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionBetweenDates')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>View status of a submission with ID 78</b></h4>
-                </div>
-            </div>
-            <div class="command code-margin">
-                <div class="label">Run this command</div>
-                <div class="text" id="codebg">
-                        <span id="viewSubmissionWithID">evalai submission 78</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionWithID')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
+                    <span id="viewSubmissionBetweenDates">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewSubmissionBetweenDates')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
                 </div>
             </div>
             <br>
-            <h3 id="h3-style"><a href="#teams" class="sub-heading">Teams</a></h3>
+            <h3 id="h3-style"><a href="#statistics" class="sub-heading">Configure your custom backend</a></h3>
             <hr>
             <div class="row">
                 <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>View your participant teams</b></h4>
+                    <h4 class="code-container-style"><b>Configure the Host URL (OPTIONAL)</b></h4>
+                    <p>Only run the following command if you want to use CLI with your forked version of EvalAI.</p>
                 </div>
             </div>
-            <div class="command code-margin">
+            <div class="command">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                        <span id="viewParticipantTeams">evalai teams --participant</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewParticipantTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
+                    <span id="configureHost">evalai host -sh https://evalapi.cloudcv.org</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('configureHost')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>View your host teams</b></h4>
-                </div>
-            </div>
-            <div class="command code-margin">
-                <div class="label">Run this command</div>
-                <div class="text" id="codebg">
-                        <span id="viewHostTeams">evalai teams --host</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewHostTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Create a participant team</b></h4>
-                </div>
-            </div>
-            <div class="command code-margin">
-                <div class="label">Run this command</div>
-                <div class="text" id="codebg">
-                        <span id="createParticipantTeams">evalai teams create participant</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('createParticipantTeams')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="code-label">
-                    <h4 class="code-container-style"><b>Create a host team</b></h4>
-                </div>
-            </div>
-            <div class="command code-margin">
-                <div class="label">Run this command</div>
-                <div class="text" id="codebg">
-                        <span id="createHostTeam">evalai teams create host</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('createHostTeam')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
-                </div>
-            </div>
-            <br>
-            <h3 id="h3-style"><a href="#statistics" class="sub-heading">Statistics</a></h3>
+            <!-- <h3 id="h3-style"><a href="#statistics" class="sub-heading">Statistics</a></h3>
             <hr>
             <div class="row">
                 <div class="col-md-12" id="code-label">
@@ -398,11 +401,11 @@
             <div class="command code-margin">
                 <div class="label">Run this command</div>
                 <div class="text" id="codebg">
-                        <span id="statsOfHostedChallenges">evalai challenge 12 stats</span>
-                        <button type="button" class="btn copybtn" onclick="CopyToClipboard('statsOfHostedChallenges')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
-                        </button>
+                    <span id="viewStats">evalai challenge 12 stats</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('viewStats')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
     <footer>
@@ -413,13 +416,10 @@
                 <a id="footer-link">EvalAI</a>
             </div>
             <p id="footer-margin">
-                Maintained by the EvalAI core team.
-                <br> ©2018 EvalAI
+                Maintained by the EvalAI core team
+                <br> ©2019 EvalAI
             </p>
         </div>
-        <ul class="primary-nav">
-            <li><a class="github" href="https://github.com/Cloud-CV/EvalAI-CLI">GitHub</a></li>
-        </ul>
     </footer>
     <script src="./assets/jquery.min.js"></script>
     <script src="./assets/bootstrap.min.js"></script>
