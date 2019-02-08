@@ -11,6 +11,7 @@
     <link href="./assets/evalai.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/gh-fork-ribbon.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,500i" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link href="./assets/github-markdown.css" rel="stylesheet">
 </head>
 
@@ -187,7 +188,11 @@
             </div>
             <div class="command code-margin">
                 <div class="label">Run this command</div>
-                <div class="text" id="codebg">evalai challenge 1</div>
+                <div class="text" id="codebg">
+                    <span id="challenge1">evalai challenge 1</span>
+                    <button type="button" class="btn copybtn" onclick="CopyToClipboard('challenge1')" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
             <br>
             <h3 id="h3-style"><a href="#challenge-phase" class="sub-heading">Challenge Phase</a></h3>
