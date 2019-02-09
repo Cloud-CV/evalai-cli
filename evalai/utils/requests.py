@@ -4,6 +4,7 @@ import sys
 from click import echo, style
 
 from evalai.utils.config import EVALAI_ERROR_CODES
+from evalai.utils.common import validate_token
 
 from .auth import get_request_header, get_host_url
 

@@ -4,17 +4,7 @@ import click
 import docker
 import sys
 
-from click import echo, style
-from urllib3 import response
-
-from evalai.utils.auth import get_host_url, get_request_header
-from evalai.utils.common import (
-    convert_UTC_date_to_local,
-    validate_date_format,
-    validate_token,
-    notify_user,
-)
-from evalai.utils.config import EVALAI_ERROR_CODES
+from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import display_submission_details
 from evalai.utils.urls import URLS
@@ -52,7 +42,7 @@ def push(image, phase):
         notify_user(message, color="red")
         sys.exit(1)
 
-    image_name, tag = image[0], image[1]
+    tag = image[1]
     docker_client = docker.from_env()
     try:
         docker_client.images.get(image)
@@ -98,10 +88,7 @@ def push(image, phase):
     for line in docker_client.images.push(
         respository_uri, tag, stream=True, decode=True
     ):
-        status = line.get("status")
         if line.get("status") in ["Pushing", "Pushed"] and line.get("progress"):
-            id = line.get("id")
-            progress = line.get("progress")
             print("{id}: {status} {progress}".format(**line))
         elif line.get("errorDetail"):
             error = line.get("error")
