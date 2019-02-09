@@ -32,7 +32,6 @@ def submission(submission_id):
     display_submission_details(submission_id)
 
 
-# @click.group(invoke_without_command=True)
 @click.command()
 @click.argument("IMAGE", nargs=1)
 @click.option(
