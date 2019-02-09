@@ -12,8 +12,8 @@ with io.open("README.md", encoding="utf-8") as f:
 
 setup(
     name=PROJECT,
-    version="1.0.18",
-    description="Use EvalAI through the CLI!",
+    version="1.1.0",
+    description="Use EvalAI through command line interface",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Cloud-CV",
