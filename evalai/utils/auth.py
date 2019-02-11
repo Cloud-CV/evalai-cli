@@ -4,7 +4,10 @@ import sys
 import requests
 
 from click import echo, style
-from evalai.utils.config import AUTH_TOKEN_PATH, API_HOST_URL, HOST_URL_FILE_PATH
+from evalai.utils.config import (AUTH_TOKEN_PATH,
+                                 API_HOST_URL,
+                                 EVALAI_ERROR_CODES,
+                                 HOST_URL_FILE_PATH)
 from evalai.utils.urls import URLS
 
 
@@ -21,7 +24,7 @@ def get_user_auth_token_by_login(username, password):
         response = requests.post(url, data=payload)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        if response.status_code == 400:
+        if response.status_code in EVALAI_ERROR_CODES:
             echo(
                 style(
                     "\nUnable to log in with provided credentials.\n",
