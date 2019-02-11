@@ -107,7 +107,7 @@ def push(image, phase):
                 "submitted_image_uri": submitted_image_uri
             }
             submission_file_path = os.path.join(BASE_TEMP_DIR, 'submission.json')
-            with open(submission_file_path, 'w') as outfile:  
+            with open(submission_file_path, 'w') as outfile:
                 json.dump(data, outfile)
             request_path = URLS.challenge_phase_details.value
             request_path = request_path.format(phase)
