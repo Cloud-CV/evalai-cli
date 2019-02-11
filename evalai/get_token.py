@@ -23,7 +23,7 @@ def get_token():
             )
         )
     else:
-        with open(AUTH_TOKEN_PATH, 'r') as fr:
+        with open(AUTH_TOKEN_PATH, "r") as fr:
             try:
                 data = fr.read()
                 tokendata = json.loads(data)
