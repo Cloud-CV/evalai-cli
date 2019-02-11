@@ -1,3 +1,4 @@
+import json
 import requests
 import sys
 
@@ -40,9 +41,59 @@ def make_request(path, method, files=None, data=None):
                 )
             )
             sys.exit(1)
+        return response.json()
     elif method == "POST":
-        # TODO: Add support for POST request
-        pass
+        if files:
+            files = {"input_file": open(files, 'rb')}
+        else:
+            files = None
+        data = {"status": "submitting"}
+        try:
+            response = requests.post(url, headers=headers, files=files, data=data)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            if response.status_code in EVALAI_ERROR_CODES:
+                validate_token(response.json())
+                echo(
+                    style(
+                        "\nError: {}\n"
+                        "\nUse `evalai challenges` to fetch the active challenges.\n"
+                        "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                        "active phases.\n".format(response.json()["error"]),
+                        fg="red",
+                        bold=True,
+                    )
+                )
+            else:
+                echo(err)
+            sys.exit(1)
+        except requests.exceptions.RequestException as err:
+            echo(
+                style(
+                    "\nCould not establish a connection to EvalAI."
+                    " Please check the Host URL.\n",
+                    bold=True,
+                    fg="red",
+                )
+            )
+            sys.exit(1)
+        response = json.loads(response.text)
+        echo(
+            style(
+                "\nYour docker file is successfully submitted.\n",
+                fg="green",
+                bold=True,
+            )
+        )
+        echo(
+            style(
+                "You can use `evalai submission {}` to view this submission's status.\n".format(
+                    response.get('id')
+                ),
+                bold=True,
+            )
+        )
+        return response
     elif method == "PUT":
         # TODO: Add support for PUT request
         pass
@@ -52,4 +103,3 @@ def make_request(path, method, files=None, data=None):
     elif method == "DELETE":
         # TODO: Add support for DELETE request
         pass
-    return response.json()

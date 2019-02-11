@@ -4,7 +4,10 @@ import base64
 import boto3
 import click
 import docker
+import json
+import shutil
 import sys
+import tempfile
 
 from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
@@ -60,7 +63,7 @@ def push(image, phase):
 
     response = make_request(request_path, "GET")
     federated_user = response["success"]["federated_user"]
-    respository_uri = response["success"]["docker_repository_uri"]
+    repository_uri = response["success"]["docker_repository_uri"]
 
     AWS_ACCOUNT_ID = federated_user["FederatedUser"]["FederatedUserId"].split(":")[0]
     AWS_SERVER_PUBLIC_KEY = federated_user["Credentials"]["AccessKeyId"]
@@ -85,16 +88,35 @@ def push(image, phase):
     registry = token["authorizationData"][0]["proxyEndpoint"]
     docker_client.login(username, password, registry=registry, dockercfg_path=os.getcwd())
 
-    # Tag and push docker image
-    docker_client.images.get(image).tag("{}:{}".format(respository_uri, tag))
+    # Tag and push docker image and create a submission if successfully pushed
+    docker_client.images.get(image).tag("{}:{}".format(repository_uri, tag))
     for line in docker_client.images.push(
-        respository_uri, tag, stream=True, decode=True
+        repository_uri, tag, stream=True, decode=True
     ):
         if line.get("status") in ["Pushing", "Pushed"] and line.get("progress"):
             print("{id}: {status} {progress}".format(**line))
         elif line.get("errorDetail"):
             error = line.get("error")
             notify_user(error, color="red")
+        elif line.get('aux'):
+            aux = line.get('aux')
+            pushed_image_tag = aux['Tag']
+            submitted_image_uri = '{}:{}'.format(repository_uri, pushed_image_tag)
+            BASE_TEMP_DIR = tempfile.mkdtemp()
+            data = {
+                "submitted_image_uri": submitted_image_uri
+            }
+            submission_file_path = os.path.join(BASE_TEMP_DIR, 'submission.json')
+            with open(submission_file_path, 'w') as outfile:  
+                json.dump(data, outfile)
+            request_path = URLS.challenge_phase_details.value
+            request_path = request_path.format(phase)
+            response = make_request(request_path, "GET")
+            challenge_pk = response.get('challenge')
+            request_path = URLS.make_submission.value
+            request_path = request_path.format(challenge_pk, phase)
+            response = make_request(request_path, "POST", submission_file_path)
+            shutil.rmtree(BASE_TEMP_DIR)
         else:
             print(
                 " ".join(
