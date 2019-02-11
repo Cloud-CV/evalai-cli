@@ -13,9 +13,15 @@ def get_token():
     Get the EvalAI token.
     """
     if not os.path.exists(AUTH_TOKEN_PATH):
-        echo(style("\nThe authentication token json file doesn't exist at the required path. "
-                   "Please download the file from the Profile section of the EvalAI webapp and "
-                   "place it at ~/.evalai/token.json or use evalai -t <token> to add it.\n\n", bold=True))
+        echo(
+            style(
+                "\nThe authentication token json file doesn't exist at the required path. "
+                "Please download the file from the Profile section of the EvalAI webapp and "
+                "place it at ~/.evalai/token.json or use evalai -t <token> to add it.\n\n",
+                bold=True,
+                fg="red",
+            )
+        )
     else:
         with open(AUTH_TOKEN_PATH, 'r') as fr:
             try:
