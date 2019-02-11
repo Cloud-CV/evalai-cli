@@ -10,7 +10,7 @@ from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
 @click.group(invoke_without_command=True)
 @click.pass_context
 @click.argument("USERNAME", type=str)
-def login(ctx,username):
+def login(ctx, username):
     """
     Login to EvalAI and save token.
     """
@@ -33,4 +33,3 @@ def login(ctx,username):
                 echo(e)
 
     echo(style("\nLogged in successfully!", bold=True))
-
