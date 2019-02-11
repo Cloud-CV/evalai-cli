@@ -1,3 +1,5 @@
+import os
+
 import base64
 import boto3
 import click
@@ -81,7 +83,7 @@ def push(image, phase):
         .split(":")
     )
     registry = token["authorizationData"][0]["proxyEndpoint"]
-    docker_client.login(username, password, registry=registry)
+    docker_client.login(username, password, registry=registry, dockercfg_path=os.getcwd())
 
     # Tag and push docker image
     docker_client.images.get(image).tag("{}:{}".format(respository_uri, tag))
