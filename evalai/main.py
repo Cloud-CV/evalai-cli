@@ -5,9 +5,10 @@ from click import echo
 from .challenges import challenge, challenges
 from .set_host import host
 from .add_token import set_token
-from .submissions import submission
+from .submissions import submission, push
 from .teams import teams
 from .get_token import get_token
+from .login import login
 
 
 @click.group(invoke_without_command=True)
@@ -34,7 +35,9 @@ def main(ctx):
 main.add_command(challenges)
 main.add_command(challenge)
 main.add_command(host)
+main.add_command(push)
 main.add_command(set_token)
 main.add_command(submission)
 main.add_command(teams)
 main.add_command(get_token)
+main.add_command(login)
