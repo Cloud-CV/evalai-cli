@@ -40,7 +40,7 @@ def validate_token(response):
                     "\nThe authentication token you are using isn't valid."
                     " Please generate it again.\n",
                     bold=True,
-                    bg="red",
+                    fg="red",
                 )
             )
             sys.exit(1)
@@ -49,7 +49,7 @@ def validate_token(response):
                 style(
                     "\nSorry, the token has expired. Please generate it again.\n",
                     bold=True,
-                    bg="red",
+                    fg="red",
                 )
             )
             sys.exit(1)
@@ -84,3 +84,7 @@ def clean_data(data):
     data = BeautifulSoup(data, "lxml").text.strip()
     data = " ".join(data.split()).encode("utf-8")
     return data
+
+
+def notify_user(message, color="green", bold=False):
+    echo(style(message, fg=color, bold=bold))
