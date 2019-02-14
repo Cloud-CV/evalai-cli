@@ -72,7 +72,7 @@ def push(image, phase):
 
     if docker_image_size > max_docker_image_size:
         message = (
-            "\nError: Image is too large. The maximum image size allowed is {}".format(max_docker_image_size)
+            "\nError: Image is too large. The maximum image size allowed is {} GB".format(max_docker_image_size)
         )
         notify_user(message, color="red")
         sys.exit(1)
