@@ -261,6 +261,6 @@ def convert_bytes_to(byte, to, bsize=1024):
     }
     unit = byte
     for value in range(units_mapping[to]):
-        unit  = int(unit/bsize)
+        unit = int(unit/bsize)
 
     return unit
