@@ -1012,7 +1012,7 @@ footer ul.primary-nav li:last-child a {
 
 #img-pos {
     height: 53px;
-    margin-top:20px;
+    margin-top:-6px;
 }
 
 #footer-pos {
@@ -1029,12 +1029,7 @@ footer ul.primary-nav li:last-child a {
 }   
 
 #footer-margin {
-    padding: 25px 50px 75px 500px; 
-    color: #808080;
-    font-size: 14px;
-    line-height: 27px;
-    font-weight: 200;
-    float: left;
+    margin-top: 20px;
 }
 
 #example-style {
