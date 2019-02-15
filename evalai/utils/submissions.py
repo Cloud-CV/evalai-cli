@@ -252,12 +252,12 @@ def convert_bytes_to(byte, to, bsize=1024):
         to {str} -- To which unit it is to be converted
     """
     units_mapping = {
-        'k': 1,
-        'm': 2,
-        'g': 3,
-        't': 4,
-        'p': 5,
-        'e': 6
+        'kb': 1,
+        'mb': 2,
+        'gb': 3,
+        'tb': 4,
+        'pb': 5,
+        'eb': 6
     }
     unit = byte
     for value in range(units_mapping[to]):
