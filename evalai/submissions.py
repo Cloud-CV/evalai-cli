@@ -52,7 +52,6 @@ def push(image, phase):
     try:
         docker_image = docker_client.images.get(image)
         docker_image_size = docker_image.__dict__.get('attrs').get('VirtualSize')
-        docker_image_size = convert_bytes_to(docker_image_size, 'g')
     except docker.errors.ImageNotFound:
         message = (
             "\nError: Image not found. Please enter the correct image name and tag."
