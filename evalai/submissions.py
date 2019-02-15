@@ -70,6 +70,7 @@ def push(image, phase):
     max_docker_image_size = response.get('max_docker_image_size')
 
     if docker_image_size > max_docker_image_size:
+        max_docker_image_size = convert_bytes_to(max_docker_image_size, 'g')
         message = (
             "\nError: Image is too large. The maximum image size allowed is {} GB".format(max_docker_image_size)
         )
