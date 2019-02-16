@@ -20,13 +20,13 @@
         <header>
             <div class="logo">
                 <a href="/" style="float: left;"><img style="height: 40px;" src="https://evalai.cloudcv.org/dist/images/evalai-logo-single.png"></a>
-                <a href="/" style="color: #000; float: left; vertical-align: middle; margin-left: 15px; font-size: 28px; font-weight: 300">EvalAI</a>
+                <a href="/" class="header-evalai">EvalAI</a>
             </div>
             <!-- <a class="btn" href="">Docs</a> -->
             <ul class="primary-nav">
-                <li><a class="support" href="https://evalai.cloudcv.org/contact" target="_blank">Contact Us</a></li>
-                <li><a class="github" href="https://github.com/Cloud-CV/EvalAI-CLI" target="_blank">GitHub</a></li>
-                <li><a class="github" href="https://evalai-forum.cloudcv.org/" target="_blank">Forum</a></li>
+                <li><a class="github fw-300" href="https://evalai-forum.cloudcv.org/" target="_blank">Forum</a></li>
+                <li><a class="support fw-300" href="https://evalai.cloudcv.org/contact" target="_blank">Contact Us</a></li>
+                <li><a class="github fw-300" href="https://github.com/Cloud-CV/EvalAI-CLI" target="_blank">GitHub</a></li>
             </ul>
         </header>
         <div class="jumbotron jumbotron-style">
@@ -83,8 +83,8 @@
                 <div class="command">
                     <div class="label">Run this command</div>
                     <div class="text">
-                        <span> evalai set_token &lt;auth_token&gt; </span>
-                        <a class="copy-btn" onclick="CopyToClipboard('viewOngoingChallenges')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="setToken"> evalai set_token &lt;auth_token&gt; </span>
+                        <a class="copy-btn" onclick="CopyToClipboard('setToken')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -97,8 +97,8 @@
                 <div class="command">
                     <div class="label">Run this command</div>
                     <div class="text">
-                        <span>evalai get_token</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('viewOngoingChallenges')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="getToken">evalai get_token</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('getToken')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>

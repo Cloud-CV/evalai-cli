@@ -1078,3 +1078,16 @@ footer ul.primary-nav li:last-child a {
 a:hover {
     color: slategrey;
 }
+
+.header-evalai {
+    color: #000;
+    float: left;
+    vertical-align: middle;
+    margin-left: 15px;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.fw-300 {
+    font-weight: 300;
+}
