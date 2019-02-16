@@ -26,11 +26,10 @@ The goal of this package is to offer almost all the features available on the we
 
 3. Login with your credentials and move to the profile section.
 
-4. Click on `Get your Auth Token` to get the authentication token & download it as a JSON file.
-
-5. Create a folder with name `.evalai` in your home directory by using the command `mkdir ~/.evalai`.
-
-6. Place the downloaded authentication token in this folder by using the command `mv ~/Downloads/token.json ~/.evalai/`.
+4. To setup the auth token, run the following command:
+```
+evalai set_token <token>
+```
 
 ### Step 2:
 
@@ -64,17 +63,17 @@ pip install -e .
 
 ### Step 1:
 
-1. Setup the development environment for EvalAI and make sure that it is running perfectly. For setting up EvalAI on Windows refer to [EvalAI Setup - Windows](https://evalai.readthedocs.io/en/latest/setup.html#windows-installation-instructions)
+1. Setup the development environment for EvalAI and make sure that it is running perfectly.
 
 2. Now, Open web browser and hit the url http://127.0.0.1:8888.
 
 3. Login with your credentials and move to the profile section.
 
-4. Click on `Get your Auth Token` to get the authentication token & download it as a JSON file.
+4. To setup the auth token, run the following command:
 
-5. Create a folder with name ``.evalai`` in your home directory by using the command `make .evalai`.
-
-6. Place the downloaded authentication token in this folder by using the command `move ~/Downloads/token.json /.evalai/`.
+```bash
+evalai set_token <token>
+```
 
 ### Step 2:
 
