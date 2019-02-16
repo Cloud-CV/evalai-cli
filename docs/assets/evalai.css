@@ -993,8 +993,8 @@ footer ul.primary-nav li:last-child a {
     margin-bottom: 20px;
 }
 
-#codebg {
-    background-color: #fff;
+.codebg {
+    background-color: #fff !important;
 }
 
 #h3-style {
