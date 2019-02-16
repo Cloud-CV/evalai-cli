@@ -1068,3 +1068,13 @@ footer ul.primary-nav li:last-child a {
     color:#283e54;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+
+.copy-btn {
+    color: black;
+    float: right;
+    cursor: pointer;
+}
+
+a:hover {
+    color: slategrey;
+}
