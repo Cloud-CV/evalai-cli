@@ -26,10 +26,7 @@ The goal of this package is to offer almost all the features available on the we
 
 3. Login with your credentials and move to the profile section.
 
-4. To setup the auth token, run the following command:
-```
-evalai set_token <token>
-```
+4. Copy the auth token from the profile section since it would help you in setting up the project in later stage.
 
 ### Step 2:
 
@@ -59,6 +56,12 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+5. To setup the auth token, use the token copied in Step-4 and run the following command:  
+
+```bash
+evalai set_token <token>
+```
+
 ## Development Setup for Windows
 
 ### Step 1:
@@ -69,11 +72,7 @@ pip install -e .
 
 3. Login with your credentials and move to the profile section.
 
-4. To setup the auth token, run the following command:
-
-```bash
-evalai set_token <token>
-```
+4. Copy the auth token from the profile section since it would help you in setting up the project in later stage.
 
 ### Step 2:
 
@@ -105,6 +104,11 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+5. To setup the auth token, use the token copied in Step-4 and run the following command:  
+
+```bash
+evalai set_token <token>
+```
 
 ## Contributing Guidelines
 
