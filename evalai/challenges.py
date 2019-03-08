@@ -4,6 +4,7 @@ from click import style
 
 from evalai.utils.common import Date
 from evalai.utils.challenges import (
+    create_challenge,
     display_all_challenge_list,
     display_future_challenge_list,
     display_ongoing_challenge_list,
