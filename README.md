@@ -16,7 +16,7 @@
 
 The goal of this package is to offer almost all the features available on the website within your terminal.
 
-## Development Setup
+## Development Setup for Linux
 
 ### Step 1:
 
@@ -26,11 +26,7 @@ The goal of this package is to offer almost all the features available on the we
 
 3. Login with your credentials and move to the profile section.
 
-4. Click on `Get your Auth Token` to get the authentication token & download it as a JSON file.
-
-5. Create a folder with name `.evalai` in your home directory by using the command `mkdir ~/.evalai`.
-
-6. Place the downloaded authentication token in this folder by using the command `mv ~/Downloads/token.json ~/.evalai/`.
+4. Copy the auth token from the profile section since it would help you in setting up the project in later stage.
 
 ### Step 2:
 
@@ -58,6 +54,60 @@ pip install -r requirements.txt
 
 ```bash
 pip install -e .
+```
+
+5. To setup the auth token, use the token copied in Step-4 and run the following command:  
+
+```bash
+evalai set_token <token>
+```
+
+## Development Setup for Windows
+
+### Step 1:
+
+1. Setup the development environment for EvalAI and make sure that it is running perfectly.
+
+2. Now, Open web browser and hit the url http://127.0.0.1:8888.
+
+3. Login with your credentials and move to the profile section.
+
+4. Copy the auth token from the profile section since it would help you in setting up the project in later stage.
+
+### Step 2:
+
+1. Clone the evalai-cli repository to your machine via git
+
+```bash
+git clone https://github.com/Cloud-CV/evalai-cli.git EvalAI-CLI
+```
+
+2. Create a virtual environment
+
+```bash
+cd EvalAI-CLI
+virtualenv -p python3 venv
+cd venv/scripts
+activate.bat   
+cd ../.. 
+```
+
+3. Install the package dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Install the package locally to try it out
+
+```bash
+pip install -e .
+```
+
+5. To setup the auth token, use the token copied in Step-4 and run the following command:  
+
+```bash
+evalai set_token <token>
 ```
 
 ## Contributing Guidelines
