@@ -49,8 +49,6 @@ def create_challenge(file, team):
             )
         else:
             echo(err)
-        if "zip_configuration" in response.json():
-            echo(style(response.json()["zip_configuration"][0], fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException as err:
         echo(
@@ -72,6 +70,7 @@ def create_challenge(file, team):
             bold=True,
         )
     )
+
 
 
 def pretty_print_challenge_data(challenges):
