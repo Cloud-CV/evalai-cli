@@ -72,7 +72,6 @@ def create_challenge(file, team):
     )
 
 
-
 def pretty_print_challenge_data(challenges):
     """
     Function to print the challenge data

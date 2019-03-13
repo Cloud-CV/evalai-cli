@@ -1028,4 +1028,3 @@ class TestCreateChallenge(BaseTestClass):
             challenges, ["create", "--file", "{}/test_zip_file.zip".format(file), "111"]
         )
         assert result.output.strip() == expected
-
