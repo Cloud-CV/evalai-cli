@@ -15,7 +15,7 @@ with open('requirements.txt') as f:
 
 setup(
     name=PROJECT,
-    version="1.1.0",
+    version="1.1.1",
     description="Use EvalAI through command line interface",
     long_description=long_description,
     long_description_content_type="text/markdown",
