@@ -277,7 +277,7 @@ def pretty_print_challenge_details(challenge):
     start_date = convert_UTC_date_to_local(challenge["start_date"]).split(" ")[0]
     end_date = convert_UTC_date_to_local(challenge["end_date"]).split(" ")[0]
     values.extend([start_date, end_date])
-    values.extend(list(map(lambda item: clean_data(challenge[item]).decode('ascii'), attributes)))
+    values.extend(list(map(lambda item: clean_data(challenge[item]), attributes)))
     table.append_row(values)
     echo(table)
 
@@ -337,7 +337,7 @@ def pretty_print_all_challenge_phases(phases):
     table.column_headers = columns_attributes
     for phase in phases:
         values = list(map(lambda item: phase[item], attributes))
-        description = clean_data(phase["description"]).decode('ascii')
+        description = clean_data(phase["description"])
         values.append(description)
         table.append_row(values)
     echo(table)
