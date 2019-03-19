@@ -10,6 +10,9 @@ PROJECT = "evalai"
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
+with open('requirements.txt') as f:
+    install_requires = f.read().strip().split('\n')
+
 setup(
     name=PROJECT,
     version="1.1.0",
@@ -27,16 +30,7 @@ setup(
     platforms=["Any"],
     scripts=[],
     provides=[],
-    install_requires=[
-        "beautifulsoup4==4.7.1",
-        "beautifultable==0.7.0",
-        "click==6.7",
-        "lxml==4.2.1",
-        "python-dateutil==2.7.3",
-        "requests==2.20.0",
-        "responses==0.9.0",
-        "validators==0.12.2",
-    ],
+    install_requires=install_requires,
     namespace_packages=[],
     packages=find_packages(),
     include_package_data=True,
