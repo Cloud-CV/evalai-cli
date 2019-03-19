@@ -392,7 +392,6 @@ def display_challenge_phase_list(challenge_id):
 
     response = response.json()
     challenge_phases = response["results"]
-    print(challenge_phases[0])
     pretty_print_all_challenge_phases(challenge_phases)
 
 
