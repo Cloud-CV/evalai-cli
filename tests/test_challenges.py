@@ -128,8 +128,6 @@ class TestDisplayChallengeDetails(BaseTestClass):
             "terms_and_conditions",
         ]
         column_attributes = [
-            "Start Date",
-            "End Date",
             "Description",
             "Submission Guidelines",
             "Evaluation Details",
@@ -137,13 +135,6 @@ class TestDisplayChallengeDetails(BaseTestClass):
         ]
         table.column_headers = column_attributes
         values = []
-        start_date = convert_UTC_date_to_local(self.challenge_data["start_date"]).split(
-            " "
-        )[0]
-        end_date = convert_UTC_date_to_local(self.challenge_data["end_date"]).split(
-            " "
-        )[0]
-        values.extend([start_date, end_date])
         values.extend(
             list(map(lambda item: clean_data(self.challenge_data[item]), attributes))
         )
