@@ -5,9 +5,13 @@ import boto3
 import click
 import docker
 import json
+import requests
 import shutil
 import sys
 import tempfile
+import urllib.parse as urlparse
+
+from click import echo, style
 
 from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
@@ -149,3 +153,55 @@ def push(image, phase):
                     if k != "progressDetail"
                 )
             )
+
+
+@click.command()
+@click.argument("URL", nargs=1)
+def download_file(url):
+    parsed_url = urlparse.urlparse(url)
+    bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
+    key = urlparse.parse_qs(parsed_url.query).get("key")
+    if not bucket or not key:
+        echo(
+            style(
+                "\nThe bucket or key is missing in the url.\n",
+                fg="red",
+                bold=True,
+            )
+        )
+        sys.exit(1)
+    request_path = URLS.download_file.value
+    request_path = request_path.format(bucket[0], key[0])
+    response = make_request(request_path, "GET")
+    signed_url = response.get("signed_url")
+    file_name = key[0].split("/")[-1]
+    try:
+        response = requests.get(signed_url, stream=True)
+        with open(file_name, "wb") as file:
+            total_file_length = int(response.headers.get("content-length"))
+            chunk_size = 1024
+            with click.progressbar(
+                length=total_file_length, label="Downloading file"
+            ) as bar:
+                for data in response.iter_content(chunk_size=chunk_size):
+                    file.write(data)
+                    bar.update(chunk_size)
+            echo(
+                style(
+                    "\nYour file {} is successfully downloaded.\n".format(
+                        file_name
+                    ),
+                    fg="green",
+                    bold=True,
+                )
+            )
+    except Exception:
+        echo(
+            style(
+                "\nYour file {} can't be downloaded. Please try again.\n".format(
+                    file_name
+                ),
+                fg="red",
+                bold=True,
+            )
+        )
