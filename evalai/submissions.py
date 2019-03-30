@@ -159,6 +159,20 @@ def push(image, phase):
 @click.argument("URL", nargs=1)
 def download_file(url):
     parsed_url = urlparse.urlparse(url)
+    parsed_host_url = "{parsed_url.scheme}://{parsed_url.netloc}".format(
+        parsed_url=parsed_url
+    )
+    # TODO: Replace the hardcoded host url with cli's host url
+    host_url = "https://evalai.cloudcv.org"
+    if parsed_host_url != host_url:
+        echo(
+            style(
+                "\nThe url doesn't match the evalai url. Please check the url.\n",
+                fg="red",
+                bold=True,
+            )
+        )
+        sys.exit(1)
     bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
     key = urlparse.parse_qs(parsed_url.query).get("key")
     if not bucket or not key:
