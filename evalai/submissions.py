@@ -57,6 +57,15 @@ def push(image, phase):
         )
         notify_user(message, color="red")
         sys.exit(1)
+    except docker.errors.DockerException as e:
+        message = (
+            '''\nError: Docker client initialization error.\n
+                Check if docker is running on the machine and doesn't require root access.\n
+                Installing docker - https://docs.docker.com/install/ \n
+                Managing docker as non-root user - https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user '''
+        )
+        notify_user(message, color="red")
+        sys.exit(1)
 
     request_path = URLS.challenge_phase_details.value
     request_path = request_path.format(phase)
