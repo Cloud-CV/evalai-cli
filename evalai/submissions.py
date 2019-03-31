@@ -20,7 +20,7 @@ from evalai.utils.submissions import (
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
-from evalai.utils.config import EVALAI_HOST_URLS
+from evalai.utils.config import EVALAI_HOST_URLS, HOST_URL_FILE_PATH
 
 
 @click.group(invoke_without_command=True)
@@ -163,8 +163,67 @@ def download_file(url):
     parsed_host_url = "{parsed_url.scheme}://{parsed_url.netloc}".format(
         parsed_url=parsed_url
     )
+    is_correct_host = False
     # TODO: Replace the hardcoded host url with cli's host url
-    if parsed_host_url not in EVALAI_HOST_URLS:
+    with open(HOST_URL_FILE_PATH, "r") as file:
+        host_url = file.read()
+    if parsed_host_url in EVALAI_HOST_URLS:
+        is_correct_host = True
+    if parsed_host_url == host_url:
+        is_correct_host = True
+
+    if is_correct_host:
+        bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
+        key = urlparse.parse_qs(parsed_url.query).get("key")
+        if not bucket or not key:
+            echo(
+                style(
+                    "\nThe bucket or key is missing in the url.\n",
+                    fg="red",
+                    bold=True,
+                )
+            )
+            sys.exit(1)
+        request_path = URLS.download_file.value
+        request_path = request_path.format(bucket[0], key[0])
+        response = make_request(request_path, "GET")
+        signed_url = response.get("signed_url")
+        file_name = key[0].split("/")[-1]
+        try:
+            response = requests.get(signed_url, stream=True)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            echo(err)
+            sys.exit(1)
+        except requests.exceptions.RequestException:
+            echo(
+                style(
+                    "\nCould not establish a connection to EvalAI."
+                    " Please check the Host URL.\n",
+                    bold=True,
+                    fg="red",
+                )
+            )
+            sys.exit(1)
+        with open(file_name, "wb") as file:
+            total_file_length = int(response.headers.get("content-length"))
+            chunk_size = 1024
+            with click.progressbar(
+                length=total_file_length, label="Downloading file"
+            ) as bar:
+                for data in response.iter_content(chunk_size=chunk_size):
+                    file.write(data)
+                    bar.update(chunk_size)
+            echo(
+                style(
+                    "\nYour file {} is successfully downloaded.\n".format(
+                        file_name
+                    ),
+                    fg="green",
+                    bold=True,
+                )
+            )
+    else:
         echo(
             style(
                 "\nThe url doesn't match the EvalAI url. Please check the url.\n",
@@ -173,53 +232,3 @@ def download_file(url):
             )
         )
         sys.exit(1)
-    bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
-    key = urlparse.parse_qs(parsed_url.query).get("key")
-    if not bucket or not key:
-        echo(
-            style(
-                "\nThe bucket or key is missing in the url.\n",
-                fg="red",
-                bold=True,
-            )
-        )
-        sys.exit(1)
-    request_path = URLS.download_file.value
-    request_path = request_path.format(bucket[0], key[0])
-    response = make_request(request_path, "GET")
-    signed_url = response.get("signed_url")
-    file_name = key[0].split("/")[-1]
-    try:
-        response = requests.get(signed_url, stream=True)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        echo(err)
-        sys.exit(1)
-    except requests.exceptions.RequestException:
-        echo(
-            style(
-                "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
-                bold=True,
-                fg="red",
-            )
-        )
-        sys.exit(1)
-    with open(file_name, "wb") as file:
-        total_file_length = int(response.headers.get("content-length"))
-        chunk_size = 1024
-        with click.progressbar(
-            length=total_file_length, label="Downloading file"
-        ) as bar:
-            for data in response.iter_content(chunk_size=chunk_size):
-                file.write(data)
-                bar.update(chunk_size)
-        echo(
-            style(
-                "\nYour file {} is successfully downloaded.\n".format(
-                    file_name
-                ),
-                fg="green",
-                bold=True,
-            )
-        )
