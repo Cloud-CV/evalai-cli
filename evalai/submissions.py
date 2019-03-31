@@ -20,6 +20,7 @@ from evalai.utils.submissions import (
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
+from evalai.utils.config import EVALAI_HOST_URLS
 
 
 @click.group(invoke_without_command=True)
@@ -163,11 +164,10 @@ def download_file(url):
         parsed_url=parsed_url
     )
     # TODO: Replace the hardcoded host url with cli's host url
-    host_url = "https://evalai.cloudcv.org"
-    if parsed_host_url != host_url:
+    if parsed_host_url not in EVALAI_HOST_URLS:
         echo(
             style(
-                "\nThe url doesn't match the evalai url. Please check the url.\n",
+                "\nThe url doesn't match the EvalAI url. Please check the url.\n",
                 fg="red",
                 bold=True,
             )
@@ -191,31 +191,35 @@ def download_file(url):
     file_name = key[0].split("/")[-1]
     try:
         response = requests.get(signed_url, stream=True)
-        with open(file_name, "wb") as file:
-            total_file_length = int(response.headers.get("content-length"))
-            chunk_size = 1024
-            with click.progressbar(
-                length=total_file_length, label="Downloading file"
-            ) as bar:
-                for data in response.iter_content(chunk_size=chunk_size):
-                    file.write(data)
-                    bar.update(chunk_size)
-            echo(
-                style(
-                    "\nYour file {} is successfully downloaded.\n".format(
-                        file_name
-                    ),
-                    fg="green",
-                    bold=True,
-                )
-            )
-    except Exception:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException:
         echo(
             style(
-                "\nYour file {} can't be downloaded. Please try again.\n".format(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+    with open(file_name, "wb") as file:
+        total_file_length = int(response.headers.get("content-length"))
+        chunk_size = 1024
+        with click.progressbar(
+            length=total_file_length, label="Downloading file"
+        ) as bar:
+            for data in response.iter_content(chunk_size=chunk_size):
+                file.write(data)
+                bar.update(chunk_size)
+        echo(
+            style(
+                "\nYour file {} is successfully downloaded.\n".format(
                     file_name
                 ),
-                fg="red",
+                fg="green",
                 bold=True,
             )
         )
