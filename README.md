@@ -40,10 +40,23 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     pip install -e .
     ```
 
-5. Login to cli using the command ``` evalai login```
+5. Get auth token for EvalAI-CLI
+- Open web browser and hit the url http://127.0.0.1:8888.
+- Login with your credentials and move to the profile section.
+- Click on `Get your Auth Token` to get the authentication token & download it as a JSON file.
+- Create a folder with name `.evalai` in your home directory by using the command `mkdir ~/.evalai`.
+- Place the downloaded authentication token in this folder by using the command `mv ~/Downloads/token.json ~/.evalai/`.
+
+
+6. Login to cli using the command ``` evalai login```
 Two users will be created by default which are listed below -
 
     ```bash
     Host User - username: host, password: password
     Participant User - username: participant, password: password
     ```
+
+## Contributing Guidelines
+
+If you are interested in contributing to EvalAI-CLI, follow our [contribution guidelines](https://github.com/Cloud-CV/evalai-cli/blob/master/.github/CONTRIBUTING.md).
+
