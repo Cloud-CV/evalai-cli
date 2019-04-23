@@ -20,7 +20,34 @@ requests.packages.urllib3.disable_warnings()
 
 def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     """
-    Function to submit a file to a challenge
+    Description
+    ----------
+    Make submission to a particular challenge
+
+    Args
+    ----------
+    challenge_id: Int
+        Challenge ID
+
+    phase_id: Int
+        Phase ID
+
+    file: Click.File
+        User submission file
+
+    submission_metadata: dict
+        Additional submission details
+
+    Returns
+    -------
+    String: User submission status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
     """
     url = "{}{}".format(get_host_url(), URLS.make_submission.value)
     url = url.format(challenge_id, phase_id)
@@ -85,7 +112,23 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
 
 def pretty_print_my_submissions_data(submissions, start_date, end_date):
     """
-    Funcion to print the submissions for a particular Challenge.
+    Description
+    ----------
+    Pretty print the submissions for a particular Challenge
+
+    Args
+    ----------
+    submissions: dict
+        Submissions as JSON
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular submissions
+
+    Raises
+    ----------
+    None
     """
     table = BeautifulTable(max_width=100)
     attributes = ["id", "participant_team_name", "execution_time", "status"]
@@ -142,7 +185,28 @@ def display_my_submission_details(
     challenge_id, phase_id, start_date, end_date
 ):
     """
-    Function to display the details of a particular submission.
+    Description
+    ----------
+    Fetch and display all of user's submissions
+
+    Args
+    ----------
+    challenge_id: Int
+        Challenge ID
+
+    phase_id: Int
+        Phase ID
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Raises
+    ----------
+    None
     """
     url = URLS.my_submissions.value
     url = "{}{}".format(get_host_url(), url)
@@ -187,7 +251,22 @@ def display_my_submission_details(
 
 def pretty_print_submission_details(submission):
     """
-    Function to print details of a submission
+    Description
+    ----------
+    Pretty print the details of a particular submission
+
+    Args
+    ----------
+    submission: dict
+        submission details as JSON
+
+    Returns
+    -------
+    String: Details of the submission
+
+    Raises
+    ----------
+    None
     """
     team_name = "\n{}".format(
         style(submission["participant_team_name"], bold=True, fg="green")
@@ -215,7 +294,25 @@ def pretty_print_submission_details(submission):
 
 def display_submission_details(submission_id):
     """
-    Function to display details of a particular submission
+    Description
+    ----------
+    Fetch and display details of a particular submission
+
+    Args
+    ----------
+    submission_id: Int
+        Submission ID
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Raises
+    ----------
+    None
     """
     url = "{}{}".format(get_host_url(), URLS.get_submission.value)
     url = url.format(submission_id)

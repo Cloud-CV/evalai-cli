@@ -9,7 +9,21 @@ from dateutil import tz
 
 class Date(click.ParamType):
     """
-    Date object parsed using datetime.
+    Descriptions
+    ----------
+    Date object parsed using datetime
+
+    Args
+    ----------
+    None
+
+    Raises
+    ----------
+    None
+
+    Returns
+    ----------
+    None
     """
 
     name = "date"
@@ -31,7 +45,22 @@ class Date(click.ParamType):
 
 def validate_token(response):
     """
-    Function to check if the authentication token provided by user is valid or not.
+    Descriptions
+    ----------
+    Function to check if the authentication token provided by user is valid or not
+
+    Args
+    ----------
+    response: dict
+        Response of request
+
+    Returns
+    -------
+    String: Validation of the request
+
+    Raises
+    ----------
+    None
     """
     if "detail" in response:
         if response["detail"] == "Invalid token":
@@ -56,6 +85,24 @@ def validate_token(response):
 
 
 def validate_date_format(date):
+    """
+    Descriptions
+    ----------
+    Validate date format against EvalAI standards
+
+    Args
+    ----------
+    date: string
+        Raw date to be validated
+
+    Returns
+    -------
+    DateTime Object: Validated against EvalAI standards
+
+    Raises
+    -------
+    ValueError: Raised when date format is invalud
+    """
     for date_format in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"):
         try:
             return datetime.strptime(date, date_format)
@@ -65,12 +112,31 @@ def validate_date_format(date):
 
 
 def convert_UTC_date_to_local(date):
+    """
+    Descriptions
+    ----------
+    Convert the date from UTC to local
+
+    Args
+    ----------
+    date: string
+        Raw date to be validated
+
+    Returns
+    -------
+    date: string
+        Validated date and converted from UTC to local
+
+    Raises
+    ----------
+    None
+    """
     # Format date
     date = validate_date_format(date)
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
 
-    # Convert to local timezone from UTC.
+    # Convert to local timezone from UTC
     date = date.replace(tzinfo=from_zone)
     converted_date = date.astimezone(to_zone)
     date = converted_date.strftime("%D %r")
@@ -79,7 +145,23 @@ def convert_UTC_date_to_local(date):
 
 def clean_data(data):
     """
+    Descriptions
+    ----------
     Strip HTML and clean spaces
+
+    Args
+    ----------
+    data: string
+        Raw data with HTML
+
+    Returns
+    -------
+    data: String
+        HTML stripped data to avoid overflow
+
+    Raises
+    ----------
+    None
     """
     data = BeautifulSoup(data, "lxml").text.strip()
     data = " ".join(data.split()).encode("utf-8")

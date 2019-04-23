@@ -16,7 +16,23 @@ requests.packages.urllib3.disable_warnings()
 
 def pretty_print_team_data(teams, is_host):
     """
-    Function to print the team data
+    Description
+    ----------
+    Pretty print the team data
+
+    Args
+    ----------
+    teams: dict
+        Teams list as JSON
+
+    Returns
+    -------
+    BeautifuleTable: BeautifulTable Object (string)
+       Tabular teams
+
+    Raises
+    ----------
+    None
     """
     table = BeautifulTable(max_width=200)
     attributes = ["id", "team_name", "created_by"]
@@ -49,7 +65,24 @@ def pretty_print_team_data(teams, is_host):
 
 def display_teams(is_host):
     """
-    Function to display all the participant or host teams of a user
+    Description
+    ----------
+    Fetch and display the participant or host teams of a user
+
+    Args
+    ----------
+    None
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+
+    Returns
+    ----------
+    None
     """
     url = "{}{}"
     headers = get_request_header()
@@ -95,7 +128,25 @@ def display_teams(is_host):
 
 def create_team(team_name, team_url, is_host):
     """
-    Function to create a new team by taking in the team name as input.
+    Description
+    ----------
+    Create new participant or host team
+
+    Args
+    ----------
+    team_name: String
+        New team name
+
+    Returns
+    -------
+    String: Team creation status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
     """
     url = "{}{}"
 
@@ -175,9 +226,29 @@ def create_team(team_name, team_url, is_host):
 
 def participate_in_a_challenge(challenge_id, participant_team_id):
     """
-    Function to participate in a particular challenge.
-    """
+    Description
+    ----------
+    Request participation in a particular challenge
 
+    Args
+    ----------
+    challenge_id: Int
+        Challenge ID
+
+    participant_team_id: Int
+        Participant team ID
+
+    Returns
+    -------
+    String: Participation status
+
+    Raises
+    -------
+    requests.exceptions.HTTPError
+        Server throws 4XX error
+    requests.exceptions.RequestException
+        Server throws request exception
+    """
     url = "{}{}".format(get_host_url(), URLS.participate_in_a_challenge.value)
     url = url.format(challenge_id, participant_team_id)
 

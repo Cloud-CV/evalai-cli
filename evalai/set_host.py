@@ -13,7 +13,25 @@ from evalai.utils.config import AUTH_TOKEN_DIR, HOST_URL_FILE_PATH
 )
 def host(set_host):
     """
-    View and configure the Host URL.
+    View and configure the Host URL
+    """
+    """
+    Args
+    ----------
+    set_host: string
+        Host URL for communication
+
+    Returns
+    -------
+    String: Host configuration status
+
+    Raises
+    -------
+    OSError, IOError: Error while operating on file system
+
+    Command
+    -------
+    evalai host --set-host <HOST URL>
     """
     if set_host is not None:
         if validators.url(set_host):
