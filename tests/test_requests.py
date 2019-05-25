@@ -1,7 +1,6 @@
 import json
-import responses
-
 import os
+import responses
 
 from click.testing import CliRunner
 from requests.exceptions import RequestException

@@ -1,7 +1,6 @@
 import json
-import responses
-
 import os
+import responses
 
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
