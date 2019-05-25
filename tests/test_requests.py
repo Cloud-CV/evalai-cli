@@ -637,7 +637,7 @@ class TestRequestForExceptions(BaseTestClass):
             responses.POST,
             url.format(API_HOST_URL, URLS.create_challenge.value),
             body=RequestException("..."),
-            )
+        )
 
         responses.add(
             responses.GET,
