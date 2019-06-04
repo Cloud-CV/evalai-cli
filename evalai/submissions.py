@@ -24,16 +24,37 @@ from evalai.utils.urls import URLS
 from evalai.utils.config import EVALAI_HOST_URLS, HOST_URL_FILE_PATH
 
 
+class Submission(object):
+
+    def __init__(self, submission_id):
+        self.submission_id = submission_id
+
+
 @click.group(invoke_without_command=True)
 @click.argument("SUBMISSION_ID", type=int)
-def submission(submission_id):
+@click.pass_context
+def submission(ctx, submission_id):
     """
     View submission specific details.
     """
     """
     Invoked by `evalai submission SUBMISSION_ID`.
     """
-    display_submission_details(submission_id)
+    ctx.obj = Submission(submission_id=submission_id)
+    if ctx.invoked_subcommand is None:
+        display_submission_details(submission_id)
+
+
+@submission.command()
+@click.pass_obj
+def result(ctx):
+    """
+    Display the submission result
+    """
+    """
+    Invoked by `evalai submission SUBMISSION_ID result`.
+    """
+    click.echo("Hello World!")
 
 
 @click.command()
