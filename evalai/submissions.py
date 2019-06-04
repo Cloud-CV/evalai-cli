@@ -18,6 +18,7 @@ from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
     display_submission_details,
+    display_submission_result,
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
@@ -54,7 +55,7 @@ def result(ctx):
     """
     Invoked by `evalai submission SUBMISSION_ID result`.
     """
-    click.echo("Hello World!")
+    display_submission_result(ctx.submission_id)
 
 
 @click.command()
