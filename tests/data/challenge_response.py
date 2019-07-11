@@ -1,11 +1,13 @@
 import datetime
 
 timestamp = datetime.datetime.now()
-timestamp = timestamp.replace(
-                year=timestamp.year + 1
-            ).strftime(
-                '%Y-%m-%dT%H:%M:%S.%f'
-            )[:-3] + 'Z'
+timestamp = (
+    timestamp.replace(year=timestamp.year + 1).strftime(
+        "%Y-%m-%dT%H:%M:%S.%f"
+    )[:-3]
+    + "Z"
+)
+
 challenges = """
                 {
                     "count": 2,
@@ -83,7 +85,7 @@ challenges = """
                         }
                     ]
                 }
-"""% (timestamp, timestamp)
+""" % (timestamp, timestamp)
 
 
 challenge_details = """
