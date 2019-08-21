@@ -14,6 +14,7 @@ from evalai.utils.challenges import (
     display_challenge_phase_detail,
     display_challenge_phase_split_list,
     display_leaderboard,
+    verify_config_file,
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
@@ -78,6 +79,16 @@ def challenge(ctx, challenge):
     ctx.obj = Challenge(challenge=challenge)
     if ctx.invoked_subcommand is None:
         display_challenge_details(challenge)
+
+
+@challenges.command(context_settings={"ignore_unknown_options": True})
+@click.option("--file", type=click.File("rb"), required=True, help="Challenge Zip file.")
+@click.argument("team", type=int)
+def verify_challenge_config(file, team):
+    """
+    Verify Challenge config zip file locally. Add file path and host team id.
+    """
+    verify_config_file(file, team)
 
 
 @challenges.command()

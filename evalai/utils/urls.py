@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class URLS(Enum):
+    verify_challenge_config = "/api/challenges/challenge/challenge_host_team/{}/verify_challenge_config/"
     login = "/api/auth/login"
     challenge_list = "/api/challenges/challenge/all"
     past_challenge_list = "/api/challenges/challenge/past"
