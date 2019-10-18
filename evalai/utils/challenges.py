@@ -25,7 +25,7 @@ def verify_config_file(file, team):
     """
     Function to verify a challenge config file.
     """
-    url = "{}".format(get_host_url(), URLS.verify_challenge_config.value)
+    url = "{}{}".format(get_host_url(), URLS.verify_challenge_config.value)
     url = url.format(team)
 
     headers = get_request_header()
@@ -60,8 +60,8 @@ def verify_config_file(file, team):
 
     response = response.json()
     response = json.loads(response)
-    for e in response:
-        if e == "Success":
+    for results in response:
+        if results == "Success":
             echo(
                 style(
                     "\n{}".format(response["Success"]),
@@ -70,10 +70,10 @@ def verify_config_file(file, team):
                 )
             )
         else:
-            for m in response[e]:
+            for m in response[results]:
                 echo(
                     style(
-                        "\n{}: {}".format(e, m),
+                        "\n{}: {}".format(results, m),
                         fg="red",
                         bold=False,
                     )
