@@ -6,10 +6,10 @@ from datetime import datetime
 from dateutil import tz
 
 from evalai.challenges import challenge
-from evalai.submissions import submission
+from evalai.submissions import submission, download_file
 from tests.data import submission_response
 
-from evalai.utils.config import API_HOST_URL
+from evalai.utils.config import API_HOST_URL,
 from evalai.utils.urls import URLS
 from .base import BaseTestClass
 
@@ -94,6 +94,69 @@ class TestGetSubmissionDetails(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(submission, ["9", "result"])
         response = result.output.strip()
+        assert response == expected
+
+class TestDownloadFile(BaseTestClass):
+    def setup(self):
+        self.testURL = "http://localhost:8888/"
+        self.file = json.loads(submission_response.submission_result_file)
+
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.download_file.value).format(
+            "submission_9",
+            "result"
+            ),
+            json=self.file,
+            status=200
+        )
+
+    @responses.activate
+    def test_download_file_when_url_invalid(self):
+        expected = "\nThe url doesn't match the EvalAI url. Please check the url.\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(download_file, ["https://falseurl.com"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_download_file_when_bucket_or_key_missing(self):
+        expected = "\nThe bucket or key is missing in the url.\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(download_file,
+            [self.testURL + "?bucket=submission_9&key=result"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_download_file_when_wrong_host_URL(self):
+        expected = "\nCould not establish a connection to EvalAI. \
+        Please check the Host URL.\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(download_file,
+            [self.testURL + "?bucket=submission_9&key=result"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_download_file_when_download_success(self):
+        #TODO: Add Check for File Download.
+        expected = "\nYour file {} is successfully downloaded.\n".format(
+            "result.json"
+        )
+
+        runner = CliRunner()
+
+        result = runner.invoke(download_file,
+            [self.testURL + "?bucket=submission_9&key=result"])
+        response = result.output
         assert response == expected
 
 

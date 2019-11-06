@@ -183,6 +183,12 @@ def push(image, phase):
 @click.command()
 @click.argument("URL", nargs=1)
 def download_file(url):
+    """
+    Download the file using URL with bucket and key
+    """
+    """
+    Invoked by `evalai download_file URL`.
+    """
     parsed_url = urlparse.urlparse(url)
     parsed_host_url = "{parsed_url.scheme}://{parsed_url.netloc}".format(
         parsed_url=parsed_url
