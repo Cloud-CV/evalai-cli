@@ -9,7 +9,7 @@ from evalai.challenges import challenge
 from evalai.submissions import submission, download_file
 from tests.data import submission_response
 
-from evalai.utils.config import API_HOST_URL,
+from evalai.utils.config import API_HOST_URL
 from evalai.utils.urls import URLS
 from .base import BaseTestClass
 
@@ -98,7 +98,6 @@ class TestGetSubmissionDetails(BaseTestClass):
 
 class TestDownloadFile(BaseTestClass):
     def setup(self):
-        self.testURL = "http://localhost:8888/"
         self.file = json.loads(submission_response.submission_result_file)
 
         url = "{}{}"
@@ -129,19 +128,19 @@ class TestDownloadFile(BaseTestClass):
         runner = CliRunner()
 
         result = runner.invoke(download_file,
-            [self.testURL + "?bucket=submission_9&key=result"])
+            [API_HOST_URL + "?bucket=submission_9"])
         response = result.output
         assert response == expected
 
     @responses.activate
-    def test_download_file_when_wrong_host_URL(self):
+    def test_download_file_when_cannot_connect_EvalAI(self):
         expected = "\nCould not establish a connection to EvalAI. \
         Please check the Host URL.\n"
 
         runner = CliRunner()
 
         result = runner.invoke(download_file,
-            [self.testURL + "?bucket=submission_9&key=result"])
+            ["http://test/" + "?bucket=submission_9&key=result"])
         response = result.output
         assert response == expected
 
@@ -155,7 +154,7 @@ class TestDownloadFile(BaseTestClass):
         runner = CliRunner()
 
         result = runner.invoke(download_file,
-            [self.testURL + "?bucket=submission_9&key=result"])
+            [API_HOST_URL + "?bucket=submission_9&key=result"])
         response = result.output
         assert response == expected
 
