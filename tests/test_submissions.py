@@ -97,10 +97,11 @@ class TestGetSubmissionDetails(BaseTestClass):
         response = result.output.strip()
         assert response == expected
 
+
 class TestDownloadFile(BaseTestClass):
     def setup(self):
-        #TODO Holding until responses doesn;t support multipart/form-data
         '''
+        #TODO Holding until responses doesn;t support multipart/form-data
         url = "{}{}"
         responses.add(
             responses.GET,
@@ -114,7 +115,6 @@ class TestDownloadFile(BaseTestClass):
         )
         '''
         pass
-
 
     def teardown(self):
         if os.path.exists("./result"):
@@ -136,7 +136,8 @@ class TestDownloadFile(BaseTestClass):
 
         runner = CliRunner()
 
-        result = runner.invoke(download_file,
+        result = runner.invoke(
+            download_file,
             [API_HOST_URL + "/api/jobs/submission_files/?bucket=submission_9"])
         response = result.output
         assert response == expected
@@ -144,11 +145,12 @@ class TestDownloadFile(BaseTestClass):
     @responses.activate
     def test_download_file_when_cannot_connect_EvalAI(self):
         expected = "\nCould not connect to EvalAI API. Please check" \
-        " the URL or if server is running\n\n"
+            " the URL or if server is running\n\n"
 
         runner = CliRunner()
 
-        result = runner.invoke(download_file,
+        result = runner.invoke(
+            download_file,
             [API_HOST_URL + "/api/jobs/submissio_files/?bucket=submission_9&key=result"])
         response = result.output
         assert response == expected

@@ -14,7 +14,7 @@ import uuid
 
 from click import echo, style
 
-from evalai.utils.common import notify_user
+from evalai.utils.common import notify_user, validate_token
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
     display_submission_details,
@@ -22,7 +22,7 @@ from evalai.utils.submissions import (
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
-from evalai.utils.config import EVALAI_API_URLS, HOST_URL_FILE_PATH
+from evalai.utils.config import EVALAI_API_URLS, EVALAI_ERROR_CODES
 from evalai.utils.auth import get_host_url, get_request_header
 
 
@@ -237,7 +237,7 @@ def download_file(url):
         except requests.exceptions.RequestException as e:
             echo(
                 style(
-                    "\nCould not connect to EvalAI API. Please check" \
+                    "\nCould not connect to EvalAI API. Please check"
                     " the URL or if server is running\n",
                     bold=True,
                     fg="red",
