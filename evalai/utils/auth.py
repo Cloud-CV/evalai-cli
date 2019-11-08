@@ -95,6 +95,6 @@ def get_host_url():
         with open(HOST_URL_FILE_PATH, "r") as fr:
             try:
                 data = fr.read()
-                return str(data)
+                return str(data.rstrip('\n'))
             except (OSError, IOError) as e:
                 echo(e)

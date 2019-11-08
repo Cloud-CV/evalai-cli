@@ -22,7 +22,8 @@ from evalai.utils.submissions import (
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
-from evalai.utils.config import EVALAI_HOST_URLS, HOST_URL_FILE_PATH
+from evalai.utils.config import EVALAI_API_URLS, HOST_URL_FILE_PATH
+from evalai.utils.auth import get_host_url, get_request_header
 
 
 class Submission(object):
@@ -194,13 +195,10 @@ def download_file(url):
         parsed_url=parsed_url
     )
     is_correct_host = False
-    # TODO: Replace the hardcoded host url with cli's host url
-    with open(HOST_URL_FILE_PATH, "r") as file:
-        host_url = file.read()
-    if parsed_host_url in EVALAI_HOST_URLS:
-        is_correct_host = True
-    if parsed_host_url == host_url:
-        is_correct_host = True
+    curr_host = get_host_url()
+    if parsed_host_url in EVALAI_API_URLS:
+        if parsed_host_url == curr_host:
+            is_correct_host = True
 
     if is_correct_host:
         bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
@@ -214,22 +212,33 @@ def download_file(url):
                 )
             )
             sys.exit(1)
-        request_path = URLS.download_file.value
-        request_path = request_path.format(bucket[0], key[0])
-        response = make_request(request_path, "GET")
-        signed_url = response.get("signed_url")
+
+        headers = get_request_header()
         file_name = key[0].split("/")[-1]
+        URL = URLS.download_file.value
+        URL = "{}{}".format(get_host_url(), URL)
+        URL = URL.format(bucket[0], key[0])
         try:
-            response = requests.get(signed_url, stream=True)
+            response = requests.get(URL, headers=headers)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            echo(err)
+            if response.status_code in EVALAI_ERROR_CODES:
+                validate_token(response.json())
+                echo(
+                    style(
+                        "\nError: {}\n".format(response.json()["error"]),
+                        fg="red",
+                        bold=True,
+                    )
+                )
+            else:
+                echo(err)
             sys.exit(1)
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
             echo(
                 style(
-                    "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    "\nCould not connect to EvalAI API. Please check" \
+                    " the URL or if server is running\n",
                     bold=True,
                     fg="red",
                 )
