@@ -29,5 +29,4 @@ EVALAI_HOST_URLS = [
 EVALAI_API_URLS = [
     "https://evalapi.cloudcv.org",
     "http://localhost:8000",
-    "http://testserver"
 ]
