@@ -1,5 +1,6 @@
 import json
 import responses
+import os
 
 from click.testing import CliRunner
 from datetime import datetime
@@ -108,7 +109,7 @@ class TestDownloadFile(BaseTestClass):
             "result"
             ),
             json=self.file,
-            status=200
+            status=200,
         )
 
     @responses.activate
