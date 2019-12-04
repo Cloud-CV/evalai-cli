@@ -43,7 +43,7 @@ def pretty_print_challenge_data(challenges):
         end_date = convert_UTC_date_to_local(challenge["end_date"])
         values.extend([creator, start_date, end_date])
         table.append_row(values)
-    echo_via_pager(style(table,fg="blue"))
+    echo_via_pager(style(table, fg="blue"))
 
 
 def display_challenges(url):
@@ -57,7 +57,7 @@ def display_challenges(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err,fg="red",bold=True))
+        echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -76,7 +76,7 @@ def display_challenges(url):
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("Sorry, no challenges found.",fg="red",bold=True,))
+        echo(style("Sorry, no challenges found.", fg="red", bold=True,))
 
 
 def display_all_challenge_list():
@@ -108,7 +108,7 @@ def display_ongoing_challenge_list():
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err,fg="red",bold=True))
+        echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -138,7 +138,7 @@ def display_ongoing_challenge_list():
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("Sorry, no challenges found.",fg="red",bold=True,))
+        echo(style("Sorry, no challenges found.", fg="red", bold=True,))
 
 
 def display_future_challenge_list():
@@ -161,7 +161,7 @@ def get_participant_or_host_teams(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err,fg="red",bold=True))
+        echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -192,7 +192,7 @@ def get_participant_or_host_team_challenges(url, teams):
         except requests.exceptions.HTTPError as err:
             if response.status_code == 401:
                 validate_token(response.json())
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
@@ -253,8 +253,8 @@ def display_participated_or_hosted_challenges(
                 filter(
                     lambda challenge: validate_date_format(
                         challenge["end_date"]
-                    )
-                    > datetime.now()
+                    ) >
+                    datetime.now()
                     and challenge["approved_by_admin"]
                     and challenge["published"],
                     challenges,
@@ -295,7 +295,7 @@ def pretty_print_challenge_details(challenge):
         list(map(lambda item: clean_data(challenge[item]), attributes))
     )
     table.append_row(values)
-    echo_via_pager(style(table,fg="blue"))
+    echo_via_pager(style(table, fg="blue"))
 
 
 def display_challenge_details(challenge):
@@ -328,7 +328,7 @@ def display_challenge_details(challenge):
                 )
             )
         else:
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -363,7 +363,7 @@ def pretty_print_all_challenge_phases(phases):
         description = clean_data(phase["description"])
         values.append(description)
         table.append_row(values)
-        echo_via_pager(style(table,fg="blue"))
+        echo_via_pager(style(table, fg="blue"))
 
 
 def display_challenge_phase_list(challenge_id):
@@ -402,7 +402,7 @@ def display_challenge_phase_list(challenge_id):
                 )
             )
         else:
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -478,7 +478,7 @@ def pretty_print_challenge_phase_data(phase):
         is_active,
         is_public,
     )
-    echo_via_pager(style(hallenge_phase,fg="blue"))
+    echo_via_pager(style(challenge_phase, fg="blue"))
 
 
 def display_challenge_phase_detail(challenge_id, phase_id, is_json):
@@ -507,7 +507,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
                 )
             )
         else:
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -547,7 +547,7 @@ def pretty_print_challenge_phase_split_data(phase_splits):
         if split["visibility"] == 3:
             values = list(map(lambda item: split[item], attributes))
             table.append_row(values)
-    echo(style(table,fg="blue"))
+    echo(style(table, fg="blue"))
 
 
 def display_challenge_phase_split_list(challenge_id):
@@ -575,7 +575,7 @@ def display_challenge_phase_split_list(challenge_id):
                 )
             )
         else:
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -592,7 +592,7 @@ def display_challenge_phase_split_list(challenge_id):
     if len(phase_splits) != 0:
         pretty_print_challenge_phase_split_data(phase_splits)
     else:
-        echo(style("Sorry, no Challenge Phase Splits found.",fg="red",bold=True))
+        echo(style("Sorry, no Challenge Phase Splits found.", fg="red", bold=True))
 
 
 def pretty_print_leaderboard_data(attributes, results):
@@ -614,7 +614,7 @@ def pretty_print_leaderboard_data(attributes, results):
 
         leaderboard_row = [rank, name] + scores + [last_submitted]
         leaderboard_table.append_row(leaderboard_row)
-    echo_via_pager(style(leaderboard_table,fg="blue"))
+    echo_via_pager(style(leaderboard_table, fg="blue"))
 
 
 def display_leaderboard(challenge_id, phase_split_id):
@@ -638,7 +638,7 @@ def display_leaderboard(challenge_id, phase_split_id):
                 )
             )
         else:
-            echo(style(err,fg="red",bold=True))
+            echo(style(err, fg="red", bold=True))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -658,4 +658,4 @@ def display_leaderboard(challenge_id, phase_split_id):
         attributes = results[0]["leaderboard__schema"]["labels"]
         pretty_print_leaderboard_data(attributes, results)
     else:
-        echo("Sorry, no Leaderboard results found.",bold=True,fg="red",)
+        echo("Sorry, no Leaderboard results found.", bold=True, fg="red",)

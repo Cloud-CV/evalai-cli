@@ -97,5 +97,4 @@ def get_host_url():
                 data = fr.read()
                 return str(data)
             except (OSError, IOError) as e:
-                echo(style(e,bold=True,
-                fg="red"))
+                echo(style(e, bold=True, fg="red"))
