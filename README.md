@@ -39,8 +39,12 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     ```bash
     pip install -e .
     ```
+    
+5. Configure your Auth Token
+    ```bash
+    evalai set_token <auth_token>
 
-5. Login to cli using the command ``` evalai login```
+6. Login to cli using the command ``` evalai login```
 Two users will be created by default which are listed below -
 
     ```bash
