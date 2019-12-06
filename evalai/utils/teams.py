@@ -78,7 +78,9 @@ def display_teams(is_host):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -142,7 +144,9 @@ def create_team(team_name, team_url, is_host):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -206,7 +210,9 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )

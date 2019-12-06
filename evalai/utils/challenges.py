@@ -63,7 +63,9 @@ def display_challenges(url):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -114,7 +116,9 @@ def display_ongoing_challenge_list():
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -167,7 +171,9 @@ def get_participant_or_host_teams(url):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -198,7 +204,9 @@ def get_participant_or_host_team_challenges(url, teams):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    " Please check the Host URL:{}.\n".format(
+                        url
+                    ),
                     bold=True,
                     fg="red",
                 )
@@ -334,7 +342,9 @@ def display_challenge_details(challenge):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -408,7 +418,9 @@ def display_challenge_phase_list(challenge_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -513,7 +525,9 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -581,7 +595,9 @@ def display_challenge_phase_split_list(challenge_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -644,7 +660,9 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )

@@ -39,7 +39,9 @@ def get_user_auth_token_by_login(username, password):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )

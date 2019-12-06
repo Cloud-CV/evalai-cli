@@ -57,7 +57,9 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -172,7 +174,9 @@ def display_my_submission_details(
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -244,7 +248,9 @@ def submission_details_request(submission_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL:{}.\n".format(
+                    url
+                ),
                 bold=True,
                 fg="red",
             )

@@ -35,7 +35,9 @@ def make_request(path, method, files=None, data=None):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    " Please check the Host URL:{}.\n".format(
+                        url
+                    ),
                     bold=True,
                     fg="red",
                 )
@@ -73,7 +75,9 @@ def make_request(path, method, files=None, data=None):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    " Please check the Host URL:{}.\n".format(
+                        url
+                    ),
                     bold=True,
                     fg="red",
                 )
