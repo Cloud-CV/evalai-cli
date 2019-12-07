@@ -43,7 +43,7 @@ def pretty_print_challenge_data(challenges):
         end_date = convert_UTC_date_to_local(challenge["end_date"])
         values.extend([creator, start_date, end_date])
         table.append_row(values)
-    echo_via_pager(style(table, fg="blue"))
+    echo_via_pager(table)
 
 
 def display_challenges(url):
@@ -295,7 +295,7 @@ def pretty_print_challenge_details(challenge):
         list(map(lambda item: clean_data(challenge[item]), attributes))
     )
     table.append_row(values)
-    echo_via_pager(style(table, fg="blue"))
+    echo_via_pager(table)
 
 
 def display_challenge_details(challenge):
@@ -363,7 +363,7 @@ def pretty_print_all_challenge_phases(phases):
         description = clean_data(phase["description"])
         values.append(description)
         table.append_row(values)
-        echo_via_pager(style(table, fg="blue"))
+        echo_via_pager(table)
 
 
 def display_challenge_phase_list(challenge_id):
@@ -478,7 +478,7 @@ def pretty_print_challenge_phase_data(phase):
         is_active,
         is_public,
     )
-    echo_via_pager(style(challenge_phase, fg="blue"))
+    echo_via_pager(challenge_phase)
 
 
 def display_challenge_phase_detail(challenge_id, phase_id, is_json):
@@ -614,7 +614,7 @@ def pretty_print_leaderboard_data(attributes, results):
 
         leaderboard_row = [rank, name] + scores + [last_submitted]
         leaderboard_table.append_row(leaderboard_row)
-    echo_via_pager(style(leaderboard_table, fg="blue"))
+    echo_via_pager(leaderboard_table)
 
 
 def display_leaderboard(challenge_id, phase_split_id):
