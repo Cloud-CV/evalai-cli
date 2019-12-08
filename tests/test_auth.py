@@ -6,6 +6,7 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 
 from evalai.challenges import challenge, challenges
+from evalai.add_token import set_token
 from evalai.set_host import host
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
@@ -43,6 +44,52 @@ class TestGetUserAuthToken(BaseTestClass):
         result = runner.invoke(challenges)
         response = result.output
         assert response == expected
+
+
+class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
+    def setup(self):
+        self.token_data = "a" * 40
+
+        url = "{}{}".format(API_HOST_URL, URLS.profile.value)
+        headers = {"Authorization": "Token {}".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=200,
+        )
+
+        self.expected = "Success: Authentication token is successfully set.\n"
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_token_is_valid(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response == self.expected
+
+
+class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
+    def setup(self):
+        self.token_data = "a" * 40
+
+        url = "{}{}".format(API_HOST_URL, URLS.profile.value)
+        headers = {"Authorization": "Token".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=401,
+        )
+
+        self.expected = "Failed: Could not make a authentication with this token.\n"
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_token_is_invalid(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response == self.expected
 
 
 class TestUserRequestWithInvalidToken(BaseTestClass):
