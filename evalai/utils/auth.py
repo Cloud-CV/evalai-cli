@@ -21,6 +21,7 @@ def get_user_auth_token_by_login(username, password):
     Returns user auth token by login.
     """
     url = "{}{}".format(get_host_url(), URLS.login.value)
+    host_url = get_host_url()
     try:
         payload = {"username": username, "password": password}
         response = requests.post(url, data=payload)
@@ -39,8 +40,8 @@ def get_user_auth_token_by_login(username, password):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",

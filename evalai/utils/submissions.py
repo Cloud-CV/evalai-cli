@@ -24,6 +24,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     """
     url = "{}{}".format(get_host_url(), URLS.make_submission.value)
     url = url.format(challenge_id, phase_id)
+    host_url = get_host_url()
 
     headers = get_request_header()
     input_file = {"input_file": file}
@@ -57,8 +58,8 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -150,6 +151,7 @@ def display_my_submission_details(
     url = "{}{}".format(get_host_url(), url)
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
+    host_url = get_host_url()
 
     try:
         response = requests.get(url, headers=headers)
@@ -174,8 +176,8 @@ def display_my_submission_details(
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -224,6 +226,7 @@ def submission_details_request(submission_id):
     url = "{}{}".format(get_host_url(), URLS.get_submission.value)
     url = url.format(submission_id)
     headers = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -248,8 +251,8 @@ def submission_details_request(submission_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",

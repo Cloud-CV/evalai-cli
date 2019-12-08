@@ -223,8 +223,8 @@ def download_file(url):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL:{}.\n".format(
-                        signed_url
+                    " Please check the Host URL: {}\n".format(
+                        parsed_host_url
                     ),
                     bold=True,
                     fg="red",

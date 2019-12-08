@@ -51,6 +51,7 @@ def display_challenges(url):
     Function to fetch & display the challenge list based on API
     """
     header = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=header)
         response.raise_for_status()
@@ -63,8 +64,8 @@ def display_challenges(url):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -102,6 +103,7 @@ def display_ongoing_challenge_list():
     Displays the list of ongoing challenges from the backend
     """
     url = "{}{}".format(get_host_url(), URLS.challenge_list.value)
+    host_url = get_host_url()
 
     header = get_request_header()
     try:
@@ -116,8 +118,8 @@ def display_ongoing_challenge_list():
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -158,6 +160,7 @@ def get_participant_or_host_teams(url):
     Returns the participant or host teams corresponding to the user
     """
     header = get_request_header()
+    host_url = get_host_url()
 
     try:
         response = requests.get(url, headers=header)
@@ -171,8 +174,8 @@ def get_participant_or_host_teams(url):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -192,6 +195,7 @@ def get_participant_or_host_team_challenges(url, teams):
     challenges = []
     for team in teams:
         header = get_request_header()
+        host_url = get_host_url()
         try:
             response = requests.get(url.format(team["id"]), headers=header)
             response.raise_for_status()
@@ -204,8 +208,8 @@ def get_participant_or_host_team_challenges(url, teams):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL:{}.\n".format(
-                        url
+                    " Please check the Host URL: {}\n".format(
+                        host_url
                     ),
                     bold=True,
                     fg="red",
@@ -315,6 +319,7 @@ def display_challenge_details(challenge):
     url = url.format(challenge)
 
     header = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=header)
         response.raise_for_status()
@@ -342,8 +347,8 @@ def display_challenge_details(challenge):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -384,6 +389,7 @@ def display_challenge_phase_list(challenge_id):
     url = "{}{}".format(get_host_url(), url)
     url = url.format(challenge_id)
     headers = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -418,8 +424,8 @@ def display_challenge_phase_list(challenge_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -501,6 +507,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
     url = "{}{}".format(get_host_url(), url)
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
+    host_url = get_host_url()
 
     try:
         response = requests.get(url, headers=headers)
@@ -525,8 +532,8 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -572,6 +579,7 @@ def display_challenge_phase_split_list(challenge_id):
     url = "{}{}".format(get_host_url(), url)
     url = url.format(challenge_id)
     headers = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -595,8 +603,8 @@ def display_challenge_phase_split_list(challenge_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
@@ -640,6 +648,7 @@ def display_leaderboard(challenge_id, phase_split_id):
     url = "{}{}".format(get_host_url(), URLS.leaderboard.value)
     url = url.format(phase_split_id)
     headers = get_request_header()
+    host_url = get_host_url()
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -660,8 +669,8 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL:{}.\n".format(
-                    url
+                " Please check the Host URL: {}\n".format(
+                    host_url
                 ),
                 bold=True,
                 fg="red",
