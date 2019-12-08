@@ -84,7 +84,7 @@ class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
             status=401,
         )
 
-        self.expected = "Failed: Could not make a authentication with this token.\n"
+        self.expected = "Failed: Unable to validate token.\n"
 
     @responses.activate
     def test_validate_user_auth_token_by_profile_when_token_is_invalid(self):

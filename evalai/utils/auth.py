@@ -89,7 +89,7 @@ def validate_user_auth_token_by_profile(auth_token):
         if response.status_code in EVALAI_ERROR_CODES:
             echo(
                 style(
-                    "Failed: Could not make a authentication with this token.",
+                    "Failed: Unable to validate token.",
                     bold=True,
                     fg="red"
                 )
