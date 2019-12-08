@@ -92,6 +92,32 @@ class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
         assert response == self.expected
 
 
+class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
+    def setup(self):
+        self.token_data = "a" * 40
+
+        url = "i-am-broken-url"
+        headers = {"Authorization": "Token".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=401,
+        )
+
+        self.expected = (
+            "\nCould not establish a connection to EvalAI."
+            " Please check the Host URL.\n\n"
+        )
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_url_is_broken(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response == self.expected
+
+
 class TestUserRequestWithInvalidToken(BaseTestClass):
     def setup(self):
 
