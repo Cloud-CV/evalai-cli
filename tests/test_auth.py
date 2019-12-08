@@ -50,7 +50,7 @@ class TestGetUserAuthToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
     def setup(self):
-        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
+        self.token_data = "".join(random.choice(string.ascii_lowercase + string.digits) for i in range(40))
 
         url = "{}{}".format(API_HOST_URL, URLS.profile.value)
         headers = {"Authorization": "Token {}".format(self.token_data)}
@@ -73,7 +73,7 @@ class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
     def setup(self):
-        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
+        self.token_data = "".join(random.choice(string.ascii_lowercase + string.digits) for i in range(40))
 
         url = "{}{}".format(API_HOST_URL, URLS.profile.value)
         headers = {"Authorization": "Token".format(self.token_data)}
@@ -96,7 +96,7 @@ class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
     def setup(self):
-        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
+        self.token_data = "".join(random.choice(string.ascii_lowercase + string.digits) for i in range(40))
 
         url = "i-am-broken-url"
         headers = {"Authorization": "Token".format(self.token_data)}
