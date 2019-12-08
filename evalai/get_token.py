@@ -3,9 +3,9 @@ import os
 
 from click import echo, style
 
+from evalai.utils.auth import pretty_print_auth_commands
 from evalai.utils.config import AUTH_TOKEN_PATH
 import json
-
 
 @click.group(invoke_without_command=True)
 def get_token():
@@ -27,6 +27,7 @@ def get_token():
             try:
                 data = fr.read()
                 tokendata = json.loads(data)
-                echo("Current token is {}".format(tokendata["token"]))
+                echo("Current token is ", nl=False)
+                pretty_print_auth_commands(tokendata["token"], 'token')
             except (OSError, IOError) as e:
                 echo(e)

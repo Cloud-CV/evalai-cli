@@ -3,7 +3,7 @@ import json
 import sys
 import requests
 
-from click import echo, style
+from click import echo, style, secho
 from evalai.utils.config import (
     AUTH_TOKEN_PATH,
     API_HOST_URL,
@@ -14,6 +14,8 @@ from evalai.utils.urls import URLS
 
 
 requests.packages.urllib3.disable_warnings()
+
+colors = {'links': 'blue', 'token': 'green', 'error': 'red'}
 
 
 def get_user_auth_token_by_login(username, password):
@@ -27,23 +29,10 @@ def get_user_auth_token_by_login(username, password):
         response.raise_for_status()
     except requests.exceptions.HTTPError:
         if response.status_code in EVALAI_ERROR_CODES:
-            echo(
-                style(
-                    "\nUnable to log in with provided credentials.\n",
-                    bold=True,
-                    fg="red",
-                )
-            )
+            pretty_print_auth_commands("\nUnable to log in with provided credentials.\n", 'error', bold=True)
         sys.exit(1)
     except requests.exceptions.RequestException:
-        echo(
-            style(
-                "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
-                bold=True,
-                fg="red",
-            )
-        )
+        pretty_print_auth_commands("\nCould not establish a connection to EvalAI.", 'error', bold=True)
         sys.exit(1)
 
     token = response.json()
@@ -64,15 +53,9 @@ def get_user_auth_token():
         token = data["token"]
         return token
     else:
-        echo(
-            style(
-                "\nThe authentication token json file doesn't exists at the required path. "
+        pretty_print_auth_commands("\nThe authentication token json file doesn't exists at the required path. "
                 "Please download the file from the Profile section of the EvalAI webapp and "
-                "place it at ~/.evalai/token.json\n",
-                bold=True,
-                fg="red",
-            )
-        )
+                "place it at ~/.evalai/token.json\n", 'error', bold=True)
         sys.exit(1)
 
 
@@ -98,3 +81,10 @@ def get_host_url():
                 return str(data)
             except (OSError, IOError) as e:
                 echo(e)
+
+def pretty_print_auth_commands(str, type, bold=False):
+    """
+    Function to print the auth commands
+    """
+
+    secho(format(str), fg=colors[type], bold=bold)
