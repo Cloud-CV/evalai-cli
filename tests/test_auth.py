@@ -1,6 +1,8 @@
 import json
 import os
+import random
 import responses
+import string
 
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
@@ -48,7 +50,7 @@ class TestGetUserAuthToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
     def setup(self):
-        self.token_data = "a" * 40
+        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
 
         url = "{}{}".format(API_HOST_URL, URLS.profile.value)
         headers = {"Authorization": "Token {}".format(self.token_data)}
@@ -71,7 +73,7 @@ class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
     def setup(self):
-        self.token_data = "a" * 40
+        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
 
         url = "{}{}".format(API_HOST_URL, URLS.profile.value)
         headers = {"Authorization": "Token".format(self.token_data)}
@@ -94,7 +96,7 @@ class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
 
 class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
     def setup(self):
-        self.token_data = "a" * 40
+        self.token_data = "".join(random.choice(string.ascii_lowercase+string.digits) for i in range(40))
 
         url = "i-am-broken-url"
         headers = {"Authorization": "Token".format(self.token_data)}
@@ -107,7 +109,7 @@ class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
 
         self.expected = (
             "\nCould not establish a connection to EvalAI."
-            " Please check the Host URL.\n\n"
+            " Please check the Host URL: {}\n\n".format(API_HOST_URL)
         )
 
     @responses.activate

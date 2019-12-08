@@ -99,7 +99,7 @@ def validate_user_auth_token_by_profile(auth_token):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL: {}\n".format(get_host_url()),
                 bold=True,
                 fg="red"
             )
