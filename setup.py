@@ -21,7 +21,6 @@ install_requires = [
     "coveralls==1.3.0",
     "docker==3.6.0",
     "flake8==3.0.4",
-    "lxml==4.2.1",
     "pre-commit==1.14.4",
     "pytest==3.5.1",
     "pytest-cov==2.5.1",
@@ -30,6 +29,8 @@ install_requires = [
     "requests-toolbelt==0.8.0",
     "responses==0.9.0",
     "validators==0.12.2",
+    "termcolor==1.1.0",
+
 ]
 
 setup(
