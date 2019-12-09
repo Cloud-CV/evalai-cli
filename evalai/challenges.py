@@ -220,16 +220,16 @@ def submit(ctx, file):
     submission_metadata = {}
     if click.confirm("Do you want to include the Submission Details?"):
         submission_metadata["method_name"] = click.prompt(
-            style("Method Name", fg="yellow"), type=str, default=""
+            style("Method Name", fg="green"), type=str, default=""
         )
         submission_metadata["method_description"] = click.prompt(
-            style("Method Description", fg="yellow"), type=str, default=""
+            style("Method Description", fg="green"), type=str, default=""
         )
         submission_metadata["project_url"] = click.prompt(
-            style("Project URL", fg="yellow"), type=str, default=""
+            style("Project URL", fg="green"), type=str, default=""
         )
         submission_metadata["publication_url"] = click.prompt(
-            style("Publication URL", fg="yellow"), type=str, default=""
+            style("Publication URL", fg="green"), type=str, default=""
         )
     make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
 
