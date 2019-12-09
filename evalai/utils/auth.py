@@ -89,7 +89,7 @@ def validate_user_auth_token_by_profile(auth_token):
         if response.status_code in EVALAI_ERROR_CODES:
             echo(
                 style(
-                    "Failed: Unable to validate token.",
+                    "Error: Invalid Auth Token (unrecognized or wrong Auth Token).",
                     bold=True,
                     fg="red"
                 )
