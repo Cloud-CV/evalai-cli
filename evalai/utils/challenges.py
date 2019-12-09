@@ -1,11 +1,12 @@
 import json
 import requests
 import sys
-from termcolor import colored
+
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
-from click import echo, style, echo_via_pager
+from click import echo, echo_via_pager ,style 
 from datetime import datetime
+from termcolor import colored
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (
