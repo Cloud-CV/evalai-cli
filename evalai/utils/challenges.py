@@ -4,7 +4,7 @@ import sys
 
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
-from click import echo, echo_via_pager ,style 
+from click import echo, echo_via_pager, style 
 from datetime import datetime
 from termcolor import colored
 
