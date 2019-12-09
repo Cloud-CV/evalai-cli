@@ -94,4 +94,4 @@ def notify_user(message, color="green", bold=False):
 
 def generate_random_string(length):
     letter_set = string.ascii_lowercase + string.digits
-    "".join(random.choice(letter_set) for _ in range(length))
+    return "".join(random.choice(letter_set) for _ in range(length))
