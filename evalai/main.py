@@ -30,7 +30,7 @@ def main(ctx):
             "CHALLENGE and PHASE placeholders used throughout the CLI are"
             " for challenge_id\nand phase_id of the challenges and phases."
         )
-        echo(welcome_text)
+        echo(welcome_text,fg="green",)
 
 
 main.add_command(challenges)
