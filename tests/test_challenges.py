@@ -83,14 +83,14 @@ class TestDisplayChallenges(BaseTestClass):
                               colored(values[4], 'green'),
                               colored(values[5], 'red'),
                               ])
-        self.output = table
+        self.output = str(table)
 
     @responses.activate
     def test_display_all_challenge_lists(self):
         runner = CliRunner()
         result = runner.invoke(challenges)
         response = result.output.strip()
-        assert response == self.output
+        assert str(response) == self.output
 
     @responses.activate
     def test_display_past_challenge_lists(self):
