@@ -25,8 +25,8 @@ def teams(ctx, host, participant):
             echo(
                 "Sorry, wrong flag. Please pass either one of the flags "
                 "{} or {}.".format(
-                    style("--participant", bold=True, fg="yellow"),
-                    style("--host", bold=True, fg="yellow"),
+                    style("--participant", bold=True, fg="red"),
+                    style("--host", bold=True, fg="red"),
                 )
             )
             sys.exit(1)
@@ -48,8 +48,8 @@ def create(team):
         echo(
             "Sorry, wrong argument. Please choose either "
             "{} or {}.".format(
-                style("participant", bold=True, fg="yellow"),
-                style("host", bold=True, fg="yellow"),
+                style("participant", bold=True, fg="red"),
+                style("host", bold=True, fg="red"),
             )
         )
         sys.exit(1)
