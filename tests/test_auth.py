@@ -4,6 +4,7 @@ import responses
 
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
+from termcolor import colored
 
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
