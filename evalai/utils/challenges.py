@@ -4,7 +4,7 @@ import sys
 
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
-from click import echo, echo_via_pager, style
+from click import echo, style
 from datetime import datetime
 from termcolor import colored
 
@@ -51,7 +51,7 @@ def pretty_print_challenge_data(challenges):
                           colored(values[5], 'red'),
                           ])
 
-    echo_via_pager(table, color='yes')
+    echo(table, color='yes')
 
 
 def display_challenges(url):
