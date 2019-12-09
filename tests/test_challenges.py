@@ -76,7 +76,6 @@ class TestDisplayChallenges(BaseTestClass):
             )
             end_date = convert_UTC_date_to_local(challenge_data["end_date"])
             values.extend([creator, start_date, end_date])
-            table.append_row(values)
             table.append_row([colored(values[0], 'white'),
                               colored(values[1], 'yellow'),
                               colored(values[2], 'cyan'),
