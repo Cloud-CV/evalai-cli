@@ -1,10 +1,10 @@
 import json
 import requests
 import sys
-
+from termcolor import colored
 from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
-from click import echo, style
+from click import echo, style, echo_via_pager
 from datetime import datetime
 
 from evalai.utils.auth import get_request_header, get_host_url
@@ -38,12 +38,20 @@ def pretty_print_challenge_data(challenges):
     table.column_headers = columns_attributes
     for challenge in reversed(challenges):
         values = list(map(lambda item: challenge[item], attributes))
+        values1=str(values)
         creator = challenge["creator"]["team_name"]
         start_date = convert_UTC_date_to_local(challenge["start_date"])
         end_date = convert_UTC_date_to_local(challenge["end_date"])
         values.extend([creator, start_date, end_date])
-        table.append_row(values)
-    echo(table)
+        table.append_row([colored(values[0],'white'),
+                          colored(values[1], 'yellow'),
+                          colored(values[2], 'cyan'),
+                          colored(values[3], 'white'),
+                          colored(values[4], 'green'),
+                          colored(values[5], 'red')
+                          ])
+
+    echo_via_pager(table,color='yes')
 
 
 def display_challenges(url):
