@@ -55,37 +55,37 @@ ________________________________________________________________________________
 
 ## Challenge
 
-Display all of the challenges                                 
+ Display all of the challenges                                 
     ```$
        evalai challenges 
     ```
 
-Display the ongoing challenges                                
+ Display the ongoing challenges                                
     ```$
         evalai challenges ongoing
     ```
     
-Display the future challenges                                 
+ Display the future challenges                                 
     ```$
-        evalai challenges upcoming
+        evalai challenges future 
     ```    
 
-Display the past challenges                                
+ Display the past challenges                                
     ```$
         evalai challenges past
     ```
 
-Display details of a challenge with the given ID (1)                                 
+ Display details of a challenge with the given ID (1)                                 
     ```$
         evalai challenge 1  
     ```
     
-Display all challenges that you've participated in                                
+ Display all challenges that you've participated in                                
     ```$
         evalai challenges --participant
     ```
 
-Display all challenges that you've hosted                                  
+ Display all challenges that you've hosted                                  
     ```$
         evalai challenges --host
     ```    
@@ -93,12 +93,12 @@ Display all challenges that you've hosted
 
 ## Challenge Phase
 
-Display all challenge phases of the challenge with Challenge the given ID (1)                                
+ Display all challenge phases of the challenge with Challenge the given ID (1)                                
     ```$
         evalai challenge 1 phases 
     ```    
 
-Display the details of the phase with the given phase ID (4) of the challenge with the given challenge ID (1)                                
+ Display the details of the phase with the given phase ID (4) of the challenge with the given challenge ID (1)                                
     ```$
         evalai challenge 1 phase 4
     ```
@@ -176,7 +176,7 @@ Display the details of the phase with the given phase ID (4) of the challenge wi
 ##### For forked version host url is http://localhost:8000
 
 ##### For online version host url is https://evalapi.cloudcv.org                                                             
-Only run the following command if you want to use CLI with your forked version of EvalAI.                                       
+ Only run the following command if you want to use CLI with your forked version of EvalAI.                                       
     ```$
         evalai host -sh <host url> 
     ```
