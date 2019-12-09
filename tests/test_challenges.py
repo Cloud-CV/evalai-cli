@@ -83,7 +83,7 @@ class TestDisplayChallenges(BaseTestClass):
                               colored(values[4], 'green'),
                               colored(values[5], 'red'),
                               ])
-        self.output = str(table)
+        self.output = table
 
     @responses.activate
     def test_display_all_challenge_lists(self):
