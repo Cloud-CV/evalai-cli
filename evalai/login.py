@@ -32,4 +32,4 @@ def login(ctx):
             except (OSError, IOError) as e:
                 echo(e)
 
-    echo(style("\nLogged in successfully!", bold=True))
+    echo(style("\nLogged in successfully!", bold=True, fg="green",))
