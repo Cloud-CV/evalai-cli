@@ -5,6 +5,7 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
+from termcolor import colored
 
 from evalai.challenges import challenge, challenges
 from evalai.utils.urls import URLS
@@ -67,19 +68,22 @@ class TestDisplayChallenges(BaseTestClass):
             "End Date",
         ]
         table.column_headers = columns_attributes
-        for challenge in reversed(challenges):
-        values = list(map(lambda item: challenge[item], attributes))
-        creator = challenge["creator"]["team_name"]
-        start_date = convert_UTC_date_to_local(challenge["start_date"])
-        end_date = convert_UTC_date_to_local(challenge["end_date"])
-        values.extend([creator, start_date, end_date])
-        table.append_row([colored(values[0], 'white'),
-                          colored(values[1], 'yellow'),
-                          colored(values[2], 'cyan'),
-                          colored(values[3], 'white'),
-                          colored(values[4], 'green'),
-                          colored(values[5], 'red'),
-                          ])
+        for challenge_data in reversed(challenges_json):
+            values = list(map(lambda item: challenge_data[item], attributes))
+            creator = challenge_data["creator"]["team_name"]
+            start_date = convert_UTC_date_to_local(
+                challenge_data["start_date"]
+            )
+            end_date = convert_UTC_date_to_local(challenge_data["end_date"])
+            values.extend([creator, start_date, end_date])
+            table.append_row(values)
+            table.append_row([colored(values[0], 'white'),
+                              colored(values[1], 'yellow'),
+                              colored(values[2], 'cyan'),
+                              colored(values[3], 'white'),
+                              colored(values[4], 'green'),
+                              colored(values[5], 'red'),
+                              ])
         self.output = str(table)
 
     @responses.activate
