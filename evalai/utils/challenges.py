@@ -38,20 +38,19 @@ def pretty_print_challenge_data(challenges):
     table.column_headers = columns_attributes
     for challenge in reversed(challenges):
         values = list(map(lambda item: challenge[item], attributes))
-        values1=str(values)
         creator = challenge["creator"]["team_name"]
         start_date = convert_UTC_date_to_local(challenge["start_date"])
         end_date = convert_UTC_date_to_local(challenge["end_date"])
         values.extend([creator, start_date, end_date])
-        table.append_row([colored(values[0],'white'),
+        table.append_row([colored(values[0], 'white'),
                           colored(values[1], 'yellow'),
                           colored(values[2], 'cyan'),
                           colored(values[3], 'white'),
                           colored(values[4], 'green'),
-                          colored(values[5], 'red')
+                          colored(values[5], 'red'),
                           ])
 
-    echo_via_pager(table,color='yes')
+    echo_via_pager(table, color='yes')
 
 
 def display_challenges(url):
