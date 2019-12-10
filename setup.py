@@ -32,6 +32,7 @@ install_requires = [
     "validators==0.12.2",
     "termcolor==1.1.0",
 ]
+
 setup(
     name=PROJECT,
     version="1.3.0",
