@@ -8,17 +8,11 @@ LEN_OF_TOKEN = 40
 
 AUTH_TOKEN_FILE_NAME = "token.json"
 
-STDOUT_FILE_NAME = "stdout.txt"
-
-STDOUT_FILE_DIR = expanduser("~/.evalai/")
-
 HOST_URL_FILE_NAME = "host_url"
 
 AUTH_TOKEN_DIR = expanduser("~/.evalai/")
 
 AUTH_TOKEN_PATH = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
-
-STDOUT_FILE_PATH = os.path.join(STDOUT_FILE_DIR, STDOUT_FILE_NAME)
 
 API_HOST_URL = os.environ.get("EVALAI_API_URL", "https://evalapi.cloudcv.org")
 
