@@ -127,3 +127,21 @@ submission_result = """
 submission_result_file = """
                 [{"Total": 60, "Metric1": 61, "Metric2": 62, "Metric3": 63}]
                 """
+
+bad_request_error = """
+                {
+                    "error": "Bad Request"
+                }
+                """
+            
+unauthorized_error = """
+                {
+                    "error": "Unauthorized"
+                }
+                """
+
+not_acceptable_error = """
+                {
+                    "error": "Not Acceptable"
+                }
+                """
