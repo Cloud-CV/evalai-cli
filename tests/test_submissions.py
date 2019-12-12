@@ -114,9 +114,6 @@ class TestGetSubmissionDetails(BaseTestClass):
         response = result.output.strip()
         assert response == expected
 
-
-
-
 class TestMakeSubmission(BaseTestClass):
     def setup(self):
         self.submission = json.loads(submission_response.submission_result)
@@ -181,7 +178,7 @@ class TestMakeSubmission(BaseTestClass):
             self.submission["input_file"][0]
         )
         expected = (
-            "416 Client Error: Requested Range Not Satisfiable for url: https://evalapi.cloudcv.org/api/jobs/challenge/9/challenge_phase/10/submission/\n{}"   
+            "416 Client Error: Requested Range Not Satisfiable for url: https://evalapi.cloudcv.org/api/jobs/challenge/9/challenge_phase/10/submission/\n{}"
         ).format(expected)
         expected = "Do you want to include the Submission Details? [y/N]: N\n{}".format(
             expected
@@ -203,8 +200,8 @@ class TestMakeSubmission(BaseTestClass):
     @responses.activate
     def test_make_submission_when_file_is_valid_without_metadata(self):
         expected = (
-            "Your file {} with the ID {} is successfully submitted.\n\n"
-            "You can use `evalai submission {}` to view this submission's status."
+                "Your file {} with the ID {} is successfully submitted.\n\n"
+                "You can use `evalai submission {}` to view this submission's status."
         ).format("test_file.txt", "9", "9")
         expected = "Do you want to include the Submission Details? [y/N]: N\n\n{}".format(
             expected
@@ -258,9 +255,9 @@ class TestMakeSubmission(BaseTestClass):
     def test_get_my_submissions_when_http_error_406(self):
         expected = (
             "\nError: Not Acceptable\n"
-                "\nUse `evalai challenges` to fetch the active challenges.\n"
-                "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                "active phases.\n\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
         )
         runner = CliRunner()
         result = runner.invoke(
@@ -273,9 +270,9 @@ class TestMakeSubmission(BaseTestClass):
     def test_get_my_submissions_when_http_error_401(self):
         expected = (
             "\nError: Unauthorized\n"
-                "\nUse `evalai challenges` to fetch the active challenges.\n"
-                "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                "active phases.\n\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
         )
         runner = CliRunner()
         result = runner.invoke(
