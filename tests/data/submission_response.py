@@ -133,7 +133,7 @@ bad_request_error = """
                     "error": "Bad Request"
                 }
                 """
-            
+
 unauthorized_error = """
                 {
                     "error": "Unauthorized"
