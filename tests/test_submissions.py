@@ -1,7 +1,6 @@
 import json
 import responses
 import os
-from click import echo
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
@@ -51,7 +50,6 @@ class TestGetSubmissionDetails(BaseTestClass):
         response = result.output.strip()
         if os.path.exists(HOST_URL_FILE_PATH):
             os.remove(HOST_URL_FILE_PATH)
-        echo(response)
         assert response == expected
 
     @responses.activate
@@ -194,7 +192,7 @@ class TestMakeSubmission(BaseTestClass):
                 f.write("1 2 3 4 5 6")
 
             result = runner.invoke(
-                challenge, 
+                challenge,
                 ["9", "phase", "10", "submit", "--file", "test_file.txt"],
                 input="N",
             )
@@ -290,9 +288,9 @@ class TestMakeSubmission(BaseTestClass):
     def test_get_my_submissions_when_http_error_400(self):
         expected = (
             "\nError: Bad Request\n"
-                "\nUse `evalai challenges` to fetch the active challenges.\n"
-                "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                "active phases.\n\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
         )
         runner = CliRunner()
         result = runner.invoke(
