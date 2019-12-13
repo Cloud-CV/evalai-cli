@@ -19,6 +19,6 @@ class BaseTestClass(TestCase):
     def test_challenges_when_token_is_missing(self):
         self.set_token_to_undefined()
         runner = CliRunner()
-        expected = "The authentication token you are using isn't valid. Please generate it again."
+        expected = "\nThe authentication token you are using isn't valid. Please generate it again.\n\n"
         result = runner.invoke(challenges)
         assert expected == result.output.rstrip()
