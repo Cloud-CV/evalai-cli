@@ -6,6 +6,5 @@ However, this uses the stubbing approach i.e. pre-defined responses that will be
 used for a specific request. This approach makes the test far from how the
 application is actually supposed to work in practice.
 
-In the evalai-cli project, we use the CLI in integration with the EvalAI server.
-To test this complete setup, we need to have integration tests or end-to-end
-tests.
+In the actual application, the CLI works with the EvalAI server. To test the
+complete setup, integration tests are required.
