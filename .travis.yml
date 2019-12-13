@@ -5,6 +5,10 @@ python:
 install:
 - pip install -r requirements.txt
 - pip install coveralls
+before_script:
+- git clone -production https://github.com/Cloud-CV/EvalAI.git evalai
+- cd evalai
+- docker-compose up --build
 script:
 - flake8 ./
 - py.test --cov . --cov-config .coveragerc
