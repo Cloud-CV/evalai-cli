@@ -21,4 +21,4 @@ class BaseTestClass(TestCase):
         runner = CliRunner()
         expected = "\nThe authentication token you are using isn't valid. Please generate it again.\n\n"
         result = runner.invoke(challenges)
-        assert expected == result.output.rstrip()
+        assert expected == result.output
