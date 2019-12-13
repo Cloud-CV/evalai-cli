@@ -5,13 +5,9 @@ python:
 install:
 - pip install -r requirements.txt
 - pip install coveralls
-before_script:
-- mkdir .travis_dump
-- git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis_dump/evalai
-- cd .travis_dump/evalai
-- docker-compose up --build
 script:
 - flake8 ./
+- ./.travis-ci_evalai_server_script.sh &
 - py.test --cov . --cov-config .coveragerc
 after_success:
 - coveralls --rcfile=.coveragerc
