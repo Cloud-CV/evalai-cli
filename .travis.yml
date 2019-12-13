@@ -6,8 +6,9 @@ install:
 - pip install -r requirements.txt
 - pip install coveralls
 before_script:
-- git clone --branch production https://github.com/Cloud-CV/EvalAI.git evalai
-- cd evalai
+- mkdir .travis_dump
+- git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis_dump/evalai
+- cd .travis_dump/evalai
 - docker-compose up --build
 script:
 - flake8 ./
