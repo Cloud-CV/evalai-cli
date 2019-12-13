@@ -5,6 +5,7 @@ from unittest import TestCase
 from evalai.utils.config import API_HOST_URL
 from evalai.utils.urls import URLS
 
+
 class BaseTestClass(TestCase):
     def setUp(self):
         self.url = "{}{}"

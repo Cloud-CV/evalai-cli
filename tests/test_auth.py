@@ -129,8 +129,8 @@ class TestHostConfig(BaseTestClass):
     def test_get_default_host(self):
         expected = (
             "You haven't configured a Host URL for the CLI.\n"
-            "The CLI would be using {} as the default url.\n"
-        ).format(API_HOST_URL)
+            "The CLI would be using https://evalapi.cloudcv.org as the default url.\n"
+        )
         runner = CliRunner()
         result = runner.invoke(host)
         assert expected == result.output
@@ -139,15 +139,15 @@ class TestHostConfig(BaseTestClass):
     def test_set_host_wrong_url(self):
         expected = (
             "Sorry, please enter a valid url.\n"
-            "Example: {}\n"
-        ).format(API_HOST_URL)
+            "Example: https://evalapi.cloudcv.org\n"
+        )
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "http:/evalapi.cloudcv"])
         assert expected == result.output
         assert result.exit_code == 0
 
     def test_set_host_url(self):
-        expected = "{} is set as the host url.\n".format(API_HOST_URL)
+        expected = "evalapi.cloudcv.org is set as the host url.\n"
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "{}"])
         assert expected == result.output
