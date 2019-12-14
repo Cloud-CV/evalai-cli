@@ -19,6 +19,7 @@ do
   fi
   sleep 1m 30s
   echo It may take up to 12 minutes to get the server started
+  let i++
   echo Tries: $i
 done
 
