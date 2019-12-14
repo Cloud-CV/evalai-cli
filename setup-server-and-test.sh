@@ -4,7 +4,7 @@ git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis-ci_
 docker-compose up --build &
 
 i=0
-while true:
+while :
 do
   if [ $i -gt 8 ]
   then
