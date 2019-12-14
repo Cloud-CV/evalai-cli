@@ -7,9 +7,7 @@ install:
 - pip install coveralls
 script:
 - flake8 ./
-- git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis-ci_tmp_evalai && cd .travis-ci_tmp_evalai
-- docker-compose up --build &
-- py.test --cov . --cov-config .coveragerc
+- ./test-script.sh
 after_success:
 - coveralls --rcfile=.coveragerc
 - ./deploy-staging.sh
