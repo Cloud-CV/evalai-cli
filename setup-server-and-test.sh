@@ -1,8 +1,9 @@
 echo Setting up EvalAI server. This may take some time
 
-git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis-ci_tmp_evalai && cd evalai
+git clone --branch production https://github.com/Cloud-CV/EvalAI.git .travis-ci_tmp_evalai && cd .travis-ci_tmp_evalai
 docker-compose up --build &
 
+cd ..
 i=0
 while :
 do
