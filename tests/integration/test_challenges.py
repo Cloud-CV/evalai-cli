@@ -7,7 +7,7 @@ from evalai.challenges import challenges, challenge
 class BaseTestClass:
     def setUp(self):
         self.url = "{}{}"
-        self.undefined_token = "0"*40
+        self.undefined_token = "0" * 40
         self.valid_testuser_token = "3c6dcbdb50b6edc2942f4629c0c1ca51fa80d88c"
 
         # Temporary Solution, a long term solution will have to be more dynamic
@@ -44,7 +44,7 @@ class BaseTestClass:
             "Usage: evalai challenge [OPTIONS] CHALLENGE COMMAND [ARGS]...\n",
             "Error: Invalid value for \"CHALLENGE\": not_integer is not a valid integer\n"
         )
-        runner.invoke(challenge, "not_integer")
+        result = runner.invoke(challenge, "not_integer")
         assert expected == result.output
 
     def test_display_challenges_participated(self):
@@ -53,4 +53,4 @@ class BaseTestClass:
         runner = CliRunner()
         expected = "\n{}\n{}\n".format("Participated Challenges", self.challenge_data_string)
         result = runner.invoke(challenges, ["--participant"])
-        assert expect == result.output
+        assert expected == result.output
