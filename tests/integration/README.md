@@ -43,7 +43,7 @@ P.S.: When I tried to set up development environment locally and on Travis,
 Celery threw some errors which made it to stop working.
 Still looking into this issue. See: https://travis-ci.com/nikochiko/evalai-cli/jobs/267038723
 
-<h6> Testing with evalapi server <h6>
+<h6> Testing with evalapi server </h6>
 
 This is the more hassle-free approach. Direct tests can be written against the evalapi server.
 Users can be created for testing purposes and few challenges (preferably those used for tutorial purposes)
@@ -70,7 +70,8 @@ checklist with these cases:
 	Invokes: `evalai.challenges.challenges`
 
   Cases:
-		* With few challenges
+
+    * With few challenges
   	* With no challenges
 		* Exception when host URL is unreachable
 		* Exception when user is not authenticated
@@ -80,13 +81,15 @@ checklist with these cases:
   Invokes: `evalai.challenges.ongoing`
 
   Cases:
+
 		* With few ongoing challenges
 		* With no ongoing challenges
-		* Exception when host URL is unreachable
-		* Exception when user is not authenticated
+    * Exception when host URL is unreachable
+    * Exception when user is not authenticated
 
   Similarly for:
-	  * `evalai.challenges.future`
+
+    * `evalai.challenges.future`
 	  * `evalai.challenges.past`
 
 * `evalai challenge <challenge_id>`
@@ -94,7 +97,8 @@ checklist with these cases:
 	Invokes: `evalai.challenges.challenge`
 
 	Cases:
-		* When challenge  exists
+
+    * When challenge  exists
 		* When challenge does not exist
 		* When host URL is unreachable
 		* When user is not authenticated
@@ -104,7 +108,8 @@ checklist with these cases:
 	Invokes: `evalai.challenges.challenges` with `participant=True`
 
 	Cases:
-		* When user has participated in few challenges
+
+    * When user has participated in few challenges
 		* When user has not participated in any challenges
 
   Similarly for `evalai challenges --host`
