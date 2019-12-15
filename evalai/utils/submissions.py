@@ -13,6 +13,7 @@ from evalai.utils.common import (
     validate_date_format,
     convert_UTC_date_to_local,
 )
+from evalai.utils.requests import check_compatibility
 
 
 requests.packages.urllib3.disable_warnings()
@@ -34,6 +35,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         response = requests.post(
             url, headers=headers, files=input_file, data=data
         )
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
@@ -151,6 +153,7 @@ def display_my_submission_details(
 
     try:
         response = requests.get(url, headers=headers)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
@@ -222,6 +225,7 @@ def submission_details_request(submission_id):
     headers = get_request_header()
     try:
         response = requests.get(url, headers=headers)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:

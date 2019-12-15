@@ -1,4 +1,8 @@
 import json
+
+import mock
+import pytest
+import requests
 import responses
 
 from click.testing import CliRunner
@@ -9,9 +13,11 @@ from evalai.teams import teams
 from evalai.submissions import submission
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
+from evalai.utils.requests import check_compatibility
 
 from .base import BaseTestClass
 from tests.data import challenge_response, teams_response
+from types import SimpleNamespace
 
 
 class TestHTTPErrorRequests(BaseTestClass):
@@ -895,3 +901,22 @@ class TestRequestForExceptions(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, ["1"])
         assert result.exit_code == 1
+
+    @responses.activate
+    @mock.patch("pkg_resources.get_distribution", return_value=SimpleNamespace(version="1.0.0"))
+    def test_check_compatibility(self, mock_get_distribution):
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(
+                API_HOST_URL, "check_this"
+            ),
+            headers={
+                "Minimum-CLI-Version": "2.0.0"
+            }
+        )
+        response = requests.get(url=url.format(API_HOST_URL, "check_this"))
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
+            check_compatibility(response)
+        assert pytest_wrapped_e.type == SystemExit
+        assert pytest_wrapped_e.value.code == 1

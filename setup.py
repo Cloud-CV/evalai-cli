@@ -31,6 +31,7 @@ install_requires = [
     "responses==0.9.0",
     "validators==0.12.2",
     "termcolor==1.1.0",
+    "semver==2.9.0",
 ]
 
 setup(

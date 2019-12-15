@@ -20,10 +20,12 @@ def get_user_auth_token_by_login(username, password):
     """
     Returns user auth token by login.
     """
+    from evalai.utils.requests import check_compatibility
     url = "{}{}".format(get_host_url(), URLS.login.value)
     try:
         payload = {"username": username, "password": password}
         response = requests.post(url, data=payload)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError:
         if response.status_code in EVALAI_ERROR_CODES:
