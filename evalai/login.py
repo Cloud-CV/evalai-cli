@@ -9,7 +9,7 @@ from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
 
 @click.group(invoke_without_command=True)
 @click.pass_context
-def login(ctx, username, password):
+def login(ctx):
     """
     Login to EvalAI and save token.
     """
