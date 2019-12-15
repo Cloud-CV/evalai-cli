@@ -26,7 +26,7 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     git clone https://github.com/Cloud-CV/evalai-cli.git evalai-cli
     ```
 
-3. Create a virtual environment
+3. Create a virtual environment ([Mac users could easily use Homebrew](https://gist.github.com/apavamontri/4516816))
 
     ```bash
     cd EvalAI-CLI
@@ -40,10 +40,23 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     pip install -e .
     ```
 
-5. Login to cli using the command ``` evalai login```
+5. Configure your Auth Token
+    1. Create an account on the production site (https://evalai.cloudcv.org/)
+    2. Verify your email
+    3. Go to your profile (https://evalai.cloudcv.org/web/profile)
+    4. Click on `Get your Auth Token`
+    5. Copy the token
+    6. Set the token using the `evalai` CLI as shown below
+    ```bash
+    evalai set_token <auth_token>
+    ```
+
+6. Login to cli using the command ``` evalai login```
 Two users will be created by default which are listed below -
 
     ```bash
     Host User - username: host, password: password
     Participant User - username: participant, password: password
     ```
+    
+Or you could just login into your account just by typing `evalai` and putting in your username and your password, and there you have it.
