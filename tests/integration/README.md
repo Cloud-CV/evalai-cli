@@ -73,8 +73,8 @@ checklist with these cases:
 
     * With few challenges
   	* With no challenges
-		* Exception when host URL is unreachable
-		* Exception when user is not authenticated
+    * Exception when host URL is unreachable
+    * Exception when user is not authenticated
 
 * `evalai challenges ongoing`
 
