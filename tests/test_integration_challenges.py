@@ -6,7 +6,7 @@ from evalai.challenges import challenges, challenge
 
 
 class TestIntegrationChallenges:
-    def setUp(self):
+    def setup(self):
         self.url = "{}{}"
         self.undefined_token = "0" * 40
         self.valid_testuser_token = "3c6dcbdb50b6edc2942f4629c0c1ca51fa80d88c"
