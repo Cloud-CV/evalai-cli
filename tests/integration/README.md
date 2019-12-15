@@ -82,15 +82,15 @@ checklist with these cases:
 
   Cases:
 
-		* With few ongoing challenges
-		* With no ongoing challenges
+    * With few ongoing challenges
+    * With no ongoing challenges
     * Exception when host URL is unreachable
     * Exception when user is not authenticated
 
   Similarly for:
 
     * `evalai.challenges.future`
-	  * `evalai.challenges.past`
+    * `evalai.challenges.past`
 
 * `evalai challenge <challenge_id>`
 
@@ -99,9 +99,9 @@ checklist with these cases:
 	Cases:
 
     * When challenge  exists
-		* When challenge does not exist
-		* When host URL is unreachable
-		* When user is not authenticated
+    * When challenge does not exist
+    * When host URL is unreachable
+    * When user is not authenticated
 
 * `evalai challenges --participant`
 
@@ -110,11 +110,11 @@ checklist with these cases:
 	Cases:
 
     * When user has participated in few challenges
-		* When user has not participated in any challenges
+    * When user has not participated in any challenges
 
   Similarly for `evalai challenges --host`
 
-<h5> The conclusion: </h5>
+<h5> The Conclusion: </h5>
 
 * Testing CLI with EvalAI server will require much setup, and possibly changes in the EvalAI server to enable testing.
 * Among the setup approaches, the second one (testing against evalapi) is better in the short term if the credentials don't become an issue. With this approach, there would be almost no extra work required. An example challenge can be created as a tutorial for new users and can be used for testing as well.
