@@ -76,11 +76,11 @@ def get_user_auth_token():
         sys.exit(1)
 
 
-def validate_user_auth_token_by_profile(auth_token):
+def is_auth_token_valid(auth_token):
     """
-    Checks tokens availability via server.
+    Returns if token is available via server.
     """
-    url = "{}{}".format(get_host_url(), URLS.profile.value)
+    url = "{}{}".format(get_host_url(), URLS.validate_auth_token.value)
     try:
         headers = {"Authorization": "Token {}".format(auth_token)}
         response = requests.post(url, headers=headers)
@@ -105,6 +105,8 @@ def validate_user_auth_token_by_profile(auth_token):
             )
         )
         sys.exit(1)
+
+    return True
 
 
 def get_request_header():

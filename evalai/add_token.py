@@ -7,7 +7,7 @@ import validators
 from click import echo, style
 
 from evalai.utils.config import AUTH_TOKEN_DIR, AUTH_TOKEN_PATH, LEN_OF_TOKEN
-from evalai.utils.auth import validate_user_auth_token_by_profile
+from evalai.utils.auth import is_auth_token_valid
 
 
 @click.group(invoke_without_command=True)
@@ -22,21 +22,21 @@ def set_token(auth_token):
     if validators.length(auth_token, min=LEN_OF_TOKEN, max=LEN_OF_TOKEN):
         if not os.path.exists(AUTH_TOKEN_DIR):
             os.makedirs(AUTH_TOKEN_DIR)
-        validate_user_auth_token_by_profile(auth_token)
-        with open(AUTH_TOKEN_PATH, "w+") as fw:
-            try:
-                auth_token = {"token": "{}".format(auth_token)}  # noqa
-                auth_token = json.dumps(auth_token)
-                fw.write(auth_token)
-            except (OSError, IOError) as e:
-                echo(e)
-            echo(
-                style(
-                    "Success: Authentication token is successfully set.",
-                    bold=True,
-                    fg="green",
+        if is_auth_token_valid(auth_token):
+            with open(AUTH_TOKEN_PATH, "w+") as fw:
+                try:
+                    auth_token = {"token": "{}".format(auth_token)}  # noqa
+                    auth_token = json.dumps(auth_token)
+                    fw.write(auth_token)
+                except (OSError, IOError) as e:
+                    echo(e)
+                echo(
+                    style(
+                        "Success: Authentication token is successfully set.",
+                        bold=True,
+                        fg="green",
+                    )
                 )
-            )
     else:
         echo(
             style(

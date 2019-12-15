@@ -50,7 +50,7 @@ class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
     def setup(self):
         self.token_data = generate_random_string(40)
 
-        url = "{}{}".format(API_HOST_URL, URLS.profile.value)
+        url = "{}{}".format(API_HOST_URL, URLS.validate_auth_token.value)
         headers = {"Authorization": "Token {}".format(self.token_data)}
         responses.add(
             responses.POST,
@@ -73,7 +73,7 @@ class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
     def setup(self):
         self.token_data = generate_random_string(40)
 
-        url = "{}{}".format(API_HOST_URL, URLS.profile.value)
+        url = "{}{}".format(API_HOST_URL, URLS.validate_auth_token.value)
         headers = {"Authorization": "Token".format(self.token_data)}
         responses.add(
             responses.POST,
