@@ -53,8 +53,7 @@ within the EvalAI server to allow for such testing with mock databases as mentio
 
 For a very rough example of the code, I used auth token from a user I created for this task.
 
-See [code comparison](https://github.com/Cloud-CV/evalai-cli/compare/master...nikochiko:test-integration-with-evalapi-server)
-on GitHub.
+See [code comparison](https://github.com/Cloud-CV/evalai-cli/pull/208) on GitHub.
 
 
 <h5> The Tests: </h5>
