@@ -33,6 +33,7 @@ class TestIntegrationChallenges:
         |            |          |                                                          local to your timezone.'                                                          |              |           |      |\n
         +------------+----------+--------------------------------------------------------------------------------------------------------------------------------------------+--------------+-----------+------+\n
         """
+        self.set_token_to(self.valid_testuser_token)
 
     def set_token_to(self, token):
         runner = CliRunner()
@@ -49,17 +50,15 @@ class TestIntegrationChallenges:
         assert expected == result.output
 
     def test_challenge_details_when_challenge_id_is_not_int(self):
-        self.set_token_to(self.valid_testuser_token)
         runner = CliRunner()
         expected = "{}{}".format(
-            "Usage: evalai challenge [OPTIONS] CHALLENGE COMMAND [ARGS]...\n",
+            "Usage: challenge [OPTIONS] CHALLENGE COMMAND [ARGS]...\n\n",
             "Error: Invalid value for \"CHALLENGE\": x is not a valid integer\n"
         )
         result = runner.invoke(challenge, "x")
         assert expected == result.output
 
     def test_display_challenge_details(self):
-        self.set_token_to(self.valid_testuser_token)
 
         runner = CliRunner()
         expected = self.challenge_data_string
