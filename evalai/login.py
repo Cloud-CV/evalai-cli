@@ -8,8 +8,8 @@ from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
 
 
 @click.group(invoke_without_command=True)
-@click.option("--username", prompt="Username: ")
-@click.option("--passowrd", prompt="Password: ")
+@click.argument("--username", prompt=True)
+@click.argument("--passowrd", prompt=True)
 @click.pass_context
 def login(ctx, username, password):
     """

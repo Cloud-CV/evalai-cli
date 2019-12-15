@@ -1,0 +1,131 @@
+[33mfd694ba[m[33m ([m[1;36mHEAD -> [m[1;32mtest-integration-with-server[m[33m, [m[1;31morigin/test-integration-with-server[m[33m)[m some changes
+[33md1d393c[m move file
+[33m37a5523[m update chmod
+[33mfe0a66e[m fix some issues
+[33m737785f[m fix error
+[33m9a41fef[m permission access for travis
+[33mc7114ad[m Fix issues
+[33mcc54b28[m Fix typo
+[33m3a92022[m Moved file
+[33mf1b72fe[m Fix typo
+[33mf0c65b6[m Add script to get server running
+[33mbb0b9ba[m Test in developer environment
+[33me07eeaf[m Fix flake8 issues
+[33m9528551[m Update Travis config. Add temporary test cases
+[33md363775[m Fix errors
+[33mc6cb488[m Fix error
+[33m96b1633[m Update
+[33m9f06849[m Update
+[33mc16b09a[m Update
+[33m1995b1e[m Update
+[33m94338a2[m Update
+[33m556825a[m Add script to start EvalAI server
+[33m184ab07[m Update
+[33m5295c1c[m[33m ([m[1;31morigin/upstream/test-integration-server[m[33m, [m[1;32mupstream/test-integration-server[m[33m)[m Add sample test
+[33m129b9cd[m[33m ([m[1;32mupstrem/test-integration-server[m[33m)[m Modified README
+[33m676436d[m Add folder for integration tests with README
+[33ma658e23[m[33m ([m[1;31mupstream/master[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Tests: Add challenge end date dynamically using datetime(#168)
+[33m2ad5d32[m[33m ([m[1;33mtag: v1.3.0[m[33m, [m[1;31mupstream/staging[m[33m, [m[1;31morigin/staging[m[33m)[m Update package version to v1.3.0 & add command to display it
+[33mf13c033[m Merge branch 'staging' of https://github.com/Cloud-CV/evalai-cli into staging
+[33m20fe1e6[m Add command to display the submission result in terminal(#165)
+[33mc2b4348[m[33m ([m[1;33mtag: v1.2.3[m[33m)[m Update release version to v1.2.3 (#163)
+[33mb9ee0b5[m update release version to v1.2.3
+[33m9807f3e[m evalai push command: Add uuid to generate image tags for pushing the images(#162)
+[33m0a0f14f[m[33m ([m[1;33mtag: v1.2.2[m[33m)[m Update evalai push command to use phase slug for pushing images(#159)
+[33ma822809[m[33m ([m[1;33mtag: v1.2.1[m[33m)[m Update readme with setup instructions
+[33m5677d30[m Fix syntax error in deploy to staging script
+[33m306f22b[m Add script to deploy on test-pypi.org for testing
+[33m05875f2[m Remove python 3.5 version from travis.yml
+[33m003e7e9[m[33m ([m[1;33mtag: v1.2.0[m[33m)[m Update pypi password, readme and version
+[33m2491078[m Add command to download submission related files using AWS signed URL (#155)
+[33m0111c14[m Black+flake8: Format code & tests using black+flake8(#156)
+[33mfee72bb[m Add pre-commit hook with black and flake8(#153)
+[33m2e4d4e9[m[33m ([m[1;33mtag: v1.1.6[m[33m)[m Change the release version to 1.1.6
+[33m68196ed[m Fix #151: Add evalai production url as the default url for fetching details(#152)
+[33mf52ad75[m Add proper release tags
+[33mfd9bd92[m[33m ([m[1;33mtag: v1.1.5[m[33m)[m Fix installation errors from PyPi
+[33m093f3dd[m[33m ([m[1;33mtag: v1.1.4[m[33m)[m Update Readme with the instructions
+[33m0057349[m[33m ([m[1;33mtag: v1.1.3[m[33m, [m[1;33mtag: v1.1.2[m[33m)[m Docs: Made copyright year dynamic(#142)
+[33ma2c7857[m[33m ([m[1;33mtag: v1.1.1[m[33m)[m Fix requirements in setup for PyPi(#150)
+[33m4649fd5[m Fix #147: Replace irrelevant text while copying commands(#148)
+[33mecfb776[m Add evalai push command in docs along with bug fixes
+[33m9951803[m Docs: Add smooth scroll and scroll to top button(#143)
+[33mc95e3de[m Add docker image size constraint while doing evalai push (#144)
+[33m24b1e48[m[33m ([m[1;33mtag: v1[m[33m)[m Fix #132: Add copy to clipboard feature in docs(#133)
+[33m9dff6f2[m Fix #4: Add automated travis release configuration from production branch(#101)
+[33mcd3cd9b[m Update CNAME
+[33m2f5f755[m Create CNAME
+[33mec5ae52[m Fix #137: Add command for Logging into EvalAI using CLI(#138)
+[33ma7e737d[m Fix #130: Remove background color from error messages(#140)
+[33mfd28882[m Add support for 'evalai push' command for docker based challenges(#136)
+[33maeb33e4[m Docs: Add badge for docs (#139)
+[33m5f708a7[m Refactor docs page code and reorder CLI commands(#134)
+[33mfbeecf1[m Fix #123: Add command to display the auth token on CLI(#125)
+[33mec4d5b4[m Create CNAME
+[33m04799d6[m Add custom domain for hosting docs page(#129)
+[33me51dea8[m Lint python code using black(#128)
+[33me50c741[m Remove verify=False from all API calls(#126)
+[33m36807b1[m Update package versions and minor punctuation fixes(#124)
+[33maa13f47[m Add documentation page for the CLI commands(#96)
+[33mfceeb47[m Fix security issue related to requests dependency(#122)
+[33mb272489[m Add command to store evalai authentication token(#116)
+[33md3e75d8[m Settings: Update release version & default API URL (#100)
+[33ma942786[m Merge pull request #109 from adityaputravu/master
+[33m330a59f[m Update main.py
+[33m28b676d[m Update main.py
+[33mdee37d6[m Fixed visual issues
+[33med074ac[m Edited AI
+[33md2d448a[m Fixing issues with output
+[33m776e743[m Changed logo
+[33m8840baf[m Fixed new lines issue
+[33m7c0fea1[m Update main.py
+[33m7affeed[m Add Pull Request Template(#107)
+[33m36e86d6[m Add Issue Template(#108)
+[33m5a2f67e[m Minor Fix: Add missing return statement for utils function(#102)
+[33m5bc5671[m SSL Fix: Add verify=False to bypass SSL certificate(#94)
+[33m41e23e1[m Add minor fixes &  Fix python2 compatibility issues(#95)
+[33m9c53205[m Fix #12: Add clear and concise error messages for when the server is down(#90)
+[33m39d5611[m Fix #72: Avoid auth token reset while running tests in dev environment(#92)
+[33m2e4f66e[m Update setup.py (#91)
+[33mbd1936e[m[33m ([m[1;33mtag: v1.1[m[33m)[m Make error responses more detailed & verbose(#73)
+[33m2bc9c63[m Add unit test cases to increase the code coverage(#88)
+[33mc7270dc[m Add commands to view & create challenge host & participant teams(#74)
+[33mb859532[m Add command to filter the submissions by start & end date(#83)
+[33m0d1e322[m Add tabular format to display all, ongoing, past, future challenges(#69)
+[33m5a89b03[m Fix #78: Add condition to stop displaying past challenges in ongoing challenges command(#79)
+[33m78a6ac5[m Update Readme: Remove bugs & add more detailed installation instructions(#84)
+[33mf4f5d4e[m Add command to display a challenge details(#68)
+[33m98a3de9[m Add feature to display challenge phase details as json(#82)
+[33m5e4e811[m Add feature to add custom API host url(#37)
+[33maa2924f[m Add setup.py file in .coveragerc (#80)
+[33m990bb0f[m Add feature to include submission metadata while making submission to a challenge(#76)
+[33m20c562f[m Add --flag option while submitting a file in a challenge(#75)
+[33m64983de[m Add tabular format to display the list of challenge phases(#71)
+[33m76b0859[m Fix #35: Add check to avoid displaying past challenges under participated challenges(#39)
+[33mf7f1a89[m Add command to display the leaderboard for the challenge(#30)
+[33m92fed95[m Add tabular format for displaying participant teams. (#70)
+[33m347e518[m Add command to display the challenge phase split list with public visibility(#29)
+[33mff41243[m Add commands to submit to a challenge & display a submission status(#56)
+[33m47bdc30[m Fix #63: Display proper errors messages when challenge doesn't exist.(#58)
+[33m7fd3d35[m Add command to display my submissions in a challenge (#31)
+[33md3f5c88[m Requirements: Add requirements for local date-time(#65)
+[33mcf42b5c[m Requirements: Update setup requirements for parsing html & table data (#64)
+[33m6fc6fb6[m Fix #32: Add date type parsing to accept date from user's input (#33)
+[33ma23fdf0[m Add commands to display challenge phases & its details (#53)
+[33m547ab20[m Fix #54: Fix master branch travis build (#55)
+[33m1e40079[m Fix #13 & #11: Update user auth token error messages along with tests(#38)
+[33m2b35550[m Add feature to display, create participant team & participate with a team(#52)
+[33m8899194[m Fix #43: Update Readme with badges & contributing guidelines (#48)
+[33m9719a9f[m Fix #49: Add remaining test cases for the challenge features (#51)
+[33m22e22b5[m Display challenge data along with renaming function & variable names(#44)
+[33mc01e421[m Travis: Fix build by creating a random token while running test cases (#42)
+[33m26eded6[m Add config file for common variables along with reordering & renaming variables (#41)
+[33mdf864db[m Make style changes to code using PEP8 & fix travis build (#23)
+[33m81a1391[m Add Travis CI config along with flake8 (#21)
+[33mef9d164[m Add pytest cache to gitignore (#22)
+[33m4aab4af[m Update Readme and add guidelines for contributors(#17)
+[33mc37da87[m Add feature to view participated & hosted challenges by a user (#16)
+[33maa44574[m Fix #10: Add user authentication along with displaying challenge details. (#9)
+[33ma96fc3f[m Add script to fetch pull request
+[33m82dc856[m Define directory structure. (#1)
+[33mea29cf5[m Initial commit

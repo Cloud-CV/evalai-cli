@@ -30,9 +30,9 @@ class TestIntegrationChallenges:
     def set_token_to_undefined(self):
         self.set_token_to(self.undefined_token)
 
-    def login_as_participant(self):
-        runner = CliRunner()
-        runner.invoke(login, ["participant", "password"])
+    # def login_as_participant(self):
+    #    runner = CliRunner()
+    #    runner.invoke(login, ["participant", "password"])
 
     def test_challenges_when_token_is_invalid(self):
         self.set_token_to_undefined()
