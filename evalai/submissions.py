@@ -23,6 +23,7 @@ from evalai.utils.submissions import (
 )
 from evalai.utils.urls import URLS
 from evalai.utils.config import EVALAI_HOST_URLS, HOST_URL_FILE_PATH
+from evalai.utils.requests import check_compatibility
 
 
 class Submission(object):
@@ -215,6 +216,7 @@ def download_file(url):
         file_name = key[0].split("/")[-1]
         try:
             response = requests.get(signed_url, stream=True)
+            check_compatibility(response)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             echo(err)

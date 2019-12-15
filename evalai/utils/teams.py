@@ -9,6 +9,7 @@ from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import validate_token
 from evalai.utils.urls import URLS
 from evalai.utils.config import EVALAI_ERROR_CODES
+from evalai.utils.requests import check_compatibility
 
 
 requests.packages.urllib3.disable_warnings()
@@ -60,6 +61,7 @@ def display_teams(is_host):
 
     try:
         response = requests.get(url, headers=headers)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
@@ -114,6 +116,7 @@ def create_team(team_name, team_url, is_host):
     data = json.dumps(data)
     try:
         response = requests.post(url, headers=headers, data=data)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
@@ -185,6 +188,7 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
     headers["Content-Type"] = "application/json"
     try:
         response = requests.post(url, headers=headers)
+        check_compatibility(response)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
