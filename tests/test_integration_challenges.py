@@ -8,7 +8,8 @@ class TestIntegrationChallenges:
     def setup(self):
         self.url = "{}{}"
         self.undefined_token = "0" * 40
-        self.valid_testuser_token = "3c6dcbdb50b6edc2942f4629c0c1ca51fa80d88c" # valid token for test user
+        # valid token for test user
+        self.valid_testuser_token = "3c6dcbdb50b6edc2942f4629c0c1ca51fa80d88c"
         self.set_token_to(self.valid_testuser_token)
 
     def set_token_to(self, token):
