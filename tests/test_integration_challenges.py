@@ -58,8 +58,7 @@ class TestIntegrationChallenges:
         result = runner.invoke(challenge, "x")
         assert expected == result.output
 
-    def test_display_challenge_details(self):
-
+    def test_challenge_details_VQA(self):
         runner = CliRunner()
         expected = self.challenge_data_string
         result = runner.invoke(challenge, ["163"])
