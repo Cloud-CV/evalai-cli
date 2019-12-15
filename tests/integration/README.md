@@ -121,6 +121,7 @@ checklist with these cases:
 * However in the long term, the first approach (testing against a development environment)should be preferred as it allows for more complete testing with more control over the server. With this approach, the work on the setup would take around 2-3 weeks.
 * The tests will also be easier to write while testing against the live evalapi server while writing in the other scenario would also include adding mock challenges, submissions, participant teams, etc. A rough estimate would be around 8 weeks for writing complete tests in the first case and 10-12 weeks for the second case.
 * Overall:  
+
 Taking the approach to write tests against the live evalapi server can take just over 8 weeks.
 
 A summary of this approach is as follows:
