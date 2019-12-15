@@ -7,7 +7,7 @@ To make the process of contributing to `evalai-cli` much easier, we have some gu
 ### Issues
 
 Issues are a great way to contribute since they help us identify bugs as well as great new features our users might love.
-We use Github's issue system for logging issues. Moreover, we like to add tags to issues to help identify priority, so if you see any tags that you would like to add to the issue, please go ahead.
+We use GitHub's issue system for logging issues. Moreover, we like to add tags to issues to help identify priority, so if you see any tags that you would like to add to the issue, please go ahead.
 
 ### Pull Requests
 
