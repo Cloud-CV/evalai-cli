@@ -115,7 +115,7 @@ class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(set_token, [self.token_data])
         response = result.output
-        assert response == self.expected
+        assert response.startswith(self.expected)
 
 
 class TestUserRequestWithInvalidToken(BaseTestClass):

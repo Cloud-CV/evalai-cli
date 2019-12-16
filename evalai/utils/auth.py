@@ -87,14 +87,7 @@ def is_auth_token_valid(auth_token):
         response.raise_for_status()
     except requests.exceptions.HTTPError:
         if response.status_code in EVALAI_ERROR_CODES:
-            echo(
-                style(
-                    "Error: Invalid Auth Token (unrecognized or wrong Auth Token).",
-                    bold=True,
-                    fg="red"
-                )
-            )
-            sys.exit(1)
+            return False
     except requests.exceptions.RequestException:
         echo(
             style(
@@ -104,7 +97,7 @@ def is_auth_token_valid(auth_token):
                 fg="red"
             )
         )
-        sys.exit(1)
+        return False
 
     return True
 

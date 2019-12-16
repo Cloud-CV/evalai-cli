@@ -37,6 +37,14 @@ def set_token(auth_token):
                         fg="green",
                     )
                 )
+        else:
+            echo(
+                style(
+                    "Error: Invalid Auth Token (unrecognized or wrong Auth Token).",
+                    bold=True,
+                    fg="red"
+                )
+            )
     else:
         echo(
             style(
