@@ -28,6 +28,9 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
 
 3. Create a virtual environment ([Mac users could easily use Homebrew](https://gist.github.com/apavamontri/4516816))
 
+    - `virtualenv` installation guide: [guide](https://pythonforundergradengineers.com/virtualenv-in-osx-linux-windows.html)
+    - If you're on a Mac, consider using Homebrew: [guide](https://gist.github.com/apavamontri/4516816)
+
     ```bash
     cd EvalAI-CLI
     virtualenv -p python3 venv
@@ -47,6 +50,7 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     4. Click on `Get your Auth Token`
     5. Copy the token
     6. Set the token using the `evalai` CLI as shown below
+    <br><br>
     ```bash
     evalai set_token <auth_token>
     ```
