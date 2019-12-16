@@ -149,3 +149,5 @@ The summary for this:
 Written by: nikochiko
 
 Mentors: Kartik Verma, Ram Ramrakhya, Yash Dusing, Rishabh Jain, Pushkal Katara
+
+Thanks to mentors Kartik Verma and Ram Ramrakhya for additional help on this difficult task.
