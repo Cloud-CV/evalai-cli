@@ -1,12 +1,13 @@
 import json
 import responses
+import os
 
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
 
 from evalai.challenges import challenge
-from evalai.submissions import submission
+from evalai.submissions import submission, download_file
 from tests.data import submission_response
 
 from evalai.utils.config import API_HOST_URL
@@ -95,6 +96,78 @@ class TestGetSubmissionDetails(BaseTestClass):
         result = runner.invoke(submission, ["9", "result"])
         response = result.output.strip()
         assert response == expected
+
+
+class TestDownloadFile(BaseTestClass):
+    def setup(self):
+        '''
+        #TODO Holding until responses doesn;t support multipart/form-data
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.download_file.value).format(
+            "submission_9",
+            "result"
+            ),
+            json=self.file,
+            content_type="multipart/form-data",
+            status=200,
+        )
+        '''
+        pass
+
+    def teardown(self):
+        if os.path.exists("./result"):
+            os.remove("./result")
+
+    @responses.activate
+    def test_download_file_when_url_invalid(self):
+        expected = "\nThe url doesn't match the EvalAI url. Please check the url.\n\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(download_file, ["https://falseurl.com"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_download_file_when_bucket_or_key_missing(self):
+        expected = "\nThe bucket or key is missing in the url.\n\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(
+            download_file,
+            [API_HOST_URL + "/api/jobs/submission_files/?bucket=submission_9"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_download_file_when_cannot_connect_EvalAI(self):
+        expected = "\nCould not connect to EvalAI API. Please check" \
+            " the URL or if server is running\n\n"
+
+        runner = CliRunner()
+
+        result = runner.invoke(
+            download_file,
+            [API_HOST_URL + "/api/jobs/submissio_files/?bucket=submission_9&key=result"])
+        response = result.output
+        assert response == expected
+
+    '''
+    @responses.activate
+    def test_download_file_when_download_success(self):
+        expected = "\nYour file {} is successfully downloaded.\n".format(
+            "result.json"
+        )
+        runner = CliRunner()
+
+        result = runner.invoke(download_file,
+            [API_HOST_URL + "/api/jobs/submission_files/?bucket=submission_9&key=result"])
+        response = result.output
+        assert response == expected
+    '''
 
 
 class TestMakeSubmission(BaseTestClass):
