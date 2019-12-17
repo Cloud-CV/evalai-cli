@@ -23,9 +23,10 @@ def teams(ctx, host, participant):
     if ctx.invoked_subcommand is None:
         if host == participant:
             echo(
-                "Sorry, wrong flag. Please pass either one of the flags "
-                "{} or {}.".format(
+                style("Sorry, wrong flag. Please pass either one of the flags "
+                "{} {} {}.", bold=True, fg="red").format(
                     style("--participant", bold=True, fg="yellow"),
+                    style("or", bold=True, fg="red"),
                     style("--host", bold=True, fg="yellow"),
                 )
             )
@@ -46,28 +47,34 @@ def create(team):
     is_host = False
     if team not in ("host", "participant"):
         echo(
-            "Sorry, wrong argument. Please choose either "
-            "{} or {}.".format(
+            style("Sorry, wrong argument. Please choose either "
+            "{} {} {}.", bold=True, fg="red").format(
                 style("participant", bold=True, fg="yellow"),
+                style("or", bold=True, fg="red"),
                 style("host", bold=True, fg="yellow"),
             )
         )
         sys.exit(1)
 
-    team_name = click.prompt("Enter team name", type=str)
+    team_name = click.prompt(style("Enter team name", bold=True, fg="cyan"), type=str)
     if click.confirm(
-        "Please confirm the team name - {}".format(team_name), abort=True
+        style("Please confirm the team name - {}".format(team_name), bold=True, fg="cyan"), abort=True
     ):
         team_url = ""
         if click.confirm(
-            "Do you want to enter the Team URL".format(team_name)
+            style("Do you want to enter the Team URL".format(team_name), bold=True, fg="cyan")
         ):
-            team_url = click.prompt("Team URL", type=str)
+            team_url = click.prompt(style("Team URL", bold=True, fg="cyan"), type=str)
             while not (
                 validators.url(team_url) or validators.domain(team_url)
             ):
-                echo("Sorry, please enter a valid link.")
-                team_url = click.prompt("Team URL", type=str)
+                echo(
+                    style("Sorry, please enter a valid link.",
+                    bold=True,
+                    fg="red",
+                    )
+                )
+                team_url = click.prompt(style("Team URL", bold=True, fg="cyan"), type=str)
 
         is_host = team == "host"
         create_team(team_name, team_url, is_host)
