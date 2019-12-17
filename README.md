@@ -26,10 +26,14 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     git clone https://github.com/Cloud-CV/evalai-cli.git evalai-cli
     ```
 
-3. Create a virtual environment ([Mac users could easily use Homebrew](https://gist.github.com/apavamontri/4516816))
+3. Create a virtual environment
 
-    - `virtualenv` installation guide: [guide](https://pythonforundergradengineers.com/virtualenv-in-osx-linux-windows.html)
-    - If you're on a Mac, consider using Homebrew: [guide](https://gist.github.com/apavamontri/4516816)
+    #### `virtualenv` installation guide:
+    - [Windows](https://programwithus.com/learn-to-code/Pip-and-virtualenv-on-Windows/)
+    - [Linux](https://www.linode.com/docs/development/python/create-a-python-virtualenv-on-ubuntu-1610/)
+    - [OSX](https://gist.github.com/apavamontri/4516816)
+    
+    And run the following commands:
 
     ```bash
     cd EvalAI-CLI
