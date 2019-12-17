@@ -46,8 +46,8 @@ def login(ctx):
 
     echo(
         style(
-            "\nLogged in successfully!", 
+            "\nLogged in successfully!",
             bold=True,
             fg="green",
-            )
+        )
     )
