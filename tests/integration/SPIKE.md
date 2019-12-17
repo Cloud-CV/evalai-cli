@@ -1,4 +1,4 @@
-<h4> Report on testing CLI with EvalAI server on Production/Staging branch on CI/CD pipeline </h4>
+<h3> Report on testing CLI with EvalAI server on Production/Staging branch on CI/CD pipeline </h3>
 
 Testing is a crucial part of the CI/CD process. Unit tests cover individual units in the code by using a stubbing
 approach i.e. pre-defined responses that will be used for a specific request. However, this does not give a complete
@@ -16,7 +16,7 @@ In addition to the basic setup for the CLI, the server environment needs to be s
 
 For the environment setup, the alternatives are:
 
-<h6> Run EvalAI server in development environment in Travis VM </h6>
+<h4> Run EvalAI server in development environment in Travis VM </h4>
 
 The server should be set up on Travis-CI VM so as to:
   1.	Ensure that the tests run fast.
@@ -33,27 +33,34 @@ For this setup to work, the EvalAI server needs to be set up as follows:
 However, setting up the environment this way can take a lot of time. On the Travis VM, setting up the server took about
 8-10 minutes on average. This makes the method unsuitable for regular testing on CI/CD pipeline. But, this can be
 implemented successfully on the Production/Staging branches where updates are less frequent. For example, the build can
-be triggered whenever there is a change in the Production/Staging branches of either EvalAI or evalai-cli.
+be triggered whenever there is a change in the Production/Staging branches of either EvalAI or evalai-cli. On the
+production/staging branches, the test time can be further optimized by a minute or so as of now (and maybe more in the
+future) if they are made to run in parallel as jobs (See [build stages](https://docs.travis-ci.com/user/build-stages/).
+
+Another solution can be to set up build stages for unit tests and integration tests. This makes sure that the integration
+tests are run only if the unit tests are already passing. This can save a lot of time in development.
 
 P.S.: When I tried to set up the environment locally and on Travis, Celery threw some errors which made it to
 stop working. Still looking into this issue. See: https://travis-ci.com/nikochiko/evalai-cli/jobs/267038723
 
-<h6> Testing with evalapi server </h6>
+<h4> Testing with evalapi server </h4>
 
 This is the more hassle-free approach. Direct tests can be written against the evalapi server. Users can be created for
 testing purposes and few challenges (preferably those used for tutorial purposes) can be used for realistic testing.
 
-This approach is better when
-[running Travis-CI locally](https://medium.com/google-developers/how-to-run-travisci-locally-on-docker-822fc6b2db2e).
-While running it publicly, the auth token will be exposed. A better way can be to add functionality within the EvalAI
-server to allow for such testing with mock databases as mentioned above.
+For better implementation of this approach, the credentials of the test user can be stored as encrypted variables in
+Travis-CI (see [Encrypting Environment Variables](https://docs.travis-ci.com/user/environment-variables/#defining-encrypted-variables-in-travisyml)).
+The problem that arises here is that this variable would only be accessible to the repository owner. Encrypted variables
+are also not available for testing pull requests from forks. Therefore, if other developers want to test new code, they
+will have to set up their own Travis-CI and add an auth token themselves. A better way around this can be to add
+functionality within the EvalAI server to allow for such testing with mock databases as mentioned above.
 
 For a very rough example of the code, I used auth token from a user I created for this task.
 
 See [code comparison](https://github.com/Cloud-CV/evalai-cli/pull/208) on GitHub.
 
 
-<h5> The Tests: </h5>
+<h4> The Tests: </h4>
 For the tests, it is convenient to take a testing approach as creating tests for each command one-at-a-time and covering
 all its corner cases.
 
@@ -109,7 +116,7 @@ checklist with these cases:
 
   Similarly for `evalai challenges --host`
 
-<h5> The Conclusion: </h5>
+<h4> The Conclusion: </h4>
 
 * Testing CLI with EvalAI server will require much setup, and possibly changes in the EvalAI server to enable testing.
 * Among the setup approaches, the second one (testing against evalapi) is better in the short term if the credentials
