@@ -46,11 +46,14 @@ def ignite(ctx, username, password, host):
                 message = "Reverting host URL from {0} to {1}"
                 echo(style(message.format(host, previous_host_url), bold=True))
                 ctx.invoke(set_host, set_host=previous_host_url)
+            sys.exit(1)
         else:
             echo(style("Setup successful."))
+            sys.exit(0)
     else:
         # A more detailed error message is shown by set_host command already.
         echo(style("Couldn't set host URL to {}".format(host), bold=True))
         # Using get_host_url() rather than previous_host_url so that any
         # future bugs are discovered easily.
         echo(style("Current host URL: {}".format(get_host_url()), bold=True))
+        sys.exit(1)
