@@ -20,18 +20,7 @@ class TestSetupConfig(BaseTestClass):
         self.new_token = "newertoken" * 4
         self.mock_ctx = mock.MagicMock()
         self.current_host = get_host_url()
-        self.new_host = "http://127.0.0.1:8000"
-        self.pass_ctx_patcher = patch("evalai.setup.click.pass_context", self.mock_pass_ctx_decorator)
-        self.pass_ctx_patcher.start()
-
-    def teardown(self):
-        self.mock_ctx.reset_mock()
-        self.pass_ctx_patcher.stop()
-
-    def mock_pass_ctx_decorator(self, f):
-        def new_func(*args, **kwargs):
-            return f(self.mock_ctx, *args, **kwargs)
-        return update_wrapper(new_func, f)
+        self.new_host = "http://testserver"
 
     @patch("evalai.setup.get_user_auth_token_by_login")
     @patch("evalai.setup.get_user_auth_token")

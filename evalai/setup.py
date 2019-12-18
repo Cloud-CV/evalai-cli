@@ -31,12 +31,11 @@ welcome_text = (
 
 @click.command
 @click.option('-h', '--host',
-              default=previous_host_url,
+              default=None,
               help=host_help_message)
 @click.option('-p', '--password', prompt=True, help=password_help_message)
 @click.option('-u', '--username', prompt=True, help=username_help_message)
-@click.pass_context
-def ignite(ctx, username, password, host):
+def ignite(username, password, host):
     """
     Set up basic configuration: host and auth key
     """
@@ -45,26 +44,17 @@ def ignite(ctx, username, password, host):
     """
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
-    if host != previous_host_url:
-        ctx.invoke(set_host, set_host=host)
-    if get_host_url() == host:  # check if the set_host command worked.
-        ctx.invoke(login, username=username, password=password)
-        current_auth_token = get_user_auth_token()
-        user_auth_token = get_user_auth_token_by_login(username, password)
-        if current_auth_token != user_auth_token:
-            echo(style("Login failed.", bold=True))
-            if host != previous_host_url:
-                message = "Reverting host URL from {0} to {1}"
-                echo(style(message.format(host, previous_host_url), bold=True))
-                ctx.invoke(set_host, set_host=previous_host_url)
-            sys.exit(1)
-        else:
-            echo(style("Setup successful."))
-            sys.exit(0)
-    else:
-        # A more detailed error message is shown by set_host command already.
-        echo(style("Couldn't set host URL to {}".format(host), bold=True))
-        # Using get_host_url() rather than previous_host_url so that any
-        # future bugs are discovered easily.
-        echo(style("Current host URL: {}".format(get_host_url()), bold=True))
-        sys.exit(1)
+    if host:
+        previous_host = get_host_url()  # In case reverting is required
+        validate_and_write_host_url_to_file(host)
+    try:
+        token = get_user_auth_token_by_login(username, password)
+        write_json_auth_token_to_file(token)
+        echo(style("\nLogged in successfully!"))
+    except Exception as e:
+        echo(style("\nLogin failed.", bold=True))
+        if host:
+            echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
+            validate_and_write_host_url_to_file(previous_host)
+        echo(e)
+    echo(style("\nSetup successful.", bold=True, fg="green"))
