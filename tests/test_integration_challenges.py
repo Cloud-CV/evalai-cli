@@ -13,7 +13,8 @@ class TestIntegrationChallenges:
         self.url = "{}{}"
         self.undefined_token = "0" * 40
         # valid token for test user. Random if environment variable does not exist
-        self.valid_testuser_token = os.environ.get('AUTH_TOKEN') or random.choice(string.ascii_lowercase) for _ in range(40)
+        random_token = "".join(random.choice(string.ascii_lowercase) for _ in range(40))
+        self.valid_testuser_token = os.environ.get('AUTH_TOKEN') or random_token
         self.set_token_to(self.valid_testuser_token)
 
     def set_token_to(self, token):
