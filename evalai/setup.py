@@ -14,7 +14,7 @@ from evalai.utils.auth import (
 )
 
 previous_host_url = get_host_url()
-username_help_message = "Required: our EvalAI username"
+username_help_message = "Required: Your EvalAI username"
 password_help_message = "Required: Your EvalAI password"
 host_help_message = "Optional: URL of the API host,\
                     currently set to: {}".format(previous_host_url)
@@ -41,10 +41,14 @@ def ignite(ctx, username, password, host):
         ctx.invoke(login, username=username, password=password)
         current_auth_token = get_user_auth_token()
         user_auth_token = get_user_auth_token_by_login(username, password)
-        if current_auth_token != user_auth_token and host != previous_host_url:
-            message = "Login failed. Reverting host URL from {0} to {1}"
-            echo(style(message.format(host, previous_host_url), bold=True))
-            ctx.invoke(set_host, set_host=previous_host_url)
+        if current_auth_token != user_auth_token:
+            echo(style("Login failed.", bold=True))
+            if host != previous_host_url:
+                message = "Reverting host URL from {0} to {1}"
+                echo(style(message.format(host, previous_host_url), bold=True))
+                ctx.invoke(set_host, set_host=previous_host_url)
+        else:
+            echo(style("Setup successful."))
     else:
         # A more detailed error message is shown by set_host command already.
         echo(style("Couldn't set host URL to {}".format(host), bold=True))
