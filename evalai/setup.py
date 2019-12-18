@@ -1,9 +1,7 @@
 import click
-import os
 
 from click import echo, style
 
-from .add_token import set_token
 from .login import login
 from .main import main
 from .set_host import host as set_host  # 'host' would be a confusing name
@@ -19,10 +17,11 @@ password_help_message = "Required: Your EvalAI password"
 host_help_message = "Optional: URL of the API host,\
                     currently set to: {}".format(previous_host_url)
 
+
 @click.command
 @click.option('-h', '--host',
-                default=previous_host_url,
-                help=host_help_message)
+    default=previous_host_url,
+    help=host_help_message)
 @click.option('-p', '--password', prompt=True, help=password_help_message)
 @click.option('-u', '--username', prompt=True, help=username_help_message)
 @click.pass_context
