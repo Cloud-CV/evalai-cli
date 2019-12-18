@@ -1,6 +1,6 @@
 import mock
 
-from click.runner import CliRunner
+from click.testing import CliRunner
 from functools import update_wrapper
 from mock import patch
 
@@ -28,7 +28,7 @@ class TestSetupConfig(BaseTestClass):
         self.mock_ctx.reset_mock()
         self.pass_ctx_patcher.stop()
 
-    def mock_pass_ctx_decorator(f):
+    def mock_pass_ctx_decorator(self, f):
         def new_func(*args, **kwargs):
             return f(self.mock_ctx, *args, **kwargs)
         return update_wrapper(new_func, f)
@@ -37,14 +37,14 @@ class TestSetupConfig(BaseTestClass):
     @patch("evalai.setup.get_user_auth_token")
     def test_setup_login_only_success(self, mock_get_token, mock_get_token_by_login):
         mock_get_token.return_value = self.valid_token
-        mock_get_auth_token_by_login.return_value = self.valid_token
+        mock_get_token_by_login.return_value = self.valid_token
         runner = CliRunner()
 
         with self.mock_ctx.invoke as mock_invoke:
             result = runner.invoke(
                 ignite, username=self.username, password=self.password,
             )
-            mock_get_auth_token_by_login.assert_called_with(username=self.username, password=self.password)
+            mock_get_token_by_login.assert_called_with(username=self.username, password=self.password)
             mock_invoke.assert_called_with(login, username=self.username, password=self.password)
 
         assert result.exit_code == 0
@@ -106,5 +106,5 @@ class TestSetupConfig(BaseTestClass):
         message1 = "Login failed."
         message2 = "Reverting host URL from {0} to {1}".format(self.new_host, self.current_host)
         expected = "{}\n{}\n".format(message1, message2)
-        assert sys.exit_code == 1
+        assert result.exit_code == 1
         assert expected in result.output
