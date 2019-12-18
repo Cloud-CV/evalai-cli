@@ -38,14 +38,14 @@ class TestSetupConfig(BaseTestClass):
     def test_setup_login_only_success(self, mock_get_token, mock_get_token_by_login):
         mock_get_token.return_value = self.valid_token
         mock_get_token_by_login.return_value = self.valid_token
-        runner = CliRunner()
 
-        with patch(self.mock_ctx.invoke) as mock_invoke:
-            result = runner.invoke(
-                ignite, username=self.username, password=self.password,
-            )
-            mock_get_token_by_login.assert_called_with(username=self.username, password=self.password)
-            mock_invoke.assert_called_with(login, username=self.username, password=self.password)
+        runner = CliRunner()
+        result = runner.invoke(
+            ignite, username=self.username, password=self.password,
+        )
+
+        mock_get_token_by_login.assert_called_with(username=self.username, password=self.password)
+        self.mock_ctx.invoke.assert_called_with(login, username=self.username, password=self.password)
 
         assert result.exit_code == 0
         assert result.output.endswith('Setup successful.\n')
@@ -57,14 +57,14 @@ class TestSetupConfig(BaseTestClass):
         mock_get_token.return_value = self.valid_token
         mock_get_token_by_login.return_value = self.valid_token
         mock_get_host.return_value = self.new_host
-        runner = CliRunner()
 
-        with patch(self.mock_ctx.invoke) as mock_invoke:
-            result = runner.invoke(
-                ignite, username=self.username, password=self.password, host=self.new_host,
-            )
-            mock_invoke.assert_any_call(set_host, set_host=self.new_host)
-            mock_invoke.assert_called_with(login, username=self.username, password=self.password)
+        runner = CliRunner()
+        result = runner.invoke(
+            ignite, username=self.username, password=self.password, host=self.new_host,
+        )
+
+        self.mock_ctx.invoke.assert_any_call(set_host, set_host=self.new_host)
+        self.mock_ctx.invoke.assert_called_with(login, username=self.username, password=self.password)
 
         assert result.exit_code == 0
         assert result.output.endswith('Setup successful.\n')
@@ -72,13 +72,13 @@ class TestSetupConfig(BaseTestClass):
     @patch("evalai.setup.get_host_url")
     def test_setup_when_set_host_fails(self, mock_get_host):
         mock_get_host.return_value = self.current_host
-        runner = CliRunner()
 
-        with patch(self.mock_ctx.invoke) as mock_invoke:
-            result = runner.invoke(
-                ignite, username=self.username, password=self.password, host=self.new_host,
-            )
-            mock_invoke.assert_called_once_with(set_host, set_host=self.new_host)
+        runner = CliRunner()
+        result = runner.invoke(
+            ignite, username=self.username, password=self.password, host=self.new_host,
+        )
+
+        self.mock_ctx.invoke.assert_called_once_with(set_host, set_host=self.new_host)
 
         message1 = "Couldn't set host URL to {}".format(self.new_host)
         message2 = "Current host URL: {}".format(self.current_host)
@@ -93,15 +93,15 @@ class TestSetupConfig(BaseTestClass):
         mock_get_host.return_value = self.new_host
         mock_get_token.return_value = self.valid_token
         mock_get_token_by_login.return_value = self.new_token
-        runner = CliRunner()
 
-        with patch(self.mock_ctx.invoke) as mock_invoke:
-            result = runner.invoke(
-                ignite, username=self.username, password=self.password, host=self.new_host,
-            )
-            mock_invoke.assert_any_call(set_host, set_host=self.new_host)
-            mock_invoke.assert_any_call(login, username=self.username, password=self.password)
-            mock_invoke.assert_called_with(set_host, set_host=self.current_host)
+        runner = CliRunner()
+        result = runner.invoke(
+            ignite, username=self.username, password=self.password, host=self.new_host,
+        )
+
+        self.mock_ctx.invoke.assert_any_call(set_host, set_host=self.new_host)
+        self.mock_ctx.invoke.assert_any_call(login, username=self.username, password=self.password)
+        self.mock_ctx.invoke.assert_called_with(set_host, set_host=self.current_host)
 
         message1 = "Login failed."
         message2 = "Reverting host URL from {0} to {1}".format(self.new_host, self.current_host)
