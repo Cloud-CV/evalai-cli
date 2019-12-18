@@ -20,8 +20,8 @@ host_help_message = "Optional: URL of the API host,\
 
 @click.command
 @click.option('-h', '--host',
-    default=previous_host_url,
-    help=host_help_message)
+            default=previous_host_url,
+            help=host_help_message)
 @click.option('-p', '--password', prompt=True, help=password_help_message)
 @click.option('-u', '--username', prompt=True, help=username_help_message)
 @click.pass_context
