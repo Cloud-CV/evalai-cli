@@ -1,3 +1,7 @@
+import os
+import random
+import string
+
 from click.testing import CliRunner
 
 from evalai.add_token import set_token
@@ -8,8 +12,8 @@ class TestIntegrationChallenges:
     def setup(self):
         self.url = "{}{}"
         self.undefined_token = "0" * 40
-        # valid token for test user
-        self.valid_testuser_token = "3c6dcbdb50b6edc2942f4629c0c1ca51fa80d88c"
+        # valid token for test user. Random if environment variable does not exist
+        self.valid_testuser_token = os.environ.get('AUTH_TOKEN') or random.choice(string.ascii_lowercase) for _ in range(40)
         self.set_token_to(self.valid_testuser_token)
 
     def set_token_to(self, token):
