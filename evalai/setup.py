@@ -4,7 +4,6 @@ import sys
 from click import echo, style
 
 from .login import login
-from .main import main
 from .set_host import host as set_host  # 'host' would be a confusing name
 from evalai.utils.auth import (
     get_host_url,
@@ -17,6 +16,17 @@ username_help_message = "Required: Your EvalAI username"
 password_help_message = "Required: Your EvalAI password"
 host_help_message = "Optional: URL of the API host,\
                     currently set to: {}".format(previous_host_url)
+welcome_text = (
+    """
+                #######                  ###      ###    #######
+                ##      ##   ##   #####  ###     #####     ###
+                #####    ## ##   ##  ##  ###    ##   ##    ###
+                ##        ###   ###  ##  #####  #######    ###
+                #######    #     ### ### #####  ##   ##  #######\n\n"""
+    "Welcome to the EvalAI CLI. Use evalai --help for viewing all the options\n"
+    "CHALLENGE and PHASE placeholders used throughout the CLI are"
+    " for challenge_id\nand phase_id of the challenges and phases."
+)
 
 
 @click.command
@@ -34,7 +44,7 @@ def ignite(ctx, username, password, host):
     Invoked by `evalai ignite -u USER -p PASSWORD [-h HOST]`
     """
     echo(style("Booting up EvalAI", bold=True))
-    ctx.invoke(main)
+    echo(welcome_text)
     if host != previous_host_url:
         ctx.invoke(set_host, set_host=host)
     if get_host_url() == host:  # check if the set_host command worked.
