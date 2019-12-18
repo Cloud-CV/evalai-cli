@@ -40,7 +40,7 @@ class TestSetupConfig(BaseTestClass):
         mock_get_token_by_login.return_value = self.valid_token
         runner = CliRunner()
 
-        with self.mock_ctx.invoke as mock_invoke:
+        with patch(self.mock_ctx.invoke) as mock_invoke:
             result = runner.invoke(
                 ignite, username=self.username, password=self.password,
             )
@@ -59,7 +59,7 @@ class TestSetupConfig(BaseTestClass):
         mock_get_host.return_value = self.new_host
         runner = CliRunner()
 
-        with self.mock_ctx.invoke as mock_invoke:
+        with patch(self.mock_ctx.invoke) as mock_invoke:
             result = runner.invoke(
                 ignite, username=self.username, password=self.password, host=self.new_host,
             )
@@ -74,7 +74,7 @@ class TestSetupConfig(BaseTestClass):
         mock_get_host.return_value = self.current_host
         runner = CliRunner()
 
-        with self.mock_ctx.invoke as mock_invoke:
+        with patch(self.mock_ctx.invoke) as mock_invoke:
             result = runner.invoke(
                 ignite, username=self.username, password=self.password, host=self.new_host,
             )
@@ -95,7 +95,7 @@ class TestSetupConfig(BaseTestClass):
         mock_get_token_by_login.return_value = self.new_token
         runner = CliRunner()
 
-        with self.mock_ctx.invoke as mock_invoke:
+        with patch(self.mock_ctx.invoke) as mock_invoke:
             result = runner.invoke(
                 ignite, username=self.username, password=self.password, host=self.new_host,
             )
