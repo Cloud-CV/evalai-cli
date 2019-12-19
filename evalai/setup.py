@@ -47,7 +47,7 @@ def ignite(username, password, host):
     if host:
         # In case reverting is required
         previous_host = get_host_url()
-        write_host_url_to_file(host)
+        # write_host_url_to_file(host)
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
