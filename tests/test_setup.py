@@ -16,7 +16,7 @@ class TestSetup(BaseTestClass):
         self.token = "validtoken" * 4  # length = 40
         self.token_json = json.dumps({"token": self.token})
         self.current_host = get_host_url()
-        self.new_host = "http://testserver"
+        self.new_host = "http://testserver.xyz"
         self.login_failure = "\nLogin failed."
         self.login_success = "\nLogged in successfully!"
         self.setup_success = "\nSetup successful!"
@@ -44,7 +44,7 @@ class TestSetup(BaseTestClass):
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
     def test_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
-                              mock_val_write_host_url_to_file):
+                           mock_val_write_host_url_to_file):
         mock_get_token_by_login.return_value = self.token_json
 
         runner = CliRunner()
