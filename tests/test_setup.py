@@ -32,10 +32,9 @@ class TestSetup(BaseTestClass):
         mock_get_token_by_login.return_value = self.token_json
 
         runner = CliRunner()
-        result = runner.invoke(ignite, self.login_args),
-        )
-
+        result = runner.invoke(ignite, self.login_args)
         expected = "{}\n{}\n".format(self.login_sucess, self.setup_success)
+
         mock_get_token_by_login.assert_called_with(username=self.username, password=self.password)
         mock_write_json_token_to_file.assert_called_with(self.token_json)
         assert result.exit_code == 0
