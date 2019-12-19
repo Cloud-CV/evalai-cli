@@ -113,6 +113,7 @@ def write_host_url_to_file(host_url):
             fw.write(host_url)
         except (OSError, IOError) as e:
             echo(e)
+            sys.exit(1)
         echo(
             style(
                 "{} is set as the host url.".format(host_url),
@@ -133,6 +134,7 @@ def write_json_auth_token_to_file(json_token):
             json.dump(json_token, TokenFile)
         except (OSError, IOError) as e:
             echo(e)
+            sys.exit(1)
 
 
 def write_auth_token_to_file(token):
