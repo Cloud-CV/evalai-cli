@@ -13,6 +13,7 @@ from evalai.challenges import challenge, challenges
 from evalai.set_host import host
 from evalai.utils.auth import (
     get_host_url,
+    get_user_auth_token,
     write_host_url_to_file,
     write_auth_token_to_file,
     write_json_auth_token_to_file,
@@ -253,14 +254,17 @@ class TestUtilWriteHostUrlToFile(TestCase):
         )
 
     @mock.patch("evalai.utils.auth.echo")
-    @mock.patch("evalai.utils.auth.open", mock.mock_open())
     def test_write_host_url_to_file_fail(self, mock_open, mock_echo):
+        mock_open = mock.mock_open()
+        patcher = mock.patch("evalai.utils.auth.open", mock_open)
+        patcher.start()
         mock_open.write.side_effect = OSError("Permission denied")  # For example
         with self.assertRaises(SystemExit) as cm:
             write_host_url_to_file(self.new_host)
             self.assertEqual(cm.exception.error_code, 1)
         mock_open.assert_called_with(HOST_URL_FILE_PATH, "w")
         mock_echo.assert_called_once_with("Permission denied")
+        patcher.stop()
 
 
 class TestUtilWriteTokenToFile(TestCase):
