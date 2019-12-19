@@ -246,7 +246,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
                 fw.write(self.old_host)
 
     def test_write_host_url_to_file_success(self, mock_echo):
-        write_host_url_to_file()
+        write_host_url_to_file(self.new_host)
         with open(HOST_URL_FILE_PATH, "r") as fr:
             assert fr.read() == self.new_host
         mock_echo.assert_called_with(
@@ -262,7 +262,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
         mock_open.return_value = mock_fw
         mock_fw.write.side_effect = OSError("Permission denied")  # For example
         try:
-            write_host_url_to_file()
+            write_host_url_to_file(self.new_host)
         except SystemExit as se:
             assert str(se) == '1'  # Exit code
         mock_open.assert_called_with(HOST_URL_FILE_PATH, "w")
@@ -286,13 +286,14 @@ class TestUtilWriteTokenToFile(BaseTestClass):
     def test_write_json_auth_token_to_file_success(self):
         write_json_auth_token_to_file(self.new_token_json)
         with open(AUTH_TOKEN_PATH, "r") as fr:
-            assert fr.read() == self.new_token_json
+            assert fr.read() == json.dumps(self.new_token_json)
 
     @mock.patch("evalai.utils.auth.echo")
     @mock.patch("evalai.utils.auth.json.dumps")
     def test_write_json_auth_token_to_file_fail(self, mock_json, mock_echo):
+        mock_json.side_effect = OSError("Error description")
         try:
-            mock_json.side_effect = OSError("Error description")
+            write_json_auth_token_to_file(self.new_token_json)
         except SystemExit as se:
             assert str(se) == '1'
         mock_echo.assert_called_with("Error description")
