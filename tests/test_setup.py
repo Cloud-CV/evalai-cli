@@ -44,7 +44,7 @@ class TestSetup(BaseTestClass):
     @mock.patch("evalai.setup.write_host_url_to_file")
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
-    def deltest_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
+    def test_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
                            mock_write_host_url_to_file, mock_get_host_url):
         mock_get_host_url.return_value = self.current_host
         mock_get_token_by_login.return_value = self.token_json

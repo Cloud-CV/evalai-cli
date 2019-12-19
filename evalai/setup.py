@@ -45,6 +45,16 @@ def ignite(host, username, password):
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
     if host:
+        if not validators.url(host):
+            echo(
+                style(
+                    "Sorry, please enter a valid url.\n"
+                    "Example: https://evalapi.cloudcv.org",
+                    bold=True,
+                    fg="red",
+                )
+            )
+            sys.exit(1)
         # In case reverting is required
         previous_host = get_host_url()
         try:
