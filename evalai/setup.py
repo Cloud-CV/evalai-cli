@@ -44,7 +44,7 @@ def ignite(host, username, password):
     """
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
-     if host:
+    if host:
         # In case reverting is required
         previous_host = get_host_url()
         write_host_url_to_file(host)
