@@ -9,7 +9,7 @@ from evalai.utils.auth import get_host_url
 from .base import BaseTestClass
 
 
-class TestSetup(BaseTestClass):
+class notrequiredTestSetup(BaseTestClass):
     def setup(self):
         self.username = "testuser"
         self.password = "testpass"
@@ -35,7 +35,7 @@ class TestSetup(BaseTestClass):
         result = runner.invoke(ignite, self.login_args)
         expected = "{}\n{}\n".format(self.login_sucess, self.setup_success)
 
-        mock_get_token_by_login.assert_called_with(username=self.username, password=self.password)
+        mock_get_token_by_login.assert_called_with(self.username, self.password)
         mock_write_json_token_to_file.assert_called_with(self.token_json)
         assert result.exit_code == 0
         assert result.output == expected
