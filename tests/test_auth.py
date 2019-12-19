@@ -239,15 +239,12 @@ class TestUtilWriteHostUrlToFile(TestCase):
         self.new_host = 'http://testserver.xyz'
 
     def tearDown(self):
-        if os.path.exists(HOST_URL_FILE_PATH):
-            with open(HOST_URL_FILE_PATH, "w") as fw:
-                fw.write(self.old_host)
+        write_host_url_to_file(self.old_host)
 
     @mock.patch("evalai.utils.auth.echo")
     def test_write_host_url_to_file_success(self, mock_echo):
         write_host_url_to_file(self.new_host)
-        with open(HOST_URL_FILE_PATH, "r") as fr:
-            assert fr.read() == self.new_host
+        self.assertEqual(get_host_url(), self.new_host)
         mock_echo.assert_called_with(
             click.style(
                 "{} is set as the host url.".format(self.new_host),
@@ -256,16 +253,14 @@ class TestUtilWriteHostUrlToFile(TestCase):
         )
 
     @mock.patch("evalai.utils.auth.echo")
-    def test_write_host_url_to_file_fail(self, mock_echo):
-        patcher = mock.patch("evalai.utils.auth.open", mock.mock_open())
-        mock_open = patcher.start()
+    @mock.patch("evalai.utils.auth.open", mock.mock_open())
+    def test_write_host_url_to_file_fail(self, mock_open, mock_echo):
         mock_open.write.side_effect = OSError("Permission denied")  # For example
         with self.assertRaises(SystemExit) as cm:
             write_host_url_to_file(self.new_host)
             self.assertEqual(cm.exception.error_code, 1)
         mock_open.assert_called_with(HOST_URL_FILE_PATH, "w")
         mock_echo.assert_called_once_with("Permission denied")
-        patcher.stop()
 
 
 class TestUtilWriteTokenToFile(TestCase):
@@ -278,14 +273,11 @@ class TestUtilWriteTokenToFile(TestCase):
                 self.old_token = fr.read()
 
     def tearDown(self):
-        if os.path.exists(AUTH_TOKEN_DIR):
-            with open(AUTH_TOKEN_PATH, "w") as fw:
-                fw.write(self.old_token)
+        write_host_url_to_file(self.old_token)
 
     def test_write_json_auth_token_to_file_success(self):
         write_json_auth_token_to_file(self.new_token_json)
-        with open(AUTH_TOKEN_PATH, "r") as fr:
-            assert fr.read() == json.dumps(self.new_token_json)
+        self.assertEqual(get_user_auth_token(), self.new_token)
 
     @mock.patch("evalai.utils.auth.echo")
     @mock.patch("evalai.utils.auth.json.dumps")
