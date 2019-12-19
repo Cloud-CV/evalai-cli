@@ -61,7 +61,7 @@ class TestSetup(BaseTestClass):
 
     @mock.patch("evalai.setup.write_host_url_to_file")
     def test_setup_when_set_host_fails(self, mock_write_host_url_to_file):
-        mock_write_host_url_to_file.side_effect = sys.exit
+        mock_write_host_url_to_file.side_effect = lambda x: sys.exit(1)
 
         runner = CliRunner()
         expected = self.set_host_failure.format(self.new_host, self.current_host)

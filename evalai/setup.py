@@ -47,7 +47,18 @@ def ignite(host, username, password):
     if host:
         # In case reverting is required
         previous_host = get_host_url()
-        write_host_url_to_file(host)
+        try:
+            write_host_url_to_file(host)
+        except SystemExit as e:
+            echo(
+                style(
+                    "Couldn't set host URL to {}\n\
+                    Current host URL: {}".format(host, previous_host),
+                    bold=True,
+                    fg="red",
+                )
+            )
+            sys.exit(1)
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
