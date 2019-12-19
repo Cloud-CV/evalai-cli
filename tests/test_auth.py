@@ -237,7 +237,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
         self.old_host = ''
         self.new_host = 'http://testserver.xyz'
         if os.path.exists(AUTH_TOKEN_DIR):
-            with open(HOSt_URL_FILE_PATh, "r") as fr:
+            with open(HOST_URL_FILE_PATH, "r") as fr:
                 self.old_host = fr.read()
 
     def teardown(self):
@@ -265,14 +265,14 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
             write_host_url_to_file()
         except SystemExit as se:
             assert str(se) == '1'  # Exit code
-        mock_open.assert_called_with(HOST_URL_FILE_PATh, "w")
+        mock_open.assert_called_with(HOST_URL_FILE_PATH, "w")
         mock_echo.assert_called_once_with("Permission denied")
 
 
 class TestUtilWriteTokenToFile(BaseTestClass):
     def setup(self):
         self.new_token = "tokenisnew" * 4  # Length = 40
-        self.new_token_json = json.dumps({"token": self.new_token})
+        self.new_token_json = json.dumps("{\"token\": \"{token}\"}".format(token=self.new_token)))
         self.old_token = ''
         if os.path.exists(AUTH_TOKEN_PATH):
             with open(AUTH_TOKEN_PATH, "r") as fr:
@@ -285,7 +285,7 @@ class TestUtilWriteTokenToFile(BaseTestClass):
 
     def test_write_json_auth_token_to_file_success(self):
         write_json_auth_token_to_file(self.new_token_json)
-        with open(AUTh_TOKEN_PATH, "r" ) as fr:
+        with open(AUTH_TOKEN_PATH, "r") as fr:
             assert fr.read() == self.new_token_json
 
     @mock.patch("evalai.utils.auth.echo")
