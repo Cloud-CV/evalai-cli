@@ -18,6 +18,8 @@ class TestSetup(BaseTestClass):
         self.current_host = get_host_url()
         self.new_host = "http://testserver"
         self.login_failure = "\nLogin failed."
+        self.login_success = "\nLogged in successfully!"
+        self.setup_success = "\nSetup successful!"
         self.revert_host = "Reverting host URL from {} to {}"
         self.set_host_failure = "Couldn't set host URL to {}\nCurrent host URL: {}"
         self.login_args = ["--username", self.username, "--password", self.password]
@@ -31,9 +33,7 @@ class TestSetup(BaseTestClass):
 
         runner = CliRunner()
         result = runner.invoke(ignite, self.login_args)
-        login_success = "\nLogged in successfully!"
-        setup_success = "\nSetup successful!"
-        expected = "{}\n{}\n".format(login_sucess, setup_success)
+        expected = "{}\n{}\n".format(self.login_success, self.setup_success)
 
         mock_get_token_by_login.assert_called_with(self.username, self.password)
         mock_write_json_token_to_file.assert_called_with(self.token_json)
@@ -50,7 +50,7 @@ class TestSetup(BaseTestClass):
         runner = CliRunner()
         login_success = "\nLogged in successfully!"
         setup_success = "\nSetup successful!"
-        expected = "{}\n{}\n".format(login_success, setup_success)
+        expected = "{}\n{}\n".format(self.login_success, self.setup_success)
         result = runner.invoke(ignite, self.login_args_with_new_host)
 
         mock_val_write_host_url_to_file.assert_called_with(self.new_host)
