@@ -25,3 +25,5 @@ EVALAI_HOST_URLS = [
     "https://evalai-staging.cloudcv.org",
     "http://localhost:8888",
 ]
+
+STARTER_URL = "https://github.com/Cloud-CV/EvalAI-Starters.git"
