@@ -52,8 +52,7 @@ def ignite(host, username, password):
         except SystemExit as e:
             echo(
                 style(
-                    "Couldn't set host URL to {}\n\
-                    Current host URL: {}".format(host, previous_host),
+                    "Couldn't set host URL to {}\nCurrent host URL: {}".format(host, previous_host),
                     bold=True,
                     fg="red",
                 )
@@ -64,9 +63,10 @@ def ignite(host, username, password):
         write_json_auth_token_to_file(token)
         echo(style("\nLogged in successfully!"))
     except Exception as e:
-        echo(style("\nLogin failed.", bold=True))
+        echo(style("\nLogin failed.", bold=True, fg="red"))
         if host:
             echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
             write_host_url_to_file(previous_host)  # Validation not required while restoring
         echo(e)
+        sys.exit(1)
     echo(style("\nSetup successful!", bold=True, fg="green"))
