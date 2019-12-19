@@ -102,33 +102,24 @@ def get_host_url():
                 echo(e)
 
 
-def validate_and_write_host_url_to_file(host_url):
+def write_host_url_to_file(host_url):
     """
-    Validates given URL and then writes it to HOST_URL_FILE_PATH.
+    Writes give URL to HOST_URL_FILE_PATH.
+    Warning: Doesn't validate the URL.
     """
-    if validators.url(host_url):
-        if not os.path.exists(AUTH_TOKEN_DIR):
-            os.makedirs(AUTH_TOKEN_DIR)
-        with open(HOST_URL_FILE_PATH, "w+") as fw:
-            try:
-                fw.write(host_url)
-            except (OSError, IOError) as e:
-                echo(e)
-            echo(
-                style(
-                    "{} is set as the host url.".format(host_url),
-                    bold=True,
-                )
-            )
-    else:
+    if not os.path.exists(AUTH_TOKEN_DIR):
+        os.makedirs(AUTH_TOKEN_DIR)
+    with open(HOST_URL_FILE_PATH, "w") as fw:
+        try:
+            fw.write(host_url)
+        except (OSError, IOError) as e:
+            echo(e)
         echo(
             style(
-                "Sorry, please enter a valid url.\n"
-                "Example: https://evalapi.cloudcv.org",
+                "{} is set as the host url.".format(host_url),
                 bold=True,
             )
         )
-        sys.exit(0)
 
 
 def write_json_auth_token_to_file(json_token):

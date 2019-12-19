@@ -1,4 +1,5 @@
 import click
+import validators
 
 from click import echo, style
 
@@ -45,7 +46,16 @@ def ignite(username, password, host):
     if host:
         # In case reverting is required
         previous_host = get_host_url()
-        validate_and_write_host_url_to_file(host)
+        if validators.url(host):
+            write_host_url_to_file(host)
+        else:
+            echo(
+                style(
+                    "Sorry, please enter a valid url.\n"
+                    "Example: https://evalapi.cloudcv.org",
+                    bold=True,
+                )
+            )
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
