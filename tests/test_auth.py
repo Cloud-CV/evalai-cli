@@ -1,4 +1,3 @@
-import click
 import json
 import os
 import responses
@@ -9,15 +8,11 @@ from termcolor import colored
 
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
-from evalai.utils.auth import (
-    get_host_url,
-)
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
     API_HOST_URL,
     AUTH_TOKEN_DIR,
     AUTH_TOKEN_FILE_NAME,
-    AUTH_TOKEN_PATH,
     HOST_URL_FILE_PATH,
 )
 from evalai.utils.common import convert_UTC_date_to_local
