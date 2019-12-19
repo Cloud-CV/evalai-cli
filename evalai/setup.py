@@ -1,4 +1,5 @@
 import click
+import sys
 import validators
 
 from click import echo, style
@@ -6,7 +7,7 @@ from click import echo, style
 from evalai.utils.auth import (
     get_host_url,
     get_user_auth_token_by_login,
-    validate_and_write_host_url_to_file,
+    write_host_url_to_file,
     write_json_auth_token_to_file,
 )
 
@@ -56,6 +57,7 @@ def ignite(username, password, host):
                     bold=True,
                 )
             )
+            sys.exit(1)
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)

@@ -2,7 +2,6 @@ import os
 import json
 import sys
 import requests
-import validators
 
 from click import echo, style
 from evalai.utils.config import (
