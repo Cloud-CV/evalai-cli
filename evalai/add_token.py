@@ -1,5 +1,4 @@
 import click
-
 import validators
 
 from click import echo, style
