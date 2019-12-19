@@ -1,13 +1,11 @@
-import os
-
 import click
-import json
+
 import validators
 
 from click import echo, style
 
 from evalai.utils.auth import write_auth_token_to_file
-from evalai.utils.config import AUTH_TOKEN_DIR, AUTH_TOKEN_PATH, LEN_OF_TOKEN
+from evalai.utils.config import LEN_OF_TOKEN
 
 
 @click.group(invoke_without_command=True)

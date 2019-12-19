@@ -3,8 +3,6 @@ import sys
 
 from click import echo, style
 
-from .login import login
-from .set_host import host as set_host  # 'host' would be a confusing name
 from evalai.utils.auth import (
     get_host_url,
     get_user_auth_token_by_login,

@@ -1,15 +1,11 @@
 import json
 import mock
-import responses
 import sys
 
 from click.testing import CliRunner
 
-from evalai.login import login
-from evalai.set_host import host as set_host
 from evalai.setup import ignite
-from evalai.utils.config import API_HOST_URL
-from evalai.utils.urls import URLS
+from evalai.utils.auth import get_host_url
 from .base import BaseTestClass
 
 
@@ -76,7 +72,7 @@ class TestSetup(BaseTestClass):
         assert result.exit_code == 1
         assert result.output == expected
 
-    @patch("evalai.setup.get_user_auth_token_by_login")
+    @mock.patch("evalai.setup.get_user_auth_token_by_login")
     def test_setup_when_login_fails(self, mock_get_token_by_login):
         mock_get_token_by_login.side_effect = Exception
 

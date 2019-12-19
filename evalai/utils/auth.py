@@ -101,6 +101,7 @@ def get_host_url():
             except (OSError, IOError) as e:
                 echo(e)
 
+
 def validate_and_write_host_url_to_file(host_url):
     """
     Validates given URL and then writes it to HOST_URL_FILE_PATH.
@@ -110,7 +111,7 @@ def validate_and_write_host_url_to_file(host_url):
             os.makedirs(AUTH_TOKEN_DIR)
         with open(HOST_URL_FILE_PATH, "w+") as fw:
             try:
-                fw.write(url)
+                fw.write(host_url)
             except (OSError, IOError) as e:
                 echo(e)
             echo(
@@ -129,6 +130,7 @@ def validate_and_write_host_url_to_file(host_url):
         )
         sys.exit()
 
+
 def write_json_auth_token_to_file(json_token):
     """
     Takes token in JSON format and writes it to AUTH_TOKEN_DIR
@@ -138,7 +140,7 @@ def write_json_auth_token_to_file(json_token):
         os.makedirs(AUTH_TOKEN_DIR)
     with open(str(AUTH_TOKEN_PATH), "w+") as TokenFile:
         try:
-            json.dump(token, TokenFile)
+            json.dump(json_token, TokenFile)
         except (OSError, IOError) as e:
             echo(e)
 
