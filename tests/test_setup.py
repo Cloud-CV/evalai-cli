@@ -45,7 +45,7 @@ class TestSetup(BaseTestClass):
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
     def test_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
-                           mock_val_write_host_url_to_file, mock_get_host_url):
+                           mock_write_host_url_to_file, mock_get_host_url):
         mock_get_host_url.return_value = self.current_host
         mock_get_token_by_login.return_value = self.token_json
 
@@ -53,21 +53,21 @@ class TestSetup(BaseTestClass):
         expected = "{}\n{}\n".format(self.login_success, self.setup_success)
         result = runner.invoke(ignite, self.login_args_with_new_host)
 
-        mock_val_write_host_url_to_file.assert_called_with(self.new_host)
+        mock_write_host_url_to_file.assert_called_with(self.new_host)
         mock_get_token_by_login.assert_called_with(self.username, self.password)
         mock_write_json_token_to_file.assert_called_with(self.token_json)
         assert result.exit_code == 0
         assert expected in result.output
 
-    @mock.patch("evalai.setup.validate_and_write_host_url_to_file")
-    def test_setup_when_set_host_fails(self, mock_val_write_host_url_to_file):
-        mock_val_write_host_url_to_file.side_effect = sys.exit
+    @mock.patch("evalai.setup.write_host_url_to_file")
+    def test_setup_when_set_host_fails(self, mock_write_host_url_to_file):
+        mock_write_host_url_to_file.side_effect = sys.exit
 
         runner = CliRunner()
         expected = self.set_host_failure.format(self.new_host, self.current_host)
         result = runner.invoke(ignite, self.login_args_with_new_host)
 
-        mock_val_write_host_url_to_file.assert_called_with(self.new_host)
+        mock_write_host_url_to_file.assert_called_with(self.new_host)
         assert result.exit_code == 1
         assert expected in result.output
 

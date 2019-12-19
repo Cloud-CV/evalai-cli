@@ -66,6 +66,6 @@ def ignite(username, password, host):
         echo(style("\nLogin failed.", bold=True))
         if host:
             echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
-            validate_and_write_host_url_to_file(previous_host)
+            write_host_url_to_file(previous_host)  # Validation not required while restoring
         echo(e)
     echo(style("\nSetup successful!", bold=True, fg="green"))
