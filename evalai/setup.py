@@ -1,5 +1,4 @@
 import click
-import sys
 
 from click import echo, style
 
@@ -44,7 +43,8 @@ def ignite(username, password, host):
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
     if host:
-        previous_host = get_host_url()  # In case reverting is required
+        # In case reverting is required
+        previous_host = get_host_url()
         validate_and_write_host_url_to_file(host)
     try:
         token = get_user_auth_token_by_login(username, password)
