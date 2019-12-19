@@ -236,7 +236,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
     def setup(self):
         self.old_host = ''
         self.new_host = 'http://testserver.xyz'
-        if os.path.exists(AUTH_TOKEN_DIR):
+        if os.path.exists(AUTH_TOKEN_PATH):
             with open(HOST_URL_FILE_PATH, "r") as fr:
                 self.old_host = fr.read()
 
@@ -272,7 +272,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
 class TestUtilWriteTokenToFile(BaseTestClass):
     def setup(self):
         self.new_token = "tokenisnew" * 4  # Length = 40
-        self.new_token_json = json.dumps("{\"token\": \"{token}\"}".format(token=self.new_token))
+        self.new_token_json = json.dumps("{\"token\": \"%s\"}" % self.new_token
         self.old_token = ''
         if os.path.exists(AUTH_TOKEN_PATH):
             with open(AUTH_TOKEN_PATH, "r") as fr:
