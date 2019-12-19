@@ -7,8 +7,9 @@ from .login import login
 from .set_host import host as set_host  # 'host' would be a confusing name
 from evalai.utils.auth import (
     get_host_url,
-    get_user_auth_token,
-    get_user_auth_token_by_login
+    get_user_auth_token_by_login,
+    validate_and_write_host_url_to_file,
+    write_json_auth_token_to_file,
 )
 
 previous_host_url = get_host_url()
@@ -29,7 +30,7 @@ welcome_text = (
 )
 
 
-@click.command
+@click.group(invoke_without_command=True)
 @click.option('-h', '--host',
               default=None,
               help=host_help_message)
@@ -40,13 +41,24 @@ def ignite(username, password, host):
     Set up basic configuration: host and auth key
     """
     """
-    Invoked by `evalai ignite -u USER -p PASSWORD [-h HOST]`
+    Invoked by `evalai ignite` or `evalai ignite -u USER -p PASSWORD [-h HOST]`
     """
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
     if host:
         previous_host = get_host_url()  # In case reverting is required
-        validate_and_write_host_url_to_file(host)
+        try:
+            validate_and_write_host_url_to_file(host)
+        except SystemExit:
+            echo(
+                style(
+                    "Couldn't set host URL to {}\n\
+                    Current host URL: {}".format(host, previous_host),
+                    bold=True,
+                    fg="red",
+                )
+            )
+            sys.exit(1)
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
@@ -57,4 +69,4 @@ def ignite(username, password, host):
             echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
             validate_and_write_host_url_to_file(previous_host)
         echo(e)
-    echo(style("\nSetup successful.", bold=True, fg="green"))
+    echo(style("\nSetup successful!", bold=True, fg="green"))

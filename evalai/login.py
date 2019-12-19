@@ -3,7 +3,7 @@ import click
 import json
 
 from click import echo, style
-from evalai.utils.auth import get_user_auth_token_by_login, write_json_auth_token_to_token_file
+from evalai.utils.auth import get_user_auth_token_by_login, write_json_auth_token_to_file
 from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
 
 

@@ -127,6 +127,7 @@ def validate_and_write_host_url_to_file(host_url):
                 bold=True,
             )
         )
+        sys.exit()
 
 def write_json_auth_token_to_file(json_token):
     """
