@@ -14,7 +14,7 @@ class TestSetup(BaseTestClass):
         self.username = "testuser"
         self.password = "testpass"
         self.token = "validtoken" * 4  # length = 40
-        self.token_json = json.dumps({"token": self.valid_token})
+        self.token_json = json.dumps({"token": self.token})
         self.current_host = get_host_url()
         self.new_host = "http://testserver"
         self.login_failure = "\nLogin failed."
