@@ -3,7 +3,7 @@ import os
 
 from click import echo, style
 
-from evalai.utils.config import get_host_url, validate_and_write_host_url_to_file
+from evalai.utils.auth import get_host_url, validate_and_write_host_url_to_file
 from evalai.utils.config import HOST_URL_FILE_PATH
 
 
