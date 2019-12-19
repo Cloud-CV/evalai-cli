@@ -22,9 +22,9 @@ class TestSetup(BaseTestClass):
         self.setup_success = "\nSetup successful!"
         self.revert_host = "Reverting host URL from {} to {}"
         self.set_host_failure = "Couldn't set host URL to {}\nCurrent host URL: {}"
-        self.login_args = ["-u", self.username, "-p", self.password]
-        self.login_args_with_new_host = self.login_args.extend(["-h", self.new_host])
-        self.login_args_with_current_host = self.login_args.extend(["-h", self.current_host])
+        self.login_args = ["--username", self.username, "--password", self.password]
+        self.login_args_with_new_host = self.login_args.extend(["--host", self.new_host])
+        self.login_args_with_current_host = self.login_args.extend(["--host", self.current_host])
 
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
