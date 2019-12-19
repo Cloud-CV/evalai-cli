@@ -7,10 +7,12 @@ import responses
 from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from termcolor import colored
+from unittest import TestCase
 
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
 from evalai.utils.auth import (
+    get_host_url,
     write_host_url_to_file,
     write_auth_token_to_file,
     write_json_auth_token_to_file,
@@ -232,13 +234,10 @@ class TestSetAndLoadHostURL(BaseTestClass):
 
 
 @mock.patch("evalai.utils.auth.echo")
-class TestUtilWriteHostUrlToFile(BaseTestClass):
+class TestUtilWriteHostUrlToFile(TestCase):
     def setup(self):
-        self.old_host = ''
+        self.old_host = get_host_url()
         self.new_host = 'http://testserver.xyz'
-        if os.path.exists(HOST_URL_FILE_PATH):
-            with open(HOST_URL_FILE_PATH, "r") as fr:
-                self.old_host = fr.read()
 
     def teardown(self):
         if os.path.exists(HOST_URL_FILE_PATH):
@@ -256,20 +255,17 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
             )
         )
 
-    @mock.patch("evalai.utils.auth.__builtins__.open")
+    @mock.patch("evalai.utils.auth.open", mock.mock_open())
     def test_write_host_url_to_file_fail(self, mock_open, mock_echo):
-        mock_fw = mock.MagicMock()
-        mock_open.return_value = mock_fw
-        mock_fw.write.side_effect = OSError("Permission denied")  # For example
-        try:
+        mock_open.write.side_effect = OSError("Permission denied")  # For example
+        with self.assertRaises(SystemExit) as cm:
             write_host_url_to_file(self.new_host)
-        except SystemExit as se:
-            assert str(se) == '1'  # Exit code
+            assert str(cm.exception) == '1'  # Exit code
         mock_open.assert_called_with(HOST_URL_FILE_PATH, "w")
         mock_echo.assert_called_once_with("Permission denied")
 
 
-class TestUtilWriteTokenToFile(BaseTestClass):
+class TestUtilWriteTokenToFile(TestCase):
     def setup(self):
         self.new_token = "tokenisnew" * 4  # Length = 40
         self.new_token_json = json.dumps({"token": self.new_token})
@@ -292,13 +288,12 @@ class TestUtilWriteTokenToFile(BaseTestClass):
     @mock.patch("evalai.utils.auth.json.dumps")
     def test_write_json_auth_token_to_file_fail(self, mock_json, mock_echo):
         mock_json.side_effect = OSError("Error description")
-        try:
+        with self.assertRaises(SystemExit) as cm:
             write_json_auth_token_to_file(self.new_token_json)
-        except SystemExit as se:
-            assert str(se) == '1'
+            assert str(cm.exception) == '1'  # Exit code
         mock_echo.assert_called_with("Error description")
 
     def test_write_auth_token_to_file_success(self):
         write_auth_token_to_file(self.new_token)
         with open(AUTH_TOKEN_PATH, "r") as fr:
-            assert fr.read() == self.new_token_json
+            assert fr.read() == json.dumps(self.new_token_json)
