@@ -30,12 +30,12 @@ welcome_text = (
 
 
 @click.group(invoke_without_command=True)
-@click.option('-h', '--host',
-              default=None,
-              help=host_help_message)
-@click.option('-p', '--password', prompt=True, help=password_help_message)
-@click.option('-u', '--username', prompt=True, help=username_help_message)
-def ignite(username, password, host):
+@click.option('-p', '--password', type=str, prompt=True,
+              hide_input=True, help=password_help_message)
+@click.option('-u', '--username', type=str, prompt=True,
+              hide_input=False, help=username_help_message)
+@click.option('-h', '--host', type=str, default=None, help=host_help_message)
+def ignite(host, username, password):
     """
     Set up basic configuration: host and auth key
     """
@@ -44,10 +44,10 @@ def ignite(username, password, host):
     """
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
-    # if host:
+     if host:
         # In case reverting is required
-        # previous_host = get_host_url()
-        # write_host_url_to_file(host)
+        previous_host = get_host_url()
+        write_host_url_to_file(host)
     try:
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
