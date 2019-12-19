@@ -9,7 +9,7 @@ from evalai.utils.auth import get_host_url
 from .base import BaseTestClass
 
 
-class notrequiredTestSetup(BaseTestClass):
+class TestSetup(BaseTestClass):
     def setup(self):
         self.username = "testuser"
         self.password = "testpass"
