@@ -43,13 +43,11 @@ class TestSetup(BaseTestClass):
     @mock.patch("evalai.setup.validate_and_write_host_url_to_file")
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
-    def deltest_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
+    def test_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
                               mock_val_write_host_url_to_file):
         mock_get_token_by_login.return_value = self.token_json
 
         runner = CliRunner()
-        login_success = "\nLogged in successfully!"
-        setup_success = "\nSetup successful!"
         expected = "{}\n{}\n".format(self.login_success, self.setup_success)
         result = runner.invoke(ignite, self.login_args_with_new_host)
 
