@@ -44,7 +44,7 @@ class TestSetup(BaseTestClass):
     @mock.patch("evalai.setup.validate_and_write_host_url_to_file")
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
-    def test_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
+    def deltest_setup_success(self, mock_get_token_by_login, mock_write_json_token_to_file,
                            mock_val_write_host_url_to_file, mock_get_host_url):
         mock_get_host_url.return_value = self.current_host
         mock_get_token_by_login.return_value = self.token_json
@@ -60,7 +60,7 @@ class TestSetup(BaseTestClass):
         assert expected in result.output
 
     @mock.patch("evalai.setup.validate_and_write_host_url_to_file")
-    def deltest_setup_when_set_host_fails(self, mock_val_write_host_url_to_file):
+    def test_setup_when_set_host_fails(self, mock_val_write_host_url_to_file):
         mock_val_write_host_url_to_file.side_effect = sys.exit
 
         runner = CliRunner()
