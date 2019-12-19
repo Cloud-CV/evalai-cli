@@ -272,7 +272,7 @@ class TestUtilWriteHostUrlToFile(BaseTestClass):
 class TestUtilWriteTokenToFile(BaseTestClass):
     def setup(self):
         self.new_token = "tokenisnew" * 4  # Length = 40
-        self.new_token_json = json.dumps("{\"token\": \"%s\"}" % self.new_token
+        self.new_token_json = json.dumps("{\"token\": \"%s\"}" % self.new_token)
         self.old_token = ''
         if os.path.exists(AUTH_TOKEN_PATH):
             with open(AUTH_TOKEN_PATH, "r") as fr:
