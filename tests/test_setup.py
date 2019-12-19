@@ -51,7 +51,7 @@ class TestSetup(BaseTestClass):
         expected = "{}\n{}\n".format(self.login_success, self.setup_success)
         result = runner.invoke(ignite, self.login_args_with_new_host)
 
-        # mock_val_write_host_url_to_file.assert_called_with(self.new_host)
+        ## mock_val_write_host_url_to_file.assert_called_with(self.new_host)
         mock_get_token_by_login.assert_called_with(self.username, self.password)
         mock_write_json_token_to_file.assert_called_with(self.token_json)
         assert result.exit_code == 0
