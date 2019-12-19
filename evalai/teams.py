@@ -24,10 +24,8 @@ def teams(ctx, host, participant):
         if host == participant:
             echo(
                 style("Sorry, wrong flag. Please pass either one of the flags "
-                      "{} {} {}.", bold=True, fg="red").format(
-                    style("--participant", bold=True, fg="yellow"),
-                    style("or", bold=True, fg="red"),
-                    style("--host", bold=True, fg="yellow"),
+                      "{}.", bold=True, fg="red").format(
+                    style("--participant or --host", bold=True, fg="yellow"),
                 )
             )
             sys.exit(1)
@@ -48,10 +46,8 @@ def create(team):
     if team not in ("host", "participant"):
         echo(
             style("Sorry, wrong argument. Please choose either "
-                  "{} {} {}.", bold=True, fg="red").format(
-                style("participant", bold=True, fg="yellow"),
-                style("or", bold=True, fg="red"),
-                style("host", bold=True, fg="yellow"),
+                  "{}.", bold=True, fg="red").format(
+                style("participant or host", bold=True, fg="yellow"),
             )
         )
         sys.exit(1)

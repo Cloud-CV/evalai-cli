@@ -249,16 +249,14 @@ def download_file(url):
                     "\nYour file {} is successfully downloaded.\n".format(
                         file_name
                     ),
-                    bold=True,
-                    fg="green",
+                    bold=True, fg="green",
                 )
             )
     else:
         echo(
             style(
                 "\nThe url doesn't match the EvalAI url. Please check the url.\n",
-                bold=True,
-                fg="red",
+                bold=True, fg="red",
             )
         )
         sys.exit(1)
