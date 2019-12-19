@@ -23,7 +23,7 @@ class TestSetup(BaseTestClass):
         self.revert_host = "Reverting host URL from {} to {}"
         self.set_host_failure = "Couldn't set host URL to {}\nCurrent host URL: {}"
         self.login_args = ["--username", self.username, "--password", self.password]
-        self.login_args_with_new_host = self.login_args.extend(["--host", self.new_host])
+        self.login_args_with_new_host = (["--username", self.username, "--password", self.password, "--host", self.new_host])
         self.login_args_with_current_host = self.login_args.extend(["--host", self.current_host])
 
     @mock.patch("evalai.setup.write_json_auth_token_to_file")

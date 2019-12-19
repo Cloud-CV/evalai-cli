@@ -34,7 +34,7 @@ welcome_text = (
               hide_input=True, help=password_help_message)
 @click.option('-u', '--username', type=str, prompt=True,
               hide_input=False, help=username_help_message)
-@click.option('-h', '--host', type=str, default=None, help=host_help_message)
+@click.option('-h', '--host', type=str, default='', help=host_help_message)
 def ignite(host, username, password):
     """
     Set up basic configuration: host and auth key
@@ -54,8 +54,8 @@ def ignite(host, username, password):
         echo(style("\nLogged in successfully!"))
     except Exception as e:
         echo(style("\nLogin failed.", bold=True))
-        # if host:
-        #     echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
-        #     write_host_url_to_file(previous_host)  # Validation not required while restoring
+        if host:
+            echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
+            write_host_url_to_file(previous_host)  # Validation not required while restoring
         echo(e)
     echo(style("\nSetup successful!", bold=True, fg="green"))
