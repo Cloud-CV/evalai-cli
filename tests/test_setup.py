@@ -21,7 +21,7 @@ class TestSetup(BaseTestClass):
         self.login_success = "\nLogged in successfully!"
         self.setup_success = "\nSetup successful!"
         self.revert_host = "Reverting host URL from {} to {}"
-        self.set_host_failure = "Couldn't set host URL to {}\nCurrent host URL: {}\n"
+        self.set_host_failure = "Couldn't set host URL to {}\nCurrent host URL: {}"
 
     @mock.patch("evalai.setup.write_json_auth_token_to_file")
     @mock.patch("evalai.setup.get_user_auth_token_by_login")
