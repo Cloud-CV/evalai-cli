@@ -1,15 +1,46 @@
 import mock
+import os
+import logger
+import shutil
 
 from io import StringIO
 from unittest import TestCase
 
 from evalai.utils.auth import write_host_url_to_file
-from evalai.utils.config import HOST_URL_FILE_PATH
 
 
-class TestWriteHostUrlToFile(TestCase):
+class TestAuthUtilsBaseClass(TestCase):
     def setUp(self):
+        self.base_temp_dir = "temp-dir/"
+        if not os.path.exists(self.temp_dir):
+            os.makedirs(self.temp_dir)
+
+        # Important to mock out the config files
+        # as any unintended changes in these may
+        # cause other tests to fail.
+        self.fake_token_dir = os.path.join(self.temp_dir, "evalai")
+        self.token_dir_patcher = mock.patch("evalai.utils.auth.AUTH_TOKEN_DIR", self.fake_token_dir)
+        self.token_dir_patcher.start()
+
+    def tearDown(self):
+        self.token_dir_pather.stop()
+        try:
+            shutil.rmtree(self.base_temp_dir)
+        except:
+            logger.critical("Unable to delete temporary directory: {}".format(self.base_temp_dir))
+
+
+class TestWriteHostUrlToFile(TestAuthUtilsBaseClass):
+    def setUp(self):
+        super(TestWriteHostUrlToFile, TestAuthUtilsBaseClass).setUp()
         self.new_host = "http://testserver.abc"
+        self.temp_host_path = os.path.join(self.fake_token_dir, "host_url")
+        self.host_path_patcher = mock.patch("evalai.utils.auth.HOST_URL_FILE_PATH", self.temp_host_path)
+        self.host_path_patcher.start()
+
+    def tearDown(self):
+        super(TestWriteHostUrlToFile, TestAuthUtilsBaseClass).tearDown()
+        self.host_path_patcher.stop()
 
     def test_write_host_url_to_file_success(self):
         fake_open = mock.mock_open()
