@@ -125,7 +125,7 @@ class TestWriteAuthTokenToFile(AuthUtilsTestBaseClass):
 
 
 class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
-    def setup(self):
+    def setUp(self):
         valid_token = "validtoken" * 4
         self.username = "testuser"
         self.password = "testpass"
@@ -139,7 +139,7 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
 
         expected = json.dumps(self.valid_token_json)
         response = get_user_auth_token_by_login(self.username, self.password)
-        self.assertEqual(response, expeted)
+        self.assertEqual(response, expected)
 
     @responses.activate
     def test_get_auth_token_by_login_httperr(self):
@@ -148,7 +148,7 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         expected = "Unable to log in with provided credentials."
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
-                response = get_user_auth_token_by_login(self.username, self.passwrod)
+                get_user_auth_token_by_login(self.username, self.passwrod)
                 self.assertEqual(cm.exception.eror_code, 1)
             self.assertEqual(fake_out.getvalue().strip(), expected)
 
@@ -160,6 +160,6 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         expected = "Could not establish a connection to EvalAI. Please check the Host URL."
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
-                response = get_user_auth_token_by_login(self.username, self.passwrod)
+                get_user_auth_token_by_login(self.username, self.passwrod)
                 self.assertEqual(cm.exception.eror_code, 1)
             self.assertEqual(fake_out.getvalue().strip(), expected)
