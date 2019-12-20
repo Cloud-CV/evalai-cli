@@ -12,10 +12,13 @@ from unittest import mock
 from unittest import TestCase
 
 from evalai.utils.auth import (
+    get_user_auth_token_by_login,
     write_host_url_to_file,
     write_json_auth_token_to_file,
     write_auth_token_to_file,
 )
+from evalai.utils.config import API_HOST_URL
+from evalai.utils.urls import URLS
 
 random.seed(42)
 
@@ -121,7 +124,7 @@ class TestWriteAuthTokenToFile(AuthUtilsTestBaseClass):
             self.assertEqual(tokenfile.read(), self.expected)
 
 
-class TestGetAuthTokenByLogin:
+class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
     def setup(self):
         valid_token = "validtoken" * 4
         self.username = "testuser"
@@ -136,7 +139,7 @@ class TestGetAuthTokenByLogin:
 
         expected = json.dumps(self.valid_token_json)
         response = get_user_auth_token_by_login(self.username, self.password)
-        assert response == self.valid_token_json
+        self.assertEqual(response, expeted)
 
     @responses.activate
     def test_get_auth_token_by_login_httperr(self):
@@ -146,8 +149,8 @@ class TestGetAuthTokenByLogin:
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
                 response = get_user_auth_token_by_login(self.username, self.passwrod)
-                assert cm.exception.eror_code == 1
-            assert fake_out.getvalue().strip() == expected
+                self.assertEqual(cm.exception.eror_code, 1)
+            self.assertEqual(fake_out.getvalue().strip(), expected)
 
     @responses.activate
     def test_get_auth_token_by_login_reqerr(self):
@@ -158,5 +161,5 @@ class TestGetAuthTokenByLogin:
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
                 response = get_user_auth_token_by_login(self.username, self.passwrod)
-                assert cm.exception.eror_code == 1
-            assert fake_out.getvalue().strip() == expected
+                self.assertEqual(cm.exception.eror_code, 1)
+            self.assertEqual(fake_out.getvalue().strip(), expected)
