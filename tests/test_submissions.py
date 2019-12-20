@@ -1,17 +1,16 @@
 import json
 import responses
-
+import os
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
-
 from evalai.challenges import challenge
 from evalai.submissions import submission
 from tests.data import submission_response
-
-from evalai.utils.config import API_HOST_URL
+from evalai.utils.submissions import convert_bytes_to
+from evalai.utils.config import API_HOST_URL, HOST_URL_FILE_PATH
 from evalai.utils.urls import URLS
-from .base import BaseTestClass
+from tests.base import BaseTestClass
 
 
 class TestGetSubmissionDetails(BaseTestClass):
@@ -26,13 +25,32 @@ class TestGetSubmissionDetails(BaseTestClass):
             json=self.submission,
             status=200,
         )
-
         responses.add(
             responses.GET,
             self.submission["submission_result_file"],
             json=json.loads(submission_response.submission_result_file),
             status=200,
         )
+        responses.add(
+            responses.GET,
+            url.format("http:/1234", URLS.get_submission.value.format("7")),
+            json=json.loads(submission_response.submission_result_file),
+            status=500,
+        )
+
+    @responses.activate
+    def test_display_submission_result_with_missing_schema(self):
+        expected = "The Submission is yet to be evaluated."
+        runner = CliRunner()
+        if not os.path.exists(HOST_URL_FILE_PATH):
+            f = open(HOST_URL_FILE_PATH, "w")
+            f.write("http:/1234")
+            f.close()
+        result = runner.invoke(submission, ["7", "result"])
+        response = result.output.strip()
+        if os.path.exists(HOST_URL_FILE_PATH):
+            os.remove(HOST_URL_FILE_PATH)
+        assert response == expected
 
     @responses.activate
     def test_display_submission_details(self):
@@ -100,6 +118,9 @@ class TestGetSubmissionDetails(BaseTestClass):
 class TestMakeSubmission(BaseTestClass):
     def setup(self):
         self.submission = json.loads(submission_response.submission_result)
+        bad_request_error_data = json.loads(submission_response.bad_request_error)
+        unauthorized_error_data = json.loads(submission_response.unauthorized_error)
+        not_acceptable_error_data = json.loads(submission_response.not_acceptable_error)
 
         url = "{}{}"
         responses.add(
@@ -111,6 +132,34 @@ class TestMakeSubmission(BaseTestClass):
             status=200,
         )
 
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.my_submissions.value).format("3", "4"),
+            json=bad_request_error_data,
+            status=400,
+        )
+
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.my_submissions.value).format("5", "6"),
+            json=unauthorized_error_data,
+            status=401,
+        )
+
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.my_submissions.value).format("7", "8"),
+            json=not_acceptable_error_data,
+            status=406,
+        )
+
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.make_submission.value).format("9", "10"),
+            json=self.submission,
+            status=416,
+        )
+
     @responses.activate
     def test_make_submission_when_file_is_not_valid(self):
         expected = (
@@ -119,10 +168,34 @@ class TestMakeSubmission(BaseTestClass):
         )
         runner = CliRunner()
         result = runner.invoke(
-            challenge, ["1", "phase", "2", "submit", "--file", "file"]
+            challenge, ["9", "phase", "10", "submit", "--file", "file"]
         )
         response = result.output
         assert response == expected
+
+    @responses.activate
+    def test_make_submission_receive_other_http_error(self):
+        expected = (
+            self.submission["input_file"][0]
+        )
+        expected = (
+            "416 Client Error: Requested Range Not Satisfiable for url: https://evalapi.cloudcv.org/api/jobs/challenge/9/challenge_phase/10/submission/\n{}"
+        ).format(expected)
+        expected = "Do you want to include the Submission Details? [y/N]: N\n{}".format(
+            expected
+        )
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open("test_file.txt", "w") as f:
+                f.write("1 2 3 4 5 6")
+
+            result = runner.invoke(
+                challenge,
+                ["9", "phase", "10", "submit", "--file", "test_file.txt"],
+                input="N",
+            )
+            assert result.exit_code == 1
+            assert result.output.strip() == expected
 
     @responses.activate
     def test_make_submission_when_file_is_valid_without_metadata(self):
@@ -177,3 +250,68 @@ class TestMakeSubmission(BaseTestClass):
             )
             assert result.exit_code == 0
             assert result.output.strip() == expected
+
+    @responses.activate
+    def test_get_my_submissions_when_http_error_406(self):
+        expected = (
+            "\nError: Not Acceptable\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(
+            challenge,
+            ["7", "phase", "8", "submissions"]
+        )
+        assert result.output == expected
+
+    @responses.activate
+    def test_get_my_submissions_when_http_error_401(self):
+        expected = (
+            "\nError: Unauthorized\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(
+            challenge,
+            ["5", "phase", "6", "submissions"]
+        )
+        assert result.output == expected
+
+    @responses.activate
+    def test_get_my_submissions_when_http_error_400(self):
+        expected = (
+            "\nError: Bad Request\n"
+            "\nUse `evalai challenges` to fetch the active challenges.\n"
+            "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+            "active phases.\n\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(
+            challenge,
+            ["3", "phase", "4", "submissions"]
+        )
+        assert result.output == expected
+
+
+class TestConvertBytesTo(BaseTestClass):
+    def test_convert_bytes_to_kb(self):
+        assert convert_bytes_to(1024, "kb") == 1
+
+    def test_convert_bytes_to_mb(self):
+        assert convert_bytes_to(1024 * 1024, "mb") == 1
+
+    def test_convert_bytes_to_gb(self):
+        assert convert_bytes_to(1024 * 1024 * 1024, "gb") == 1
+
+    def test_convert_bytes_to_tb(self):
+        assert convert_bytes_to(1024 * 1024 * 1024 * 1024, "tb") == 1
+
+    def test_convert_bytes_to_pb(self):
+        assert convert_bytes_to(1024 * 1024 * 1024 * 1024 * 1024, "pb") == 1
+
+    def test_convert_bytes_to_eb(self):
+        assert convert_bytes_to(1024 * 1024 * 1024 * 1024 * 1024 * 1024, "eb") == 1
