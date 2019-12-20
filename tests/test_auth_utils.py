@@ -39,7 +39,7 @@ class TestWriteHostUrlToFile(TestAuthUtilsBaseClass):
         self.host_path_patcher.start()
 
     def tearDown(self):
-        super(TestWriteHostUrlToFile, TestAuthUtilsBaseClass).tearDown()
+        super(TestWriteHostUrlToFile, self).tearDown()
         self.host_path_patcher.stop()
 
     def test_write_host_url_to_file_success(self):
