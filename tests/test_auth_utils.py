@@ -32,7 +32,7 @@ class TestAuthUtilsBaseClass(TestCase):
 
 class TestWriteHostUrlToFile(TestAuthUtilsBaseClass):
     def setUp(self):
-        super(TestWriteHostUrlToFile, TestAuthUtilsBaseClass).setUp()
+        super(TestWriteHostUrlToFile, self).setUp()
         self.new_host = "http://testserver.abc"
         self.temp_host_path = os.path.join(self.fake_token_dir, "host_url")
         self.host_path_patcher = mock.patch("evalai.utils.auth.HOST_URL_FILE_PATH", self.temp_host_path)
