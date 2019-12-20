@@ -35,12 +35,12 @@ welcome_text = (
 @click.option('-u', '--username', type=str, prompt=True,
               hide_input=False, help=username_help_message)
 @click.option('-h', '--host', type=str, default='', help=host_help_message)
-def ignite(host, username, password):
+def setup(host, username, password):
     """
     Set up basic configuration: host and auth key
     """
     """
-    Invoked by `evalai ignite` or `evalai ignite -u USER -p PASSWORD [-h HOST]`
+    Invoked by `evalai setup` or `evalai setup -u USER -p PASSWORD [-h HOST]`
     """
     echo(style("Booting up EvalAI", bold=True))
     echo(welcome_text)
