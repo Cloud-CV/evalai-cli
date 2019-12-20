@@ -1,12 +1,12 @@
 import json
 import logging
-import mock
 import os
 import random
 import shutil
 import string
 
 from io import StringIO
+from unittest import mock
 from unittest import TestCase
 
 from evalai.utils.auth import write_host_url_to_file
