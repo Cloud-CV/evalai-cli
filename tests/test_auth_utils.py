@@ -2,10 +2,12 @@ import json
 import logging
 import os
 import random
+import responses
 import shutil
 import string
 
 from io import StringIO
+from requests.exceptions import RequestException
 from unittest import mock
 from unittest import TestCase
 
@@ -117,3 +119,44 @@ class TestWriteAuthTokenToFile(AuthUtilsTestBaseClass):
         write_auth_token_to_file(self.token)
         with open(self.temp_token_path, "r") as tokenfile:
             self.assertEqual(tokenfile.read(), self.expected)
+
+
+class TestGetAuthTokenByLogin:
+    def setup(self):
+        valid_token = "validtoken" * 4
+        self.username = "testuser"
+        self.password = "testpass"
+        self.valid_token_json = json.dumps(valid_token)
+        self.response_token = '{"token": "%s"}' % valid_token
+        self.url = "{}{}".format(API_HOST_URL, URLS.login.value)
+
+    @responses.activate
+    def test_get_auth_token_by_login_success(self):
+        responses.add(responses.POST, self.url, json=self.response_token, status=200)
+
+        expected = json.dumps(self.valid_token_json)
+        response = get_user_auth_token_by_login(self.username, self.password)
+        assert response == self.valid_token_json
+
+    @responses.activate
+    def test_get_auth_token_by_login_httperr(self):
+        responses.add(responses.POST, self.url, status=401)
+
+        expected = "Unable to log in with provided credentials."
+        with mock.patch("sys.stdout", StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm:
+                response = get_user_auth_token_by_login(self.username, self.passwrod)
+                assert cm.exception.eror_code == 1
+            assert fake_out.getvalue().strip() == expected
+
+    @responses.activate
+    def test_get_auth_token_by_login_reqerr(self):
+        error_description = "Example Error Description"
+        responses.add(responses.POST, self.url, body=RequestException(error_description))
+
+        expected = "Could not establish a connection to EvalAI. Please check the Host URL."
+        with mock.patch("sys.stdout", StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm:
+                response = get_user_auth_token_by_login(self.username, self.passwrod)
+                assert cm.exception.eror_code == 1
+            assert fake_out.getvalue().strip() == expected
