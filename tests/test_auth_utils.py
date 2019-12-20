@@ -12,13 +12,13 @@ from evalai.utils.auth import write_host_url_to_file
 class TestAuthUtilsBaseClass(TestCase):
     def setUp(self):
         self.base_temp_dir = "temp-dir/"
-        if not os.path.exists(self.temp_dir):
-            os.makedirs(self.temp_dir)
+        if not os.path.exists(self.base_temp_dir):
+            os.makedirs(self.base_temp_dir)
 
         # Important to mock out the config files
         # as any unintended changes in these may
         # cause other tests to fail.
-        self.fake_token_dir = os.path.join(self.temp_dir, "evalai")
+        self.fake_token_dir = os.path.join(self.base_temp_dir, "evalai")
         self.token_dir_patcher = mock.patch("evalai.utils.auth.AUTH_TOKEN_DIR", self.fake_token_dir)
         self.token_dir_patcher.start()
 
