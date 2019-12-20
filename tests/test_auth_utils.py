@@ -141,7 +141,7 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
     def test_get_auth_token_by_login_success(self):
         responses.add(responses.POST, self.url, json=self.response_token, status=200)
 
-        expected = json.dumps(self.valid_token_json)
+        expected = self.valid_token_json
         response = get_user_auth_token_by_login(self.username, self.password)
         self.assertEqual(response, expected)
 
@@ -152,7 +152,7 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         expected = "Unable to log in with provided credentials."
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
-                get_user_auth_token_by_login(self.username, self.passwrod)
+                get_user_auth_token_by_login(self.username, self.password)
                 self.assertEqual(cm.exception.eror_code, 1)
             self.assertEqual(fake_out.getvalue().strip(), expected)
 
