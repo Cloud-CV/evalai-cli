@@ -2,18 +2,23 @@ import json
 import logging
 import os
 import random
+import responses
 import shutil
 import string
 
 from io import StringIO
+from requests.exceptions import RequestException
 from unittest import mock
 from unittest import TestCase
 
 from evalai.utils.auth import (
+    get_user_auth_token_by_login,
     write_host_url_to_file,
     write_json_auth_token_to_file,
     write_auth_token_to_file,
 )
+from evalai.utils.config import API_HOST_URL
+from evalai.utils.urls import URLS
 
 random.seed(42)
 
@@ -117,3 +122,48 @@ class TestWriteAuthTokenToFile(AuthUtilsTestBaseClass):
         write_auth_token_to_file(self.token)
         with open(self.temp_token_path, "r") as tokenfile:
             self.assertEqual(tokenfile.read(), self.expected)
+
+
+class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
+    def setUp(self):
+        valid_token = "validtoken" * 4
+        self.username = "testuser"
+        self.password = "testpass"
+        self.valid_token_json = json.dumps({"token": valid_token})
+        self.response_token = '{"token": "%s"}' % valid_token
+        self.url = "{}{}".format(API_HOST_URL, URLS.login.value)
+
+    def tearDown(self):
+        # Overriding the tearDown from parent class
+        pass
+
+    @responses.activate
+    def test_get_auth_token_by_login_success(self):
+        responses.add(responses.POST, self.url, json=self.response_token, status=200)
+
+        expected = self.valid_token_json
+        response = get_user_auth_token_by_login(self.username, self.password)
+        self.assertEqual(response, expected)
+
+    @responses.activate
+    def test_get_auth_token_by_login_httperr(self):
+        responses.add(responses.POST, self.url, status=401)
+
+        expected = "Unable to log in with provided credentials."
+        with mock.patch("sys.stdout", StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm:
+                get_user_auth_token_by_login(self.username, self.password)
+                self.assertEqual(cm.exception.eror_code, 1)
+            self.assertEqual(fake_out.getvalue().strip(), expected)
+
+    @responses.activate
+    def test_get_auth_token_by_login_reqerr(self):
+        error_description = "Example Error Description"
+        responses.add(responses.POST, self.url, body=RequestException(error_description))
+
+        expected = "Could not establish a connection to EvalAI. Please check the Host URL."
+        with mock.patch("sys.stdout", StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm:
+                get_user_auth_token_by_login(self.username, self.password)
+                self.assertEqual(cm.exception.eror_code, 1)
+            self.assertEqual(fake_out.getvalue().strip(), expected)
