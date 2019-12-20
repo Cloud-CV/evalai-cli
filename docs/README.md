@@ -15,4 +15,5 @@ Download_file - The below steps define the usage for Download_file.
     ```
 2.	If url is host and has bucket and key, url will be downloaded as a file
 
-3.	If url does not have a bucket or key, error will flash - please check url or check with admin to get AWS s3 bucket name and key information
+3.	If url does not have a bucket or key, below error will flash -
+      "please check url or check with admin to get AWS s3 bucket name and key information"
