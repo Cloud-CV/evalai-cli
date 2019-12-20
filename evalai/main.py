@@ -7,7 +7,7 @@ from .set_host import host
 from .add_token import set_token
 from .submissions import submission, push, download_file
 from .teams import teams
-from .get_starter import get_starter
+from .get_starters import get_starters
 from .get_token import get_token
 from .login import login
 
@@ -42,6 +42,6 @@ main.add_command(push)
 main.add_command(set_token)
 main.add_command(submission)
 main.add_command(teams)
-main.add_command(get_starter)
+main.add_command(get_starters)
 main.add_command(get_token)
 main.add_command(login)
