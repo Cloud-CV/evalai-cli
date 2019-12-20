@@ -1,6 +1,6 @@
 import mock
 import os
-import logger
+import logging
 import shutil
 
 from io import StringIO
@@ -27,7 +27,7 @@ class TestAuthUtilsBaseClass(TestCase):
         try:
             shutil.rmtree(self.base_temp_dir)
         except:
-            logger.critical("Unable to delete temporary directory: {}".format(self.base_temp_dir))
+            logging.critical("Unable to delete temporary directory: {}".format(self.base_temp_dir))
 
 
 class TestWriteHostUrlToFile(TestAuthUtilsBaseClass):
@@ -50,7 +50,7 @@ class TestWriteHostUrlToFile(TestAuthUtilsBaseClass):
         expected = "{} is set as the host url.\n".format(self.new_host)
         with mock.patch('sys.stdout', new=StringIO()) as fake_out:
             write_host_url_to_file(self.new_host)
-            fake_open.assert_called_with(HOST_URL_FILE_PATH, "w")
+            fake_open.assert_called_with(self.temp_host_path, "w")
             handler.write.assert_called_with(self.new_host)
             self.assertEqual(fake_out.getvalue(), expected)
         patcher.stop()
