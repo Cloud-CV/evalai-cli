@@ -133,6 +133,10 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         self.response_token = '{"token": "%s"}' % valid_token
         self.url = "{}{}".format(API_HOST_URL, URLS.login.value)
 
+    def tearDown(self):
+        # Overriding the tearDown from parent class
+        pass
+
     @responses.activate
     def test_get_auth_token_by_login_success(self):
         responses.add(responses.POST, self.url, json=self.response_token, status=200)
