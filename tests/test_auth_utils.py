@@ -48,7 +48,7 @@ class TestWriteHostUrlToFile(AuthUtilsTestBaseClass):
         self.file_open_patcher.start()
 
     def tearDown(self):
-        self.fake_open.reset()
+        self.fake_open.reset_mock(side_effect=True)
         self.file_open_patcher.stop()
         self.host_path_patcher.stop()
         super(TestWriteHostUrlToFile, self).tearDown()
@@ -85,7 +85,7 @@ class TestWriteAuthTokenToFile(AuthUtilsTestBaseClass):
         self.expected = json.dumps(self.token_json)
         self.temp_token_path = os.path.join(self.fake_token_dir, "token.json")
         self.token_path_patcher = mock.patch(
-            "evalai.utils.auth.AUTH_TOKEN_FILE_PATH", self.temp_token_path
+            "evalai.utils.auth.AUTH_TOKEN_PATH", self.temp_token_path
         )
         self.token_path_patcher.start()
 
