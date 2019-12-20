@@ -23,7 +23,7 @@ class TestAuthUtilsBaseClass(TestCase):
         self.token_dir_patcher.start()
 
     def tearDown(self):
-        self.token_dir_pather.stop()
+        self.token_dir_patcher.stop()
         try:
             shutil.rmtree(self.base_temp_dir)
         except:
