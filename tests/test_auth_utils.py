@@ -129,7 +129,7 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         valid_token = "validtoken" * 4
         self.username = "testuser"
         self.password = "testpass"
-        self.valid_token_json = json.dumps(valid_token)
+        self.valid_token_json = json.dumps({"token": valid_token})
         self.response_token = '{"token": "%s"}' % valid_token
         self.url = "{}{}".format(API_HOST_URL, URLS.login.value)
 
@@ -164,6 +164,6 @@ class TestGetAuthTokenByLogin(AuthUtilsTestBaseClass):
         expected = "Could not establish a connection to EvalAI. Please check the Host URL."
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
-                get_user_auth_token_by_login(self.username, self.passwrod)
+                get_user_auth_token_by_login(self.username, self.password)
                 self.assertEqual(cm.exception.eror_code, 1)
             self.assertEqual(fake_out.getvalue().strip(), expected)
