@@ -30,7 +30,7 @@ class TestWriteHostUrlToFile(TestCase):
         patcher.start()
         handler = fake_open()
         handler.write.side_effect = OSError("Permission denied.")
-        expected = "Permission denied.\nNone\n"
+        expected = "Permission denied.\n"
         with mock.patch('sys.stdout', new=StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
                 write_host_url_to_file(self.new_host)
