@@ -9,7 +9,11 @@ from io import StringIO
 from unittest import mock
 from unittest import TestCase
 
-from evalai.utils.auth import write_host_url_to_file
+from evalai.utils.auth import (
+    write_host_url_to_file,
+    write_json_auth_token_to_file,
+    write_auth_token_to_file,
+)
 
 random.seed(42)
 
