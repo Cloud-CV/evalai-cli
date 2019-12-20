@@ -11,7 +11,7 @@ class TestWriteHostUrlToFile(TestCase):
     def setUp(self):
         self.new_host = "http://testserver.abc"
 
-    def test_write_host_url_to_file_success(self, mock_open):
+    def test_write_host_url_to_file_success(self):
         mock_open = mock.mock_open()
         patcher = mock.patch("evalai.utils.auth.open", mock_open)
         patcher.start()
@@ -23,7 +23,7 @@ class TestWriteHostUrlToFile(TestCase):
             self.assertEqual(fake_out.get_value(), expected)
         patcher.stop()
 
-    def test_write_host_url_to_file_fail(self, mock_open):
+    def test_write_host_url_to_file_fail(self):
         mock_open = mock.mock_open()
         patcher = mock.patch("evalai.utils.auth.open", mock_open)
         patcher.start()
