@@ -7,6 +7,7 @@ from evalai.utils.config import AUTH_TOKEN_PATH
 import json
 from json.decoder import JSONDecodeError
 
+
 @click.group(invoke_without_command=True)
 def get_token():
     """
