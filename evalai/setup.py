@@ -30,12 +30,12 @@ welcome_text = (
 
 
 @click.group(invoke_without_command=True)
-@click.option('-p', '--password', type=str, prompt=True,
-              hide_input=True, help=password_help_message)
 @click.option('-u', '--username', type=str, prompt=True,
               hide_input=False, help=username_help_message)
+@click.option('-p', '--password', type=str, prompt=True,
+              hide_input=True, help=password_help_message)
 @click.option('-h', '--host', type=str, default='', help=host_help_message)
-def setup(host, username, password):
+def setup(host, password, username):
     """
     Set up basic configuration: host and auth key
     """
