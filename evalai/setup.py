@@ -74,7 +74,7 @@ def setup(host, password, username):
         echo(style("\nLogged in successfully!"))
     except (SystemExit, Exception) as e:  # Accommodating sys.exit!
         echo(style("\nLogin failed.", bold=True, fg="red"))
-        if host:
+        if host != previous_host:
             echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
             write_host_url_to_file(previous_host)  # Validation not required while restoring
         echo(e)
