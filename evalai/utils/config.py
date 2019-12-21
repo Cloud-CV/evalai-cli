@@ -26,6 +26,4 @@ EVALAI_HOST_URLS = [
     "http://localhost:8888",
 ]
 
-STARTERS_URL = "https://github.com/Cloud-CV/EvalAI-Starters.git"
-
 STARTERS_ZIP_URL = "http://github.com/cloud-cv/evalai-starters/zipball/master/"
