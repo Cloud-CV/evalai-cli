@@ -72,7 +72,7 @@ def setup(host, username, password):
         token = get_user_auth_token_by_login(username, password)
         write_json_auth_token_to_file(token)
         echo(style("\nLogged in successfully!"))
-    except SystemExit, Exception as e:  # Accommodating sys.exit(!)
+    except (SystemExit, Exception) as e:  # Accommodating sys.exit!
         echo(style("\nLogin failed.", bold=True, fg="red"))
         if host:
             echo(style("Reverting host URL from {} to {}".format(host, previous_host), bold=True))
