@@ -28,28 +28,37 @@ def download_evalai_starters_kit():
             )
         )
 
-    with open(download_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
-    zip_ref = zipfile.ZipFile(download_path, "r")
-    zip_ref.extractall(extract_path)
-    zip_ref.close()
+    if response and response.status_code == 200:
+        with open(download_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+        zip_ref = zipfile.ZipFile(download_path, "r")
+        zip_ref.extractall(extract_path)
+        zip_ref.close()
 
-    try:
-        os.remove(download_path)
-    except Exception as e:
-        echo(
-            style(
-                "Failed to remove zip file {}, error {}".format(download_path, e),
-                bold=True,
-                fg="red"
+        try:
+            os.remove(download_path)
+        except Exception as e:
+            echo(
+                style(
+                    "Failed to remove zip file {}, error {}".format(download_path, e),
+                    bold=True,
+                    fg="red"
+                )
             )
-        )
+        else:
+            echo(
+                style(
+                    "Successfully downloaded EvalAI-Starters and saved in {}".format(extract_path),
+                    bold=True,
+                    fg="green"
+                )
+            )
     else:
         echo(
             style(
-                "Successfully downloaded EvalAI-Starters and saved in {}".format(extract_path),
+                "Failed in connecting to the GitHub repository.",
                 bold=True,
                 fg="green"
             )
