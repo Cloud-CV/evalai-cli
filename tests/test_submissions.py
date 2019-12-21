@@ -289,5 +289,4 @@ class TestMakeSubmission(BaseTestClass):
                     "localhost:{0}".format(registry_port),
                 ],
             )
-            print(result.output.strip())
             assert result.exit_code == 0
