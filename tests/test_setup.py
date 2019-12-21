@@ -4,7 +4,7 @@ import sys
 
 from click.testing import CliRunner
 
-from evalai.setup import ignite
+from evalai.setup import setup
 from evalai.utils.auth import get_host_url
 from .base import BaseTestClass
 
@@ -32,7 +32,7 @@ class TestSetup(BaseTestClass):
         mock_get_token_by_login.return_value = self.token_json
 
         runner = CliRunner()
-        result = runner.invoke(ignite, self.login_args)
+        result = runner.invoke(setup, self.login_args)
         expected = "{}\n{}\n".format(self.login_success, self.setup_success)
 
         mock_get_token_by_login.assert_called_with(self.username, self.password)
@@ -51,7 +51,7 @@ class TestSetup(BaseTestClass):
 
         runner = CliRunner()
         expected = "{}\n{}\n".format(self.login_success, self.setup_success)
-        result = runner.invoke(ignite, self.login_args_with_new_host)
+        result = runner.invoke(setup, self.login_args_with_new_host)
 
         mock_write_host_url_to_file.assert_called_with(self.new_host)
         mock_get_token_by_login.assert_called_with(self.username, self.password)
@@ -65,7 +65,7 @@ class TestSetup(BaseTestClass):
 
         runner = CliRunner()
         expected = self.set_host_failure.format(self.new_host, self.current_host)
-        result = runner.invoke(ignite, self.login_args_with_new_host)
+        result = runner.invoke(setup, self.login_args_with_new_host)
 
         mock_write_host_url_to_file.assert_called_with(self.new_host)
         assert result.exit_code == 1
@@ -78,7 +78,7 @@ class TestSetup(BaseTestClass):
         runner = CliRunner()
         revert_host_message = self.revert_host.format(self.new_host, self.current_host)
         expected = "{}\n{}\n".format(self.login_failure, revert_host_message)
-        result = runner.invoke(ignite, self.login_args_with_new_host)
+        result = runner.invoke(setup, self.login_args_with_new_host)
 
         assert result.exit_code == 1
         assert expected in result.output
