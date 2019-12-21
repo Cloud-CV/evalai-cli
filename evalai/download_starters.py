@@ -33,9 +33,9 @@ def download_starters():
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
-        zip_ref = zipfile.ZipFile(download_path, "r")
-        zip_ref.extractall(extract_path)
-        zip_ref.close()
+
+        with zipfile.ZipFile(download_path, "r") as z:
+            z.extractall(extract_path)
 
         try:
             os.remove(download_path)
