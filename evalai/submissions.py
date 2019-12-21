@@ -127,7 +127,7 @@ def push(image, phase, url):
     federated_user = response["success"]["federated_user"]
     repository_uri = response["success"]["docker_repository_uri"]
 
-    # Default Environment
+    # Production Environment
     if ENVIRONMENT == "PRODUCTION":
         AWS_ACCOUNT_ID = federated_user["FederatedUser"][
             "FederatedUserId"
