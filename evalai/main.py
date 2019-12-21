@@ -7,7 +7,7 @@ from .set_host import host
 from .add_token import set_token
 from .submissions import submission, push, download_file
 from .teams import teams
-from .download_evalai_starters_kit import download_evalai_starters_kit
+from .download_starters import download_evalai_starters_kit
 from .get_token import get_token
 from .login import login
 
