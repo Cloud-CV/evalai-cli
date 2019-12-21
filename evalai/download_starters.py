@@ -10,7 +10,7 @@ from evalai.utils.config import STARTERS_ZIP_URL
 
 
 @click.group(invoke_without_command=True)
-def download_evalai_starters_kit():
+def download_starters():
     """
     Download the EvalAI-Starters kit.
     """
