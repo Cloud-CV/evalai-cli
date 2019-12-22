@@ -30,8 +30,9 @@ def get_token():
                 tokendata = json.loads(data)
                 echo("Current token is {}".format(tokendata["token"]))
             except (OSError, IOError) as e:
-                echo(e)
+                echo(str(e))
             except JSONDecodeError as e:
-                echo("Decode Error: ", e, "\nThe 'token.json' file was empty")
+                msg = "Decode Error: " + str(e) +"\nThe 'token.json' file was empty"
+                echo(msg)
             except KeyError as e:
-                echo("The following key was not found in 'token.json': ", e)
+                echo("The following key was not found in 'token.json': " + str(e))
