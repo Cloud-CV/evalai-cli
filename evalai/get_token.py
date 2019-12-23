@@ -1,6 +1,6 @@
-import os
 import click
 import json
+import os
 
 from click import echo, style
 from evalai.utils.config import AUTH_TOKEN_PATH
@@ -35,3 +35,4 @@ def get_token():
                 echo(msg)
             except KeyError as e:
                 echo("The following key was not found in 'token.json': " + str(e))
+                
