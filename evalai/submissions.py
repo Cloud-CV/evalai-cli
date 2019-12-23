@@ -228,8 +228,8 @@ def download_file(url):
             echo(
                 style(
                     "\nThe bucket or key is missing in the url.\n",
-                    fg="red",
                     bold=True,
+                    fg="red",
                 )
             )
             sys.exit(1)
@@ -242,7 +242,13 @@ def download_file(url):
             response = requests.get(signed_url, stream=True)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            echo(err)
+            echo(
+                style(
+                    "\nError: " + err,
+                    bold=True,
+                    fg="red",
+                )
+            )
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
@@ -268,16 +274,14 @@ def download_file(url):
                     "\nYour file {} is successfully downloaded.\n".format(
                         file_name
                     ),
-                    fg="green",
-                    bold=True,
+                    bold=True, fg="green",
                 )
             )
     else:
         echo(
             style(
                 "\nThe url doesn't match the EvalAI url. Please check the url.\n",
-                fg="red",
-                bold=True,
+                bold=True, fg="red",
             )
         )
         sys.exit(1)

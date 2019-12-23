@@ -29,4 +29,10 @@ def get_token():
                 tokendata = json.loads(data)
                 echo("Current token is {}".format(tokendata["token"]))
             except (OSError, IOError) as e:
-                echo(e)
+                echo(
+                    style(
+                        "\nError: " + e,
+                        bold=True,
+                        fg="red",
+                    )
+                )
