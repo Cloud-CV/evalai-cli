@@ -1,10 +1,9 @@
-import click
 import os
+import click
+import json
 
 from click import echo, style
-
 from evalai.utils.config import AUTH_TOKEN_PATH
-import json
 from json.decoder import JSONDecodeError
 
 
