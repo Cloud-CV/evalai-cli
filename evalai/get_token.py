@@ -35,4 +35,3 @@ def get_token():
                 echo(msg)
             except KeyError as e:
                 echo("The following key was not found in 'token.json': " + str(e))
-                
