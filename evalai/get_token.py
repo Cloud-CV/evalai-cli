@@ -31,7 +31,6 @@ def get_token():
             except (OSError, IOError) as e:
                 echo(str(e))
             except JSONDecodeError as e:
-                msg = "Decode Error: " + str(e) + "\nThe 'token.json' file was empty"
-                echo(msg)
+                echo("Token file was found empty, Please set the token using the command evalai set_token <token>")
             except KeyError as e:
-                echo("The following key was not found in 'token.json': " + str(e))
+                echo("Invalid token found, please reset the token using the command evalai set_token <token>")
