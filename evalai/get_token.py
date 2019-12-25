@@ -1,4 +1,4 @@
-import click
+ import click
 import json
 import os
 
@@ -31,6 +31,6 @@ def get_token():
             except (OSError, IOError) as e:
                 echo(str(e))
             except JSONDecodeError as e:
-                echo("Token file was found empty, Please set the token using the command evalai set_token <token>")
+                echo("Token file was found empty, please set the token using the command evalai set_token <token>")
             except KeyError as e:
                 echo("Invalid token found, please reset the token using the command evalai set_token <token>")
