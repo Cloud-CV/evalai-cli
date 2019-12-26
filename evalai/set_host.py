@@ -23,11 +23,12 @@ def host(set_host):
                 try:
                     fw.write(set_host)
                 except (OSError, IOError) as e:
-                    echo(e)
+                    echo(style(e, bold=True, fg="red"))
                 echo(
                     style(
                         "{} is set as the host url.".format(set_host),
                         bold=True,
+                        fg="green"
                     )
                 )
         else:
@@ -36,6 +37,7 @@ def host(set_host):
                     "Sorry, please enter a valid url.\n"
                     "Example: https://evalapi.cloudcv.org",
                     bold=True,
+                    fg="red"
                 )
             )
     else:
@@ -45,6 +47,7 @@ def host(set_host):
                     "You haven't configured a Host URL for the CLI.\n"
                     "The CLI would be using https://evalapi.cloudcv.org as the default url.",
                     bold=True,
+                    fg="red"
                 )
             )
         else:
@@ -55,7 +58,8 @@ def host(set_host):
                         style(
                             "{} is the Host URL of EvalAI.".format(data),
                             bold=True,
+                            fg="green"
                         )
                     )
                 except (OSError, IOError) as e:
-                    echo(e)
+                    echo(style(e, bold=True, fg="red"))

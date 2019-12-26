@@ -49,7 +49,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         if "input_file" in response.json():
             echo(style(response.json()["input_file"][0], fg="red", bold=True))
         sys.exit(1)
@@ -78,6 +78,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
             "You can use `evalai submission {}` to view this submission's status.\n".format(
                 response["id"]
             ),
+            fg="white",
             bold=True,
         )
     )
@@ -102,6 +103,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
         echo(
             style(
                 "\nSorry, you have not made any submissions to this challenge phase.\n",
+                fg="red",
                 bold=True,
             )
         )
@@ -131,6 +133,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
         echo(
             style(
                 "\nSorry, no submissions were made during this time period.\n",
+                fg="red"
                 bold=True,
             )
         )
@@ -166,7 +169,7 @@ def display_my_submission_details(
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -238,7 +241,16 @@ def submission_details_request(submission_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
+        sys.exit(1)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="red",
+            )
+        )
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -265,17 +277,8 @@ def display_submission_result(submission_id):
     """
     Function to display result of a particular submission
     """
-    try:
-        response = submission_details_request(submission_id).json()
-        echo(requests.get(response['submission_result_file']).text)
-    except requests.exceptions.MissingSchema:
-        echo(
-            style(
-                "\nThe Submission is yet to be evaluated.\n",
-                bold=True,
-                fg="yellow",
-            )
-        )
+    response = submission_details_request(submission_id).json()
+    echo(requests.get(response['submission_result_file']).text)
 
 
 def convert_bytes_to(byte, to, bsize=1024):

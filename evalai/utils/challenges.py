@@ -57,7 +57,7 @@ def display_challenges(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(err)
+        echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -76,7 +76,7 @@ def display_challenges(url):
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo("Sorry, no challenges found.")
+        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def display_all_challenge_list():
@@ -108,7 +108,7 @@ def display_ongoing_challenge_list():
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(err)
+        echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -138,7 +138,7 @@ def display_ongoing_challenge_list():
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo("Sorry, no challenges found.")
+        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def display_future_challenge_list():
@@ -161,7 +161,7 @@ def get_participant_or_host_teams(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(err)
+        echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -192,7 +192,7 @@ def get_participant_or_host_team_challenges(url, teams):
         except requests.exceptions.HTTPError as err:
             if response.status_code == 401:
                 validate_token(response.json())
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
@@ -233,7 +233,7 @@ def display_participated_or_hosted_challenges(
         if len(challenges) != 0:
             pretty_print_challenge_data(challenges)
         else:
-            echo("Sorry, no challenges found.")
+            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
     if is_participant:
         team_url = "{}{}".format(get_host_url(), URLS.participant_teams.value)
@@ -264,9 +264,9 @@ def display_participated_or_hosted_challenges(
                 echo(style("\nParticipated Challenges\n", bold=True))
                 pretty_print_challenge_data(challenges)
             else:
-                echo("Sorry, no challenges found.")
+                echo(style("Sorry, no challenges found.", bold=True, fg="red"))
         else:
-            echo("Sorry, no challenges found.")
+            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def pretty_print_challenge_details(challenge):
@@ -328,7 +328,7 @@ def display_challenge_details(challenge):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -402,7 +402,7 @@ def display_challenge_phase_list(challenge_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -507,7 +507,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -575,7 +575,7 @@ def display_challenge_phase_split_list(challenge_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -592,7 +592,7 @@ def display_challenge_phase_split_list(challenge_id):
     if len(phase_splits) != 0:
         pretty_print_challenge_phase_split_data(phase_splits)
     else:
-        echo("Sorry, no Challenge Phase Splits found.")
+        echo(style("Sorry, no Challenge Phase Splits found.", bold=True, fg="red"))
 
 
 def pretty_print_leaderboard_data(attributes, results):
@@ -638,7 +638,7 @@ def display_leaderboard(challenge_id, phase_split_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -658,4 +658,4 @@ def display_leaderboard(challenge_id, phase_split_id):
         attributes = results[0]["leaderboard__schema"]["labels"]
         pretty_print_leaderboard_data(attributes, results)
     else:
-        echo("Sorry, no Leaderboard results found.")
+        echo(style("Sorry, no Challenge Phase Splits found.", bold=True, fg="red"))
