@@ -27,6 +27,12 @@ def get_token():
             try:
                 data = fr.read()
                 tokendata = json.loads(data)
-                echo("Current token is {}".format(tokendata["token"]))
+                echo(
+                    style(
+                        "Current token is {}".format(tokendata["token"]))
+                        bold=True,
+                        fg="green",
+                   )
+                )
             except (OSError, IOError) as e:
                 echo(e)
