@@ -592,7 +592,7 @@ def display_challenge_phase_split_list(challenge_id):
     if len(phase_splits) != 0:
         pretty_print_challenge_phase_split_data(phase_splits)
     else:
-        echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
+        echo(style("Sorry, no Challenge Phase Splits found.", bold=True, fg="red"))
 
 
 def pretty_print_leaderboard_data(attributes, results):
