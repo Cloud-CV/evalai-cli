@@ -243,15 +243,6 @@ def submission_details_request(submission_id):
         else:
             echo(style(err, bold=True, fg="red"))
         sys.exit(1)
-    except requests.exceptions.MissingSchema:
-        echo(
-            style(
-                "\nThe Submission is yet to be evaluated.\n",
-                bold=True,
-                fg="red",
-            )
-        )
-        sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
             style(
@@ -269,8 +260,17 @@ def display_submission_details(submission_id):
     """
     Function to display details of a particular submission
     """
-    response = submission_details_request(submission_id).json()
-    pretty_print_submission_details(response)
+    try:
+        response = submission_details_request(submission_id).json()
+        echo(requests.get(response['submission_result_file']).text)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="red",
+            )
+        )
 
 
 def display_submission_result(submission_id):
