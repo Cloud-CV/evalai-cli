@@ -658,4 +658,4 @@ def display_leaderboard(challenge_id, phase_split_id):
         attributes = results[0]["leaderboard__schema"]["labels"]
         pretty_print_leaderboard_data(attributes, results)
     else:
-        echo(style("Sorry, no Challenge Phase Splits found.", bold=True, fg="red"))
+        echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
