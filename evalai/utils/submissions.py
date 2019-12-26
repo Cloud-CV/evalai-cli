@@ -133,7 +133,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
         echo(
             style(
                 "\nSorry, no submissions were made during this time period.\n",
-                fg="red"
+                fg="red",
                 bold=True,
             )
         )
