@@ -84,7 +84,7 @@ def display_challenges(url):
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("\nSorry, no challenges found.\n"), bold=True, fg="red")
+        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def display_all_challenge_list():
@@ -146,7 +146,7 @@ def display_ongoing_challenge_list():
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("\nSorry, no challenges found.\n", bold=True, fg="red"))
+        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def display_future_challenge_list():
@@ -241,7 +241,7 @@ def display_participated_or_hosted_challenges(
         if len(challenges) != 0:
             pretty_print_challenge_data(challenges)
         else:
-            echo(style("\nSorry, no challenges found.\n", bold=True, fg="red"))
+            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
     if is_participant:
         team_url = "{}{}".format(get_host_url(), URLS.participant_teams.value)
@@ -272,9 +272,9 @@ def display_participated_or_hosted_challenges(
                 echo(style("\nParticipated Challenges\n", bold=True))
                 pretty_print_challenge_data(challenges)
             else:
-                echo(style("\nSorry, no challenges found.\n", bold=True, fg="red"))
+                echo(style("Sorry, no challenges found.", bold=True, fg="red"))
         else:
-            echo(style("\nSorry, no challenges found.\n", bold=True, fg="red"))
+            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
 
 
 def pretty_print_challenge_details(challenge):
