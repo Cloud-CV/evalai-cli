@@ -65,7 +65,7 @@ def display_challenges(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err, bold=True, fg="red"))
+        echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -84,7 +84,7 @@ def display_challenges(url):
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
+        echo("Sorry, no challenges found.")
 
 
 def display_all_challenge_list():
@@ -146,7 +146,7 @@ def display_ongoing_challenge_list():
     if len(challenges) != 0:
         pretty_print_challenge_data(challenges)
     else:
-        echo(style("Sorry, no challenges found.", bold=True, fg="red"))
+        echo("Sorry, no challenges found.")
 
 
 def display_future_challenge_list():
@@ -241,7 +241,7 @@ def display_participated_or_hosted_challenges(
         if len(challenges) != 0:
             pretty_print_challenge_data(challenges)
         else:
-            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
+            echo("Sorry, no challenges found.")
 
     if is_participant:
         team_url = "{}{}".format(get_host_url(), URLS.participant_teams.value)
@@ -272,9 +272,9 @@ def display_participated_or_hosted_challenges(
                 echo(style("\nParticipated Challenges\n", bold=True))
                 pretty_print_challenge_data(challenges)
             else:
-                echo(style("Sorry, no challenges found.", bold=True, fg="red"))
+                echo("Sorry, no challenges found.")
         else:
-            echo(style("Sorry, no challenges found.", bold=True, fg="red"))
+            echo("Sorry, no challenges found.")
 
 
 def pretty_print_challenge_details(challenge):
@@ -600,7 +600,7 @@ def display_challenge_phase_split_list(challenge_id):
     if len(phase_splits) != 0:
         pretty_print_challenge_phase_split_data(phase_splits)
     else:
-        echo(style("Sorry, no Challenge Phase Splits found.", bold=True, fg="red"))
+        echo("Sorry, no Challenge Phase Splits found.")
 
 
 def pretty_print_leaderboard_data(attributes, results):
@@ -666,4 +666,5 @@ def display_leaderboard(challenge_id, phase_split_id):
         attributes = results[0]["leaderboard__schema"]["labels"]
         pretty_print_leaderboard_data(attributes, results)
     else:
-        echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
+        echo("Sorry, no Leaderboard results found.")
+        
