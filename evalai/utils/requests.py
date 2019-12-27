@@ -29,7 +29,7 @@ def make_request(path, method, files=None, data=None):
                     )
                 )
             else:
-                echo(style(err, bold=True, fg="red"))
+                echo(err)
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
@@ -67,7 +67,7 @@ def make_request(path, method, files=None, data=None):
                     )
                 )
             else:
-                echo(style(err, bold=True, fg="red"))
+                echo(err)
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
