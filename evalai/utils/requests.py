@@ -93,7 +93,6 @@ def make_request(path, method, files=None, data=None):
                     response.get("id")
                 ),
                 bold=True,
-                fg="white"
             )
         )
         return response
@@ -106,3 +105,4 @@ def make_request(path, method, files=None, data=None):
     elif method == "DELETE":
         # TODO: Add support for DELETE request
         pass
+        
