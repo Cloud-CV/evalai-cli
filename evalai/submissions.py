@@ -174,7 +174,7 @@ def push(image, phase, url):
         if line.get("status") in ["Pushing", "Pushed"] and line.get(
             "progress"
         ):
-            print("{id}: {status} {progress}".format(**line))
+            print("{id}: {status} {progress}\r".format(**line), end='', flush=True)
         elif line.get("errorDetail"):
             error = line.get("error")
             notify_user(error, color="red")
