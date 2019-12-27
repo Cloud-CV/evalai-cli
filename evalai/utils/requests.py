@@ -105,4 +105,3 @@ def make_request(path, method, files=None, data=None):
     elif method == "DELETE":
         # TODO: Add support for DELETE request
         pass
-        

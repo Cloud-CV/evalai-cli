@@ -291,4 +291,3 @@ def convert_bytes_to(byte, to, bsize=1024):
         unit = int(unit / bsize)
 
     return unit
-    

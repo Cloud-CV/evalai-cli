@@ -667,4 +667,3 @@ def display_leaderboard(challenge_id, phase_split_id):
         pretty_print_leaderboard_data(attributes, results)
     else:
         echo("Sorry, no Leaderboard results found.")
-        
