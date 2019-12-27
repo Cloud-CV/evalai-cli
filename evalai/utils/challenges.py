@@ -116,7 +116,7 @@ def display_ongoing_challenge_list():
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err, bold=True, fg="red"))
+        echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -169,7 +169,7 @@ def get_participant_or_host_teams(url):
     except requests.exceptions.HTTPError as err:
         if response.status_code == 401:
             validate_token(response.json())
-        echo(style(err, bold=True, fg="red"))
+        echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -200,7 +200,7 @@ def get_participant_or_host_team_challenges(url, teams):
         except requests.exceptions.HTTPError as err:
             if response.status_code == 401:
                 validate_token(response.json())
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(
@@ -336,7 +336,7 @@ def display_challenge_details(challenge):
                 )
             )
         else:
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -410,7 +410,7 @@ def display_challenge_phase_list(challenge_id):
                 )
             )
         else:
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -515,7 +515,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
                 )
             )
         else:
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -583,7 +583,7 @@ def display_challenge_phase_split_list(challenge_id):
                 )
             )
         else:
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -646,7 +646,7 @@ def display_leaderboard(challenge_id, phase_split_id):
                 )
             )
         else:
-            echo(style(err, bold=True, fg="red"))
+            echo(err)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
