@@ -117,5 +117,5 @@ def reset_user_auth_token():
     try:
         os.remove(AUTH_TOKEN_PATH)
     except (OSError, IOError) as e:
-        echo(style(e, bold=True, fg="red"))
+        echo(e)
         sys.exit(1)
