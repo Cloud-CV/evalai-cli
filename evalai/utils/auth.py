@@ -98,3 +98,24 @@ def get_host_url():
                 return str(data)
             except (OSError, IOError) as e:
                 echo(style(e, bold=True, fg="red"))
+
+
+def reset_user_auth_token():
+    """
+    Resets the auth token of the user by deleting token.json file
+    """
+    if not os.path.exists(AUTH_TOKEN_PATH):
+        echo(
+            style(
+                "\nThe authentication token has not been configured. Please use the commands "
+                "`evalai login` or `evalai set_token TOKEN` first to set up the configuration.\n",
+                bold=True,
+                fg="red",
+            ),
+        )
+        sys.exit(1)
+    try:
+        os.remove(AUTH_TOKEN_PATH)
+    except (OSError, IOError) as e:
+        echo(style(e, bold=True, fg="red"))
+        sys.exit(1)

@@ -16,8 +16,18 @@ def set_token(auth_token):
     Configure EvalAI Token.
     """
     """
-    Invoked by `evalai set_token <your_evalai_auth_token>`.
+    Invoked by `evalai set_token <your_evalai_auth_token>` or `evalai set_token clear_token`.
     """
+    if auth_token == "clear_token":
+        reset_user_auth_token()
+        echo(
+            style(
+                "\nAuthentication Token has been reset successfully.\n",
+                bold=True,
+                fg="green",
+            )
+        )
+        sys.exit()
     if validators.length(auth_token, min=LEN_OF_TOKEN, max=LEN_OF_TOKEN):
         if not os.path.exists(AUTH_TOKEN_DIR):
             os.makedirs(AUTH_TOKEN_DIR)
