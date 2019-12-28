@@ -107,8 +107,8 @@ def reset_user_auth_token():
     if not os.path.exists(AUTH_TOKEN_PATH):
         echo(
             style(
-                "\nThe authentication token has not been configured. Please use the commands "
-                "`evalai login` or `evalai set_token TOKEN` first to set up the configuration.\n",
+                """\nThe authentication token has not been configured. Please use the commands
+                `evalai login` or `evalai set_token TOKEN` first to set up the configuration.\n""",
                 bold=True,
                 fg="red",
             ),
