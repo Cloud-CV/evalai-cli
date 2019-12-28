@@ -144,4 +144,3 @@ def write_auth_token_to_file(token):
     token = {"token": "{}".format(token)}  # noqa
     token = json.dumps(token)
     write_json_auth_token_to_file(token)
-
