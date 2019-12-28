@@ -3,7 +3,7 @@ import json
 import sys
 import requests
 
-from click import echo, style, secho
+from click import secho
 from evalai.utils.config import (
     AUTH_TOKEN_PATH,
     API_HOST_URL,
@@ -12,10 +12,9 @@ from evalai.utils.config import (
 )
 from evalai.utils.urls import URLS
 
-
 requests.packages.urllib3.disable_warnings()
 
-colors = {'links': 'blue', 'token': 'green', 'error': 'red'}
+colors = {'links': 'blue', 'data': 'green', 'error': 'red'}
 
 
 def get_user_auth_token_by_login(username, password):
@@ -48,14 +47,14 @@ def get_user_auth_token():
             try:
                 data = TokenObj.read()
             except (OSError, IOError) as e:
-                echo(e)
+                pretty_print_auth_commands(e, 'error', bold=True)
         data = json.loads(data)
         token = data["token"]
         return token
     else:
         pretty_print_auth_commands("\nThe authentication token json file doesn't exists at the required path. "
-                "Please download the file from the Profile section of the EvalAI webapp and "
-                "place it at ~/.evalai/token.json\n", 'error', bold=True)
+                                   "Please download the file from the Profile section of the EvalAI webapp and "
+                                   "place it at ~/.evalai/token.json\n", 'error', bold=True)
         sys.exit(1)
 
 
@@ -80,11 +79,12 @@ def get_host_url():
                 data = fr.read()
                 return str(data)
             except (OSError, IOError) as e:
-                echo(e)
+                pretty_print_auth_commands(e, 'error', bold=True)
 
-def pretty_print_auth_commands(str, type, bold=False):
+
+def pretty_print_auth_commands(message, message_type, bold=False):
     """
     Function to print the auth commands
     """
 
-    secho(format(str), fg=colors[type], bold=bold)
+    secho(format(message), fg=colors[message_type], bold=bold)
