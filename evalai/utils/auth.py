@@ -60,7 +60,7 @@ def get_user_auth_token():
             try:
                 data = TokenObj.read()
             except (OSError, IOError) as e:
-                echo(e)
+                echo(style(e, bold=True, fg="red"))
         data = json.loads(data)
         token = data["token"]
         return token
@@ -98,7 +98,7 @@ def get_host_url():
                 data = fr.read()
                 return str(data)
             except (OSError, IOError) as e:
-                echo(e)
+                echo(style(e, bold=True, fg="red"))
 
 
 def write_host_url_to_file(host_url):
@@ -144,3 +144,4 @@ def write_auth_token_to_file(token):
     token = {"token": "{}".format(token)}  # noqa
     token = json.dumps(token)
     write_json_auth_token_to_file(token)
+
