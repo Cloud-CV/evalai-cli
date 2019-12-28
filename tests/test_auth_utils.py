@@ -47,7 +47,7 @@ class TestResetUserAuthToken(TestCase):
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
                 reset_user_auth_token()
-                exit_code = cm.exception.error_code
+            exit_code = cm.exception.error_code
             value = fake_out.getvalue().strip()
 
         self.assertEqual(exit_code, 1)
