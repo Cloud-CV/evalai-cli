@@ -43,7 +43,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "active phases.\n".format(response.json().get("error"),
                     fg="red",
                     bold=True,
                 )
