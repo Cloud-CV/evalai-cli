@@ -16,7 +16,7 @@ def set_token(auth_token):
     Configure EvalAI Token.
     """
     """
-    Invoked by `evalai settoken <your_evalai_auth_token>`.
+    Invoked by `evalai set_token <your_evalai_auth_token>`.
     """
     if validators.length(auth_token, min=LEN_OF_TOKEN, max=LEN_OF_TOKEN):
         if not os.path.exists(AUTH_TOKEN_DIR):
@@ -42,5 +42,6 @@ def set_token(auth_token):
                     LEN_OF_TOKEN
                 ),
                 bold=True,
+                fg="red"
             )
         )
