@@ -1,5 +1,4 @@
 import os
-import sys
 
 import click
 import json
@@ -7,7 +6,6 @@ import validators
 
 from click import echo, style
 
-from evalai.utils.auth import reset_user_auth_token
 from evalai.utils.config import AUTH_TOKEN_DIR, AUTH_TOKEN_PATH, LEN_OF_TOKEN
 
 
@@ -18,18 +16,8 @@ def set_token(auth_token):
     Configure EvalAI Token.
     """
     """
-    Invoked by `evalai set_token <your_evalai_auth_token>` or `evalai set_token clear_token`.
+    Invoked by `evalai set_token <your_evalai_auth_token>`.
     """
-    if auth_token == "clear_token":
-        reset_user_auth_token()
-        echo(
-            style(
-                "\nAuthentication Token has been reset successfully.\n",
-                bold=True,
-                fg="green",
-            )
-        )
-        sys.exit()
     if validators.length(auth_token, min=LEN_OF_TOKEN, max=LEN_OF_TOKEN):
         if not os.path.exists(AUTH_TOKEN_DIR):
             os.makedirs(AUTH_TOKEN_DIR)
