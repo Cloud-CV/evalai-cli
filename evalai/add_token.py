@@ -1,4 +1,5 @@
 import os
+import sys
 
 import click
 import json
@@ -6,6 +7,7 @@ import validators
 
 from click import echo, style
 
+from evalai.utils.auth import reset_user_auth_token
 from evalai.utils.config import AUTH_TOKEN_DIR, AUTH_TOKEN_PATH, LEN_OF_TOKEN
 
 

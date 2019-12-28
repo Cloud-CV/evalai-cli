@@ -1,6 +1,8 @@
 import json
 import os
+import random
 import shutil
+import string
 import tempfile
 
 from io import StringIO
@@ -8,6 +10,7 @@ from unittest import mock
 from unittest import TestCase
 
 from evalai.utils.auth import reset_user_auth_token
+
 
 class TestResetUserAuthToken(TestCase):
     def setUp(self):
@@ -35,12 +38,11 @@ class TestResetUserAuthToken(TestCase):
         reset_user_auth_token()
 
         self.assertFalse(os.path.exists(self.token_path))
-        self.assertEqual(value, expected)
 
     def test_reset_user_auth_token_when_token_is_not_configured(self):
         os.remove(self.token_path)
         expected = ("The authentication token has not been configured. Please use the commands ",
-                   "`evalai login` or `evalai set_token TOKEN` first to set up the configuration.")
+                    "`evalai login` or `evalai set_token TOKEN` first to set up the configuration.")
 
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
