@@ -41,8 +41,10 @@ class TestResetUserAuthToken(TestCase):
 
     def test_reset_user_auth_token_when_token_is_not_configured(self):
         os.remove(self.token_path)
-        expected = """The authentication token has not been configured. Please use the commands 
-                   `evalai login` or `evalai set_token TOKEN` first to set up the configuration."""
+        expected = str(
+            "The authentication token has not been configured. Please use the commands "
+            "`evalai login` or `evalai set_token TOKEN` first to set up the configuration."
+        )
 
         with mock.patch("sys.stdout", StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
