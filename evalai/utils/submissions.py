@@ -49,6 +49,8 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                         bold=True,
                     )
                 )
+            else:
+                echo(err)
         else:
             echo(err)
         if "input_file" in response.json():
