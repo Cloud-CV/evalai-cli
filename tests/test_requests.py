@@ -365,7 +365,7 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             status=406,
         )
 
-        self.expected = "Error: Sorry, the object does not exist."
+        self.expected = "\nFailed to make submission with error: {}\n: Sorry, the object does not exist."
 
     @responses.activate
     def test_display_submission_details_for_object_does_not_exist(self):
@@ -436,7 +436,7 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
             json=error_data,
             status=406,
         )
-        self.expected = "\nFailed to make submission with error: Sorry, the object does not exist."
+        self.expected = "Error: Sorry, the object does not exist."
 
     @responses.activate
     def test_display_participant_team_for_object_does_not_exist(self):
