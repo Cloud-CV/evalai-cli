@@ -38,16 +38,17 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
-            echo(
-                style(
-                    "\nError: {}\n"
-                    "\nUse `evalai challenges` to fetch the active challenges.\n"
-                    "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
-                    fg="red",
-                    bold=True,
+            if response.json().get("error") in response.json():
+                echo(
+                    style(
+                        "\nError: {}\n"
+                        "\nUse `evalai challenges` to fetch the active challenges.\n"
+                        "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                        "active phases.\n".format(response.json().get("error")),
+                        fg="red",
+                        bold=True,
+                    )
                 )
-            )
         else:
             echo(err)
         if "input_file" in response.json():
