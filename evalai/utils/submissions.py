@@ -34,6 +34,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         response = requests.post(
             url, headers=headers, files=input_file, data=data
         )
+        response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
