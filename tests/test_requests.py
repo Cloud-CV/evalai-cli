@@ -365,7 +365,7 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             status=406,
         )
 
-        self.expected = "\nFailed to make submission with error: {}\n: Sorry, the object does not exist."
+        self.expected = "Error: Sorry, the object does not exist."
 
     @responses.activate
     def test_display_submission_details_for_object_does_not_exist(self):
@@ -394,7 +394,7 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             response = result.output.strip()
 
             expected = "Do you want to include the Submission Details? [y/N]: N\n\n{}".format(
-                self.expected
+                "\nFailed to make submission with error: {}\n: Sorry, the object does not exist."
             )
             expected = "{}\n\n{}".format(
                 expected,
