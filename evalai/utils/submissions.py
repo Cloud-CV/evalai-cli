@@ -41,7 +41,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
             if "error" in response.json():
                 echo(
                     style(
-                        "\nError: {}\n"
+                        "\nFailed to make submission with error: {}\n"
                         "\nUse `evalai challenges` to fetch the active challenges.\n"
                         "\nUse `evalai challenge CHALLENGE phases` to fetch the "
                         "active phases.\n".format(response.json().get("error")),
