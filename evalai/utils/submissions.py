@@ -38,7 +38,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
-            if response.json().get("error") in response.json():
+            if "error" in response.json():
                 echo(
                     style(
                         "\nError: {}\n"
