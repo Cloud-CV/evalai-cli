@@ -394,7 +394,7 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             response = result.output.strip()
 
             expected = "Do you want to include the Submission Details? [y/N]: N\n\n{}".format(
-                "\nFailed to make submission with error: {}\n: Sorry, the object does not exist."
+                "Failed to make submission with error: Sorry, the object does not exist."
             )
             expected = "{}\n\n{}".format(
                 expected,
