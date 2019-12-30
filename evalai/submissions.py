@@ -103,9 +103,6 @@ def push(image, phase, url):
     request_path = URLS.phase_details_using_slug.value
     request_path = request_path.format(phase)
     response = make_request(request_path, "GET")
-    # DEBUG:
-    raise Exception(response)
-    #
     challenge_pk = response.get("challenge")
     phase_pk = response.get("id")
 

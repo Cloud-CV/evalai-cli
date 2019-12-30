@@ -62,7 +62,7 @@ def make_request(path, method, files=None, data=None):
         echo(
             style(
                 "You can use `evalai submission {}` to view this submission's status.\n".format(
-                    response.get("id")
+                    response.json().get("id")
                 ),
                 bold=True,
             )
