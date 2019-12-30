@@ -104,7 +104,7 @@ def push(image, phase, url):
     request_path = request_path.format(phase)
     response = make_request(request_path, "GET")
     # DEBUG:
-    raise Exception("Response: {}, content: {}".format(response, response.content))
+    raise Exception("Response: {}, content: {}".format(response))
     #
     challenge_pk = response.get("challenge")
     phase_pk = response.get("id")
