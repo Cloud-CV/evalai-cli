@@ -67,7 +67,4 @@ def make_request(path, method, files=None, data=None):
                 bold=True,
             )
         )
-    # TODO: Add support for PUT request
-    # TODO: Add support for PATCH request
-    # TODO: Add support for DELETE request
     return response.json()
