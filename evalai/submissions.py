@@ -110,7 +110,7 @@ def push(image, phase, url):
     request_path = request_path.format(challenge_pk)
     response = make_request(request_path, "GET")
     # DUBUG
-    raise Exception('Response: {}\nContent: {}'.format(response, response.content))
+    raise Exception('Response: {}'.format(response))
     # DEBUG
     max_docker_image_size = response.get("max_docker_image_size")
 
