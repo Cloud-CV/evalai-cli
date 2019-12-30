@@ -18,7 +18,7 @@ def make_request(path, method, files=None, data=None):
         data = {"status": "submitting"}
 
     try:
-        response = requests.request(method, url, data=data, files=files)
+        response = requests.request(method, url, data=data, headers=headers, files=files)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         if response.status_code in EVALAI_ERROR_CODES:
