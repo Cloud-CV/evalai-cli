@@ -5,7 +5,7 @@ Welcome to Evalai-Cli's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   evalai
 
 Indices and tables
 ==================

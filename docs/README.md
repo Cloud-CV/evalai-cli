@@ -4,15 +4,19 @@
    ```
    pip install Sphinx
    ```
-2. Move to docs folder
+2. Install Theme
+   ```
+   pip install sphinx-rtd-theme
+   ```
+3. Move to docs folder
    ```
    cd docs
    ```
-3. Update docs if needed (OPTIONAL)
+4. Update docs if needed (OPTIONAL)
    ```
    sphinx-apidoc -o . ../evalai
    ```
-4. Generate HTML Using Provided theme
+5. Generate HTML Using Provided theme
    ```
    make html
    ```
