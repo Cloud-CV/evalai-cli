@@ -10,6 +10,16 @@ from .auth import get_request_header, get_host_url
 
 
 def make_request(path, method, files=None, data=None):
+    if method in  ["PUT", "PATCH", "DELETE"]:
+        echo(
+            style(
+                "\nError: HTTP Method is not supported: {}\n".format(method),
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+
     url = "{}{}".format(get_host_url(), path)
     headers = get_request_header()
     if method == "POST":
