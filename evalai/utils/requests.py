@@ -11,7 +11,7 @@ from .auth import get_request_header, get_host_url
 
 def make_request(path, method, files=None, data=None):
     if method in ["PUT", "PATCH", "DELETE"]:
-        raise ValueError("Unsupported method: {}".format(method))
+        raise Exception("HTTP method {} is not supported by make_request".format(method))
 
     url = "{}{}".format(get_host_url(), path)
     headers = get_request_header()
