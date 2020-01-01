@@ -15,6 +15,7 @@ def make_request(path, method, files=None, data=None):
 
     url = "{}{}".format(get_host_url(), path)
     headers = get_request_header()
+
     if method == "POST":
         files = {"input_file": open(files, "rb")} if files else None
         data = {"status": "submitting"}
