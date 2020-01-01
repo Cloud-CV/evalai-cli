@@ -26,7 +26,11 @@ def make_request(path, method, files=None, data=None):
     except requests.exceptions.RequestException as e:
         if isinstance(e, requests.exceptions.HTTPError) and response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
-            e = response.json().get("error")  # In this case, the error message is returned by the server
+            error = response.json().get("error")  # Error message is returned by server in this case
+            e = "\n{}\n" \
+                "\nUse `evalai challenges` to fetch the active challenges.\n" \
+                "\nUse `evalai challenge CHALLENGE phases` to fetch the active phases.\n".format(error)
+
         echo("Could not establish a connection to EvalAI with error: {}".format(e))
         sys.exit(1)
 
