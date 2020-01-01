@@ -23,36 +23,11 @@ def make_request(path, method, files=None, data=None):
     try:
         response = requests.request(method, url, data=data, headers=headers, files=files)
         response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        if response.status_code in EVALAI_ERROR_CODES:
+    except requests.exceptions.RequestException as e:
+        if isinstance(e, requests.exceptions.HTTPError) and response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
-            echo(
-                style(
-                    "\nError: {}\n".format(response.json().get("error")),
-                    fg="red",
-                    bold=True,
-                )
-            )
-            echo(
-                style(
-                    "Use `evalai challenges` to fetch the active challenges."
-                    "Use `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.",
-                    bold=True,
-                )
-            )
-        else:
-            echo(e)
-        sys.exit(1)
-    except requests.exceptions.RequestException:
-        echo(
-            style(
-                "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
-                bold=True,
-                fg="red",
-            )
-        )
+            e = response.json().get("error")  # In this case, the error message is returned by the server
+        echo("Could not establish a connection to EvalAI with error: {}".format(e))
         sys.exit(1)
 
     if method == "POST":
