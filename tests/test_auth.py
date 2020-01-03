@@ -41,11 +41,17 @@ class TestGetUserAuthToken(BaseTestClass):
             json=valid_token_data,
             status=200,
         )
+        responses.add(
+            responses.POST,
+            url.format(get_host_url(), URLS.login.value),
+            status=406,
+        )
 
     def teardown(self):
         with open(self.token_file, "w") as f:
             f.write(self.token)
 
+    @responses.activate()
     def test_get_user_auth_token_by_login_success(self):
         expected = "username: test"
         expected = "{}\n{}".format(
@@ -55,6 +61,22 @@ class TestGetUserAuthToken(BaseTestClass):
         expected = "{}\n{}".format(
             expected,
             "\nLogged in successfully!"
+        ) 
+        runner = CliRunner()
+        result = runner.invoke(login, input="test\npassword",)
+        response = result.output.rstrip()
+        assert response == expected
+
+    @responses.activate()
+    def test_get_user_auth_token_by_login_when_http_error(self):
+        expected = "username: test"
+        expected = "{}\n{}".format(
+            expected,
+            "Enter password: "
+        )
+        expected = "{}\n{}".format(
+            expected,
+            "\nUnable to log in with provided credentials."
         ) 
         runner = CliRunner()
         result = runner.invoke(login, input="test\npassword",)
