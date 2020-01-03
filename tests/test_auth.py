@@ -51,7 +51,7 @@ class TestGetUserAuthToken(BaseTestClass):
         with open(self.token_file, "w") as f:
             f.write(self.token)
 
-    @responses.activate()
+    @responses.activate
     def test_get_user_auth_token_by_login_success(self):
         expected = "username: test"
         expected = "{}\n{}".format(
@@ -67,7 +67,7 @@ class TestGetUserAuthToken(BaseTestClass):
         response = result.output.rstrip()
         assert response == expected
 
-    @responses.activate()
+    @responses.activate
     def test_get_user_auth_token_by_login_when_http_error(self):
         expected = "username: test"
         expected = "{}\n{}".format(
