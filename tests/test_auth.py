@@ -8,6 +8,8 @@ from termcolor import colored
 
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
+from evalai.utils.auth import get_host_url
+from evalai.login import login
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
     API_HOST_URL,
@@ -30,9 +32,34 @@ class TestGetUserAuthToken(BaseTestClass):
             self.token = fo.read()
         os.remove(self.token_file)
 
+        valid_token_data = json.loads(challenge_response.valid_token)
+
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(get_host_url(), URLS.login.value),
+            json=valid_token_data,
+            status=200,
+        )
+
     def teardown(self):
         with open(self.token_file, "w") as f:
             f.write(self.token)
+
+    def test_get_user_auth_token_by_login_success(self):
+        expected = "username: test"
+        expected = "{}\n{}".format(
+            expected,
+            "Enter password: "
+        )
+        expected = "{}\n{}".format(
+            expected,
+            "\nLogged in successfully!"
+        ) 
+        runner = CliRunner()
+        result = runner.invoke(login, input="test\npassword",)
+        response = result.output.rstrip()
+        assert response == expected
 
     def test_get_user_auth_token_when_file_does_not_exist(self):
         expected = (
