@@ -117,7 +117,7 @@ submission_result = """
                     "publication_url": null,
                     "status": "submitted",
                     "stderr_file": null,
-                    "stdout_file": null,
+                    "stdout_file": "https://example.com",
                     "submission_result_file": "http://testserver/media/submission_files/submission_9/result.json",
                     "submitted_at": "2018-06-08T09:24:09.866590Z",
                     "when_made_public": null

@@ -38,6 +38,13 @@ class TestGetSubmissionDetails(BaseTestClass):
             status=200,
         )
 
+        responses.add(
+            responses.GET,
+            self.submission["stdout_file"],
+            body="Test Submission Stdout File",
+            status=200,
+        )
+
     @responses.activate
     def test_display_submission_details(self):
         team_title = "\n{}".format(self.submission["participant_team_name"])
@@ -97,6 +104,14 @@ class TestGetSubmissionDetails(BaseTestClass):
         expected = "{}\n".format(submission_response.submission_result_file).strip()
         runner = CliRunner()
         result = runner.invoke(submission, ["9", "result"])
+        response = result.output.strip()
+        assert response == expected
+
+    @responses.activate
+    def test_display_submission_stdout(self):
+        expected = "Test Submission Stdout File"
+        runner = CliRunner()
+        result = runner.invoke(submission, ["9", "stdout"])
         response = result.output.strip()
         assert response == expected
 
