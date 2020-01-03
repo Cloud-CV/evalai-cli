@@ -14,6 +14,7 @@ from evalai.utils.common import (
     convert_UTC_date_to_local,
 )
 
+
 requests.packages.urllib3.disable_warnings()
 
 
@@ -141,7 +142,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
 
 
 def display_my_submission_details(
-        challenge_id, phase_id, start_date, end_date
+    challenge_id, phase_id, start_date, end_date
 ):
     """
     Function to display the details of a particular submission.
