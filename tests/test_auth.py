@@ -32,6 +32,31 @@ class TestGetUserAuthToken(BaseTestClass):
             self.token = fo.read()
         os.remove(self.token_file)
 
+    def teardown(self):
+        with open(self.token_file, "w") as f:
+            f.write(self.token)
+
+    def test_get_user_auth_token_when_file_does_not_exist(self):
+        expected = (
+            "\nThe authentication token json file doesn't exists at the required path. "
+            "Please download the file from the Profile section of the EvalAI webapp and "
+            "place it at ~/.evalai/token.json\n\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(challenges)
+        response = result.output
+        assert response == expected
+
+
+class TestGetUserAuthTokenByLogin(BaseTestClass):
+
+    token_file = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
+
+    def setup(self):
+        with open(self.token_file) as fo:
+            self.token = fo.read()
+        os.remove(self.token_file)
+
         valid_token_data = json.loads(challenge_response.valid_token)
 
         url = "{}{}"
@@ -40,11 +65,6 @@ class TestGetUserAuthToken(BaseTestClass):
             url.format(get_host_url(), URLS.login.value),
             json=valid_token_data,
             status=200,
-        )
-        responses.add(
-            responses.POST,
-            url.format(get_host_url(), URLS.login.value),
-            status=406,
         )
 
     def teardown(self):
@@ -61,11 +81,31 @@ class TestGetUserAuthToken(BaseTestClass):
         expected = "{}\n{}".format(
             expected,
             "\nLogged in successfully!"
-        ) 
+        )
         runner = CliRunner()
         result = runner.invoke(login, input="test\npassword",)
         response = result.output.rstrip()
         assert response == expected
+
+
+class TestGetUserAuthTokenByLoginWithHTTPError(BaseTestClass):
+
+    token_file = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
+
+    def setup(self):
+        with open(self.token_file) as fo:
+            self.token = fo.read()
+        os.remove(self.token_file)
+        
+        responses.add(
+            responses.POST,
+            url.format(get_host_url(), URLS.login.value),
+            status=406,
+        )
+
+    def teardown(self):
+        with open(self.token_file, "w") as f:
+            f.write(self.token)
 
     @responses.activate
     def test_get_user_auth_token_by_login_when_http_error(self):
@@ -77,21 +117,42 @@ class TestGetUserAuthToken(BaseTestClass):
         expected = "{}\n{}".format(
             expected,
             "\nUnable to log in with provided credentials."
-        ) 
+        )
         runner = CliRunner()
         result = runner.invoke(login, input="test\npassword",)
         response = result.output.rstrip()
         assert response == expected
 
-    def test_get_user_auth_token_when_file_does_not_exist(self):
-        expected = (
-            "\nThe authentication token json file doesn't exists at the required path. "
-            "Please download the file from the Profile section of the EvalAI webapp and "
-            "place it at ~/.evalai/token.json\n\n"
+
+class TestGetUserAuthTokenByLoginWithRequestError(BaseTestClass):
+
+    token_file = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
+
+    def setup(self):
+        with open(self.token_file) as fo:
+            self.token = fo.read()
+        os.remove(self.token_file)
+
+
+    def teardown(self):
+        with open(self.token_file, "w") as f:
+            f.write(self.token)
+
+    @responses.activate
+    def test_get_user_auth_token_by_login_when_request_error(self):
+        expected = "username: test"
+        expected = "{}\n{}".format(
+            expected,
+            "Enter password: "
+        )
+        expected = "{}\n{}".format(
+            expected,
+            "\nCould not establish a connection to EvalAI."
+            " Please check the Host URL.",
         )
         runner = CliRunner()
-        result = runner.invoke(challenges)
-        response = result.output
+        result = runner.invoke(login, input="test\npassword",)
+        response = result.output.rstrip()
         assert response == expected
 
 
