@@ -17,6 +17,7 @@ from click import echo, style
 from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
+    display_submission_stdout,
     display_submission_details,
     display_submission_result,
     convert_bytes_to,
@@ -61,6 +62,18 @@ def result(ctx):
     Invoked by `evalai submission SUBMISSION_ID result`.
     """
     display_submission_result(ctx.submission_id)
+
+
+@submission.command()
+@click.pass_obj
+def stdout(ctx):
+    """
+    Display stdout file of the submission
+    """
+    """
+    Invoked by `evalai submission SUBMISSION_ID stdout`.
+    """
+    display_submission_stdout(ctx.submission_id)
 
 
 @click.command()

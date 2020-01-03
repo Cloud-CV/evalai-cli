@@ -14,7 +14,6 @@ from evalai.utils.common import (
     convert_UTC_date_to_local,
 )
 
-
 requests.packages.urllib3.disable_warnings()
 
 
@@ -142,7 +141,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
 
 
 def display_my_submission_details(
-    challenge_id, phase_id, start_date, end_date
+        challenge_id, phase_id, start_date, end_date
 ):
     """
     Function to display the details of a particular submission.
@@ -275,6 +274,23 @@ def display_submission_result(submission_id):
         echo(
             style(
                 "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+
+
+def display_submission_stdout(submission_id):
+    """
+    Function to display stdout file of a particular submission
+    """
+    try:
+        response = submission_details_request(submission_id).json()
+        echo(requests.get(response['stdout_file']).text)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission does not have stdout file.\n",
                 bold=True,
                 fg="red",
             )
