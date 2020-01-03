@@ -96,7 +96,8 @@ class TestGetUserAuthTokenByLoginWithHTTPError(BaseTestClass):
         with open(self.token_file) as fo:
             self.token = fo.read()
         os.remove(self.token_file)
-        
+
+        url = "{}{}"
         responses.add(
             responses.POST,
             url.format(get_host_url(), URLS.login.value),
@@ -132,7 +133,6 @@ class TestGetUserAuthTokenByLoginWithRequestError(BaseTestClass):
         with open(self.token_file) as fo:
             self.token = fo.read()
         os.remove(self.token_file)
-
 
     def teardown(self):
         with open(self.token_file, "w") as f:
