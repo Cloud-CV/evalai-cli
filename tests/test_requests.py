@@ -895,3 +895,61 @@ class TestRequestForExceptions(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, ["1"])
         assert result.exit_code == 1
+
+
+class TestTeamsSuccess(BaseTestClass):
+    def setup(self):
+        url = "{}{}"
+	
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.participant_team_list.value),
+            status=201)
+
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.host_team_list.value),
+            status=201)
+
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.participate_in_a_challenge.format("2", "3")),
+            status=201)
+
+    @responses.activate
+    def test_create_participant_team_success(self):
+        user_prompt_text = (
+            "Enter team name: TeamTest\n"
+            "Please confirm the team name - TeamTest [y/N]: y\n"
+            "Do you want to enter the Team URL [y/N]: N\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(
+            teams, ["create", "participant"], input="TeamTest\ny\nN"
+        )
+        response = result.output
+        expected = "Your participant team TeamTest was successfully created."
+        expected = "{}{}".format(user_prompt_text, expected)
+        assert response == expected
+
+    @responses.activate
+    def test_create_host_team_success(self):
+        user_prompt_text = (
+            "Enter team name: TeamTest\n"
+            "Please confirm the team name - TeamTest [y/N]: y\n"
+            "Do you want to enter the Team URL [y/N]: N\n"
+        )
+        runner = CliRunner()
+        result = runner.invoke(teams, ["create", "host"], input="TeamTest\ny\nN")
+        response = result.output
+        expected = "Your participant team TeamTest was successfully created."
+        expected = "{}{}".format(user_prompt_text, expected)
+        assert response == expected
+
+    @responses.activate
+    def test_participate_in_a_challenge_success(self):
+        runner = CliRunner()
+        result = runner.invoke(challenge, ["2", "participate", "3"])
+        response = result.output
+        expected = "Your team id {} is now participating in this challenge.".format("2")
+        assert response == expected
