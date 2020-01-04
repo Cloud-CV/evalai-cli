@@ -901,8 +901,8 @@ class TestTeamsSuccess(BaseTestClass):
     def setup(self):
         url = "{}{}"
 	
-	self.team_id = "3"
-	self.challenge_id = "2"
+        self.team_id = "3"
+        self.challenge_id = "2"
 	
         responses.add(
             responses.POST,
