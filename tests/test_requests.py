@@ -903,22 +903,23 @@ class TestTeamsSuccess(BaseTestClass):
 	
         self.team_id = "3"
         self.challenge_id = "2"
-	
+        
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.participant_team_list.value),
             status=201)
-
+        
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.host_team_list.value),
             status=201)
-
+        
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.participate_in_a_challenge.format("2", "3")),
             status=201)
-
+        
+        
     @responses.activate
     def test_create_participant_team_success(self):
         user_prompt_text = (
@@ -934,7 +935,8 @@ class TestTeamsSuccess(BaseTestClass):
         expected = "Your participant team TeamTest was successfully created."
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
-
+        
+        
     @responses.activate
     def test_create_host_team_success(self):
         user_prompt_text = (
@@ -948,7 +950,8 @@ class TestTeamsSuccess(BaseTestClass):
         expected = "Your participant team TeamTest was successfully created."
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
-
+        
+        
     @responses.activate
     def test_participate_in_a_challenge_success(self):
         runner = CliRunner()
