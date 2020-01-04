@@ -901,6 +901,9 @@ class TestTeamsSuccess(BaseTestClass):
     def setup(self):
         url = "{}{}"
 	
+	self.team_id = "3"
+	self.challenge_id = "2"
+	
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.participant_team_list.value),
@@ -949,7 +952,7 @@ class TestTeamsSuccess(BaseTestClass):
     @responses.activate
     def test_participate_in_a_challenge_success(self):
         runner = CliRunner()
-        result = runner.invoke(challenge, ["2", "participate", "3"])
+        result = runner.invoke(challenge, [self.challenge_id, "participate", self.team_id])
         response = result.output
         expected = "Your team id {} is now participating in this challenge.".format("2")
         assert response == expected
