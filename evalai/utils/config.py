@@ -26,4 +26,6 @@ EVALAI_HOST_URLS = [
     "http://localhost:8888",
 ]
 
-STARTERS_ZIP_URL = "http://github.com/cloud-cv/evalai-starters/zipball/master/"
+ENVIRONMENT = os.environ.get("EVALAI_CLI_ENVIRONMENT", "PRODUCTION")
+
+LOCAL_DOCKER_REGISTRY_URI = os.environ.get("EVALAI_LOCAL_DOCKER_REGISTRY_URI", "localhost:5000")
