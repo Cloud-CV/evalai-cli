@@ -85,7 +85,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
 
 def pretty_print_my_submissions_data(submissions, start_date, end_date):
     """
-    Funcion to print the submissions for a particular challenge.
+    Function to print the submissions for a particular challenge.
     """
     table = BeautifulTable(max_width=100)
     attributes = ["id", "participant_team_name", "execution_time", "status"]
