@@ -896,28 +896,27 @@ class TestRequestForExceptions(BaseTestClass):
         result = runner.invoke(challenge, ["1"])
         assert result.exit_code == 1
 
-
 class TestTeamsSuccess(BaseTestClass):
     def setup(self):
         url = "{}{}"
 	
-	self.challenge_id = "2"
-	self.team_id = "3"
-	self.team_name = "TeamTest"
-	self.expected_partic_team = "Your participant team {} was successfully created".format(self.team_name)
-	self.expected_host_team = "Your host team {} was successfully created".format(self.team_name)
-	self.expected_participate = "Your team id {} is now participating in this challenge".format(self.team_id)
+        self.challenge_id = "2"
+        self.team_id = "3"
+        self.team_name = "TeamTest"
+        self.expected_partic_team = "Your participant team {} was successfully created".format(self.team_name)
+        self.expected_host_team = "Your host team {} was successfully created".format(self.team_name)
+        self.expected_participate = "Your team id {} is now participating in this challenge".format(self.team_id)
 
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.participant_team_list.value),
-	        body="Your participant team {} was successfully created.".format(self.team_name),
+            body="Your participant team {} was successfully created.".format(self.team_name),
             status=201)
 
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.create_host_team.value),
-	        body="Your host team {} was successfully created.".format(self.team_name),
+            body="Your host team {} was successfully created.".format(self.team_name),
             status=201)
 
         responses.add(
@@ -950,7 +949,7 @@ class TestTeamsSuccess(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(teams, ["create", "host"], input="TeamTest\ny\nN")
         response = result.output
-	    expected = self.expected_host_team
+	expected = self.expected_host_team
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
 
