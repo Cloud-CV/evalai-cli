@@ -900,7 +900,7 @@ class TestRequestForExceptions(BaseTestClass):
 class TestTeamsSuccess(BaseTestClass):
     def setup(self):
 
-        url = str("{}{}")
+        url = "{}{}"
 
         self.team_id = "3"
         self.challenge_id = "2"
@@ -917,7 +917,7 @@ class TestTeamsSuccess(BaseTestClass):
 
         responses.add(
             responses.POST,
-            url.format(API_HOST_URL, URLS.participate_in_a_challenge.format(self.challenge_id, self.team_id)),
+            url.format(API_HOST_URL, str(URLS.participate_in_a_challenge).format(self.challenge_id, self.team_id)),
             status=201)
 
     @responses.activate
