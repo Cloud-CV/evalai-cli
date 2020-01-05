@@ -899,7 +899,7 @@ class TestRequestForExceptions(BaseTestClass):
 class TestTeamsSuccess(BaseTestClass):
     def setup(self):
         url = "{}{}"
-	
+
         self.challenge_id = "2"
         self.team_id = "3"
         self.team_name = "TeamTest"
@@ -921,19 +921,20 @@ class TestTeamsSuccess(BaseTestClass):
 
         responses.add(
             responses.POST,
-            url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format(self.challenge_id, self.team_id)),
+            url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format(self.challenge_id, self.team_id),
             body="Your team id {} is now participating in this challenge.".format(self.team_id),
             status=201)
 
     @responses.activate
     def test_create_participant_team_success(self):
-        user_prompt_text = (
+        user_prompt_text=(
             "Enter team name: TeamTest\n"
             "Please confirm the team name - TeamTest [y/N]: y\n"
             "Do you want to enter the Team URL [y/N]: N\n"
         )
+
         runner = CliRunner()
-        result = runner.invoke(teams, ["create", "participant"], input="TeamTest\ny\nN")
+        result = runner.invoke(teams, ["create", "participant"], input = "TeamTest\ny\nN")
         response = result.output
         expected = self.expected_partic_team
         expected = "{}{}".format(user_prompt_text, expected)
@@ -941,11 +942,12 @@ class TestTeamsSuccess(BaseTestClass):
 
     @responses.activate
     def test_create_host_team_success(self):
-        user_prompt_text = (
+        user_prompt_text=(
             "Enter team name: TeamTest\n"
             "Please confirm the team name - TeamTest [y/N]: y\n"
             "Do you want to enter the Team URL [y/N]: N\n"
         )
+
         runner = CliRunner()
         result = runner.invoke(teams, ["create", "host"], input="TeamTest\ny\nN")
         response = result.output
