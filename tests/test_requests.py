@@ -899,25 +899,31 @@ class TestRequestForExceptions(BaseTestClass):
 
 class TestTeamsSuccess(BaseTestClass):
     def setup(self):
-
         url = "{}{}"
-
-        self.team_id = "3"
-        self.challenge_id = "2"
+	
+	self.challenge_id = "2"
+	self.team_id = "3"
+	self.team_name = "TeamTest"
+	self.expected_partic_team = "Your participant team {} was successfully created".format(self.team_name)
+	self.expected_host_team = "Your host team {} was successfully created".format(self.team_name)
+	self.expected_participate = "Your team id {} is now participating in this challenge".format(self.team_id)
 
         responses.add(
             responses.POST,
             url.format(API_HOST_URL, URLS.participant_team_list.value),
+	        body="Your participant team {} was successfully created.".format(self.team_name),
             status=201)
 
         responses.add(
             responses.POST,
-            url.format(API_HOST_URL, URLS.host_team_list.value),
+            url.format(API_HOST_URL, URLS.create_host_team.value),
+	        body="Your host team {} was successfully created.".format(self.team_name),
             status=201)
 
         responses.add(
             responses.POST,
-            url.format(API_HOST_URL, str(URLS.participate_in_a_challenge).format(self.challenge_id, self.team_id)),
+            url.format(API_HOST_URL, URLS.participate_in_a_challenge.value).format(self.challenge_id, self.team_id)),
+            body="Your team id {} is now participating in this challenge.".format(self.team_id),
             status=201)
 
     @responses.activate
@@ -928,11 +934,9 @@ class TestTeamsSuccess(BaseTestClass):
             "Do you want to enter the Team URL [y/N]: N\n"
         )
         runner = CliRunner()
-        result = runner.invoke(
-            teams, ["create", "participant"], input="TeamTest\ny\nN"
-        )
+        result = runner.invoke(teams, ["create", "participant"], input="TeamTest\ny\nN")
         response = result.output
-        expected = "Your participant team TeamTest was successfully created."
+        expected = self.expected_partic_team
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
 
@@ -946,7 +950,7 @@ class TestTeamsSuccess(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(teams, ["create", "host"], input="TeamTest\ny\nN")
         response = result.output
-        expected = "Your participant team TeamTest was successfully created."
+	    expected = self.expected_host_team
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
 
@@ -955,5 +959,5 @@ class TestTeamsSuccess(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(challenge, [self.challenge_id, "participate", self.team_id])
         response = result.output
-        expected = "Your team id {} is now participating in this challenge.".format("2")
+        expected = self.expected_participate
         assert response == expected
