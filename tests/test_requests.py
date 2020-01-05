@@ -7,6 +7,7 @@ from requests.exceptions import RequestException
 from evalai.challenges import challenge, challenges
 from evalai.teams import teams
 from evalai.submissions import submission
+from evalai.utils.auth import get_request_header
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
