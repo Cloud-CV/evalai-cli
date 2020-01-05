@@ -903,9 +903,9 @@ class TestTeamsSuccess(BaseTestClass):
         self.challenge_id = "2"
         self.team_id = "3"
         self.team_name = "TeamTest"
-        self.expected_partic_team = "Your participant team {} was successfully created".format(self.team_name)
-        self.expected_host_team = "Your host team {} was successfully created".format(self.team_name)
-        self.expected_participate = "Your team id {} is now participating in this challenge".format(self.team_id)
+        self.expected_partic_team = "Your participant team {} was successfully created.".format(self.team_name)
+        self.expected_host_team = "Your host team {} was successfully created.".format(self.team_name)
+        self.expected_participate = "Your team id {} is now participating in this challenge.".format(self.team_id)
 
         responses.add(
             responses.POST,
