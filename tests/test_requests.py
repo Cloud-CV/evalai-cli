@@ -951,7 +951,7 @@ class TestTeamsSuccess(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(teams, ["create", "host"], input="TeamTest\ny\nN")
         response = result.output
-	expected = self.expected_host_team
+        expected = self.expected_host_team
         expected = "{}{}".format(user_prompt_text, expected)
         assert response == expected
 
