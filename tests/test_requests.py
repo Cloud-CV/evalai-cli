@@ -899,25 +899,25 @@ class TestRequestForExceptions(BaseTestClass):
 
 class TestTeamsSuccess(BaseTestClass):
     def setup(self):
-        
-        url1 = "{}{}"
+
+        url = str("{}{}")
 
         self.team_id = "3"
         self.challenge_id = "2"
 
         responses.add(
             responses.POST,
-            url1.format(API_HOST_URL, URLS.participant_team_list.value),
+            url.format(API_HOST_URL, URLS.participant_team_list.value),
             status=201)
 
         responses.add(
             responses.POST,
-            url1.format(API_HOST_URL, URLS.host_team_list.value),
+            url.format(API_HOST_URL, URLS.host_team_list.value),
             status=201)
 
         responses.add(
             responses.POST,
-            url1.format(API_HOST_URL, URLS.participate_in_a_challenge.format(self.challenge_id, self.team_id)),
+            url.format(API_HOST_URL, URLS.participate_in_a_challenge.format(self.challenge_id, self.team_id)),
             status=201)
 
     @responses.activate
