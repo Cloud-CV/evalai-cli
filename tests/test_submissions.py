@@ -38,13 +38,6 @@ class TestGetSubmissionDetails(BaseTestClass):
             status=200,
         )
 
-        responses.add(
-            responses.GET,
-            self.submission["stdout_file"],
-            body="Test Submission Stdout File",
-            status=200,
-        )
-
     @responses.activate
     def test_display_submission_details(self):
         team_title = "\n{}".format(self.submission["participant_team_name"])
