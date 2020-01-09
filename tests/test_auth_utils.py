@@ -56,7 +56,7 @@ class TestResetUserAuthToken(TestCase):
         self.assertEqual(value, expected)
 
     @mock.patch("evalai.utils.auth.os.remove")
-    def test_reset_user_auth_token_when_writing_to_file_fails(self, mock_remove):
+    def test_reset_user_auth_token_when_token_file_removal_fails(self, mock_remove):
         error = "ExampleError: Example Error Description"
         mock_remove.side_effect = OSError(error)
 
