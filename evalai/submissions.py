@@ -17,10 +17,10 @@ from click import echo, style
 from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
+    convert_bytes_to,
     display_submission_details,
     display_submission_result,
     display_submission_stderr,
-    convert_bytes_to,
 )
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
