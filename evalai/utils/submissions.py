@@ -287,7 +287,15 @@ def display_submission_stderr(submission_id):
     """
     try:
         response = submission_details_request(submission_id).json()
-        echo(requests.get(response['stderr_file']).text)
+        stderr_content = requests.get(response['stderr_file']).text
+        echo(
+            style(
+                "\nThe content of stderr file:",
+                bold=True,
+                fg="green"
+            )
+        )
+        echo(stderr_content)
     except requests.exceptions.MissingSchema:
         echo(
             style(

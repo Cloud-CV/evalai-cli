@@ -129,7 +129,7 @@ class TestDisplaySubmissionStderr(BaseTestClass):
 
     @responses.activate
     def test_display_submission_stderr(self):
-        expected = "Test Submission Stderr File"
+        expected = "The content of stderr file:\nTest Submission Stderr File"
         runner = CliRunner()
         result = runner.invoke(submission, ["10", "stderr"])
         response = result.output.strip()
