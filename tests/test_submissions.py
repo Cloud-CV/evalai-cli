@@ -20,6 +20,7 @@ from .base import BaseTestClass
 
 class TestGetSubmissionDetails(BaseTestClass):
     def setup(self):
+
         self.submission = json.loads(submission_response.submission_result)
 
         url = "{}{}"
@@ -315,7 +316,7 @@ class TestMakeSubmission(BaseTestClass):
 
     @responses.activate
     def test_make_submission_for_docker_based_challenge(
-            self, test_make_submission_for_docker_based_challenge_setup
+        self, test_make_submission_for_docker_based_challenge_setup
     ):
         registry_port, image_tag = (
             test_make_submission_for_docker_based_challenge_setup
