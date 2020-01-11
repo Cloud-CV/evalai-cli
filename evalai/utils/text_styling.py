@@ -6,11 +6,11 @@ def print_message(message, error=False):
 
     style_message = ""
 
-    index=0
+    index = 0
 
     for i in list(message.split("`")):
 
-        if index%2:
+        if index % 2:
             style_message += style(i, fg="cyan")
 
         elif error:
