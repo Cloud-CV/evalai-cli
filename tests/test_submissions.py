@@ -111,7 +111,7 @@ class TestDisplaySubmissionStdout(BaseTestClass):
             responses.GET,
             url.format(API_HOST_URL, URLS.get_submission.value).format("10"),
             json=self.submission_with_stdout,
-            status=200
+            status=200,
         )
 
         responses.add(
@@ -125,7 +125,7 @@ class TestDisplaySubmissionStdout(BaseTestClass):
             responses.GET,
             url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
             json=self.submission_without_stdout,
-            status=200
+            status=200,
         )
 
     @responses.activate
