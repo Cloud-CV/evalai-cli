@@ -18,8 +18,8 @@ from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
     display_submission_details,
-    display_submission_result,
     convert_bytes_to,
+    submission_details_request
 )
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
@@ -60,7 +60,17 @@ def result(ctx):
     """
     Invoked by `evalai submission SUBMISSION_ID result`.
     """
-    display_submission_result(ctx.submission_id)
+    try:
+        response = submission_details_request(ctx.submission_id).json()
+        echo(requests.get(response['submission_result_file']).text)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="red",
+            )
+        )
 
 
 @click.command()
