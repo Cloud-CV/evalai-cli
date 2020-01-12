@@ -20,7 +20,6 @@ from evalai.utils.submissions import (
     display_submission_details,
     display_submission_with,
     convert_bytes_to,
-    submission_details_request
 )
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
@@ -63,6 +62,7 @@ def result(ctx):
     """
     error_message = "\nThe Submission is yet to be evaluated.\n"
     display_submission_with(ctx.submission_id, "submission_result_file", error_message)
+
 
 @click.command()
 @click.argument("IMAGE", nargs=1)
