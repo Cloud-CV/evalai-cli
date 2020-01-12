@@ -158,3 +158,29 @@ aws_credentials = """
 submission_result_file = """
                 [{"Total": 60, "Metric1": 61, "Metric2": 62, "Metric3": 63}]
                 """
+
+
+submission_stderr_result = """
+                    {
+                        "id": 48728,
+                        "participant_team": 3519,
+                        "participant_team_name": "test",
+                        "execution_time": 0.085137,
+                        "challenge_phase": 251,
+                        "created_by": 5672,
+                        "status": "failed",
+                        "input_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/a93d2f2b-ac19-409d-a97d-7240ea336a0c.txt",
+                        "stdout_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/0b2c4396-e078-4b95-b041-83801a430874.txt",
+                        "stderr_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/39f3b087-8f86-4757-9c93-bf0b26c1a3c2.txt",
+                        "submitted_at": "2019-12-11T05:37:24.259890Z",
+                        "method_name": "null",
+                        "method_description": "null",
+                        "project_url": "null",
+                        "publication_url": "null",
+                        "is_public": false,
+                        "is_flagged": false,
+                        "submission_result_file": null,
+                        "when_made_public": null,
+                        "is_baseline": false
+                    }"""
+                    

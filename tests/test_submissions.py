@@ -290,3 +290,35 @@ class TestMakeSubmission(BaseTestClass):
                 ],
             )
             assert result.exit_code == 0
+
+
+class TestDisplayStderrFile(BaseTestClass):
+    def setup(self):
+        self.submission_stderr_result = json.loads(submission_response.submission_stderr_result),
+        self.expected_stderr_text = "Testing display contents of stderr file"
+
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.get_submission.value).format(
+                "48728"
+            ),
+            json=self.submission_stderr_result,
+            status=200,
+        )
+
+        responses.add(
+            responses.GET,
+            self.submission_stderr_result["stderr_file"],
+            body=self.expected_stderr_text,
+            status=200,
+        )
+
+    @responses.activate
+    def test_display_stderr_file_success(self):
+        expected = self.expected_stderr_text
+        result = runner.invoke(
+                submission,
+                ["48728", "stderr"]
+            )
+        assert result.output.strip() == expected
