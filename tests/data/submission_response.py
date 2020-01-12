@@ -160,7 +160,7 @@ submission_result_file = """
                 """
 
 
-submission_stderr_result = """
+submission_result_with_stderr_file = """
                     {
                         "id": 48728,
                         "participant_team": 3519,
@@ -183,4 +183,3 @@ submission_stderr_result = """
                         "when_made_public": null,
                         "is_baseline": false
                     }"""
-                    

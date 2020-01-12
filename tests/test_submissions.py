@@ -294,7 +294,7 @@ class TestMakeSubmission(BaseTestClass):
 
 class TestDisplayStderrFile(BaseTestClass):
     def setup(self):
-        self.submission_stderr_result = json.loads(submission_response.submission_stderr_result),
+        self.submission_stderr_result = json.loads(submission_response.submission_result_with_stderr_file)
         self.expected_stderr_text = "Testing display contents of stderr file"
 
         url = "{}{}"
@@ -317,8 +317,9 @@ class TestDisplayStderrFile(BaseTestClass):
     @responses.activate
     def test_display_stderr_file_success(self):
         expected = self.expected_stderr_text
+        runner = CliRunner()
         result = runner.invoke(
-                submission,
-                ["48728", "stderr"]
-            )
+            submission,
+            ["48728", "stderr"]
+        )
         assert result.output.strip() == expected
