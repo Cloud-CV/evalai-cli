@@ -264,6 +264,23 @@ def display_submission_details(submission_id):
     pretty_print_submission_details(response)
 
 
+def display_submission_with(submission_id, file_name, error_message):
+    """
+    Function to display information of a particular submission
+    """
+    try:
+        response = submission_details_request(submission_id).json()
+        echo(requests.get(response[file_name]).text)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                error_message,
+                bold=True,
+                fg="red",
+            )
+        )
+
+
 def convert_bytes_to(byte, to, bsize=1024):
     """
     Convert bytes to KB, MB, GB etc.
