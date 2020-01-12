@@ -264,7 +264,7 @@ def display_submission_details(submission_id):
     pretty_print_submission_details(response)
 
 
-def display_submission_with(submission_id, file_name, error_message):
+def display_submission_file_data(submission_id, file_name, error_message):
     """
     Function to display information of a particular submission
     """
