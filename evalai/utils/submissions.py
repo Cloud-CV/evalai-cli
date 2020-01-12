@@ -292,3 +292,17 @@ def convert_bytes_to(byte, to, bsize=1024):
         unit = int(unit / bsize)
 
     return unit
+
+
+def display_submission_stderr_file(submission_id):
+    try:
+        response = submission_details_request(submission_id).json()
+        echo(requests.get(response['stderr_file']).text)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="yellow",
+            )
+        )
