@@ -316,9 +316,10 @@ class TestDisplayStderrFile(BaseTestClass):
 
     @responses.activate
     def test_display_stderr_file_success(self):
-        expected = self.expected_stderr_text
+        expected = "{}\n{}"
         expected = expected.format(
-            "\nThe Submission is yet to be evaluated."
+            self.expected_stderr_text,
+            "The Submission is yet to be evaluated."
         )
         runner = CliRunner()
         result = runner.invoke(
