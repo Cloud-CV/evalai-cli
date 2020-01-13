@@ -295,7 +295,7 @@ class TestMakeSubmission(BaseTestClass):
 class TestDisplayStderrFile(BaseTestClass):
     def setup(self):
         self.submission_stderr_result = json.loads(submission_response.submission_result_with_stderr_file)
-        self.expected_stderr_text = "Testing display contents of stderr file"
+        self.expected_stderr_text = "Testing display contents of stderr file{}"
 
         url = "{}{}"
         responses.add(
