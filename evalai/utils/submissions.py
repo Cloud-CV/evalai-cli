@@ -297,6 +297,7 @@ def convert_bytes_to(byte, to, bsize=1024):
 def display_submission_stderr_file(submission_id):
     response = submission_details_request(submission_id).json()
     echo(requests.get(response['stderr_file']).text)
+    echo(response['status'])
     if response['status'] == "failed":
         echo(
             style(
