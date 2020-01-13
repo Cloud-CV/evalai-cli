@@ -319,7 +319,7 @@ class TestDisplayStderrFile(BaseTestClass):
 
         responses.add(
             responses.GET,
-            self.submission_stderr_result["stderr_file"],
+            self.submission_stderr_result_submitted["stderr_file"],
             body=self.expected_stderr_text,
             status=200,
         )
