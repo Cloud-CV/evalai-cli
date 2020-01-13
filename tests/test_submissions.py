@@ -295,7 +295,7 @@ class TestMakeSubmission(BaseTestClass):
 class TestDisplayStderrFile(BaseTestClass):
     def setup(self):
         self.submission_stderr_result = json.loads(submission_response.submission_result_with_stderr_file)
-        self.expected_stderr_text = "\nThe Submission is yet to be evaluated.\n"
+        self.expected_stderr_text = "Testing display contents of stderr file"
 
         url = "{}{}"
         responses.add(
@@ -318,7 +318,7 @@ class TestDisplayStderrFile(BaseTestClass):
     def test_display_stderr_file_success(self):
         expected = self.expected_stderr_text
         expected = expected.format(
-            "Testing display contents of stderr file"
+            "\nThe Submission is yet to be evaluated."
         )
         runner = CliRunner()
         result = runner.invoke(
@@ -326,3 +326,4 @@ class TestDisplayStderrFile(BaseTestClass):
             ["48728", "stderr"]
         )
         assert result.output.strip() == expected
+        assert result.exit_code == 0
