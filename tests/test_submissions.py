@@ -325,4 +325,4 @@ class TestDisplayStderrFile(BaseTestClass):
             submission,
             ["48728", "stderr"]
         )
-        assert result.output.strip() == expected
+        assert result.output == expected
