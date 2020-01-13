@@ -316,7 +316,7 @@ class TestDisplayStderrFile(BaseTestClass):
 
     @responses.activate
     def test_display_stderr_file_success(self):
-        expected = "{}{}"
+        expected = "{}\n\n{}"
         expected = expected.format(
             self.expected_stderr_text,
             "The Submission is yet to be evaluated."
