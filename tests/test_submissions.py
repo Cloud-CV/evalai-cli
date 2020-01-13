@@ -294,7 +294,8 @@ class TestMakeSubmission(BaseTestClass):
 
 class TestDisplayStderrFile(BaseTestClass):
     def setup(self):
-        self.submission_stderr_result = json.loads(submission_response.submission_result_with_stderr_file)
+        self.submission_stderr_result_submitted = json.loads(submission_response.submission_result_with_stderr_file_with_status_of_submitted)
+        self.submission_stderr_result_failed = json.loads(submission_response.submission_result_with_stderr_file_with_status_of_failed)
         self.expected_stderr_text = "Testing display contents of stderr file"
 
         url = "{}{}"
@@ -303,7 +304,16 @@ class TestDisplayStderrFile(BaseTestClass):
             url.format(API_HOST_URL, URLS.get_submission.value).format(
                 "48728"
             ),
-            json=self.submission_stderr_result,
+            json=self.submission_stderr_result_submitted,
+            status=200,
+        )
+
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.get_submission.value).format(
+                "48928"
+            ),
+            json=self.submission_stderr_result_failed,
             status=200,
         )
 
@@ -315,7 +325,7 @@ class TestDisplayStderrFile(BaseTestClass):
         )
 
     @responses.activate
-    def test_display_stderr_file_success(self):
+    def test_display_stderr_file_success_with_status_of_submitted(self):
         expected = "{}\n\n{}"
         expected = expected.format(
             self.expected_stderr_text,
@@ -325,6 +335,21 @@ class TestDisplayStderrFile(BaseTestClass):
         result = runner.invoke(
             submission,
             ["48728", "stderr"]
+        )
+        assert result.output.strip() == expected
+        assert result.exit_code == 0
+
+    @responses.activate
+    def test_display_stderr_file_success_with_status_of_failed(self):
+        expected = "{}\n\n{}"
+        expected = expected.format(
+            self.expected_stderr_text,
+            "The Submission failed."
+        )
+        runner = CliRunner()
+        result = runner.invoke(
+            submission,
+            ["48928", "stderr"]
         )
         assert result.output.strip() == expected
         assert result.exit_code == 0
