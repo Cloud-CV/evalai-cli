@@ -280,6 +280,28 @@ def display_submission_result(submission_id):
             )
         )
 
+def display_submission_stderr(submission_id):
+    """
+    Function to display stderr file of a particular submission in Terminal output
+    """
+    try:
+        response = submission_details_request(submission_id).json()
+        file_url = requests.get(response['stderr_file']).text
+        with open(file_url, "r") as fr:
+            try:
+                file_contents = fr.read()
+                print (file_contents)
+                fr.close()
+            except (OSError, IOError) as e:
+                echo(e)
+    except requests.exceptions.MissingSchema:
+        echo(
+            style(
+                "\nThe Submission is yet to be evaluated.\n",
+                bold=True,
+                fg="yellow",
+            )
+        )
 
 def convert_bytes_to(byte, to, bsize=1024):
     """
