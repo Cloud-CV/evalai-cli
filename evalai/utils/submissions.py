@@ -314,4 +314,13 @@ def display_submission_stderr_file(submission_id):
                 fg="red",
             )
         )
+
+    if response['status'] == "running":
+        echo(
+            style(
+                "\nThe Submission is still running.\n",
+                bold=True,
+                fg="red",
+            )
+        )
     sys.exit(0)
