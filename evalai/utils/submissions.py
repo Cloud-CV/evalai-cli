@@ -306,7 +306,7 @@ def display_submission_stderr_file(submission_id):
             )
         )
 
-    if response['status'] == "failed":
+    elif response['status'] == "failed":
         echo(
             style(
                 "\nThe Submission failed.\n",
@@ -315,7 +315,7 @@ def display_submission_stderr_file(submission_id):
             )
         )
 
-    if response['status'] == "running":
+    elif response['status'] == "running":
         echo(
             style(
                 "\nThe Submission is still running.\n",
