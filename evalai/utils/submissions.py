@@ -292,7 +292,7 @@ def display_submission_stderr(submission_id):
             style(
                 "\nThe content of stderr file:",
                 bold=True,
-                fg="green"
+                fg="green",
             )
         )
         echo(stderr_content)
@@ -301,7 +301,7 @@ def display_submission_stderr(submission_id):
             style(
                 "\nThe Submission does not have stderr file.",
                 bold=True,
-                fg="red"
+                fg="red",
             )
         )
 

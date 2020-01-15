@@ -125,7 +125,7 @@ class TestDisplaySubmissionStderr(BaseTestClass):
             responses.GET,
             url.format(API_HOST_URL, URLS.get_submission.value).format("9"),
             json=self.submission_without_stderr,
-            status=200
+            status=200,
         )
 
     @responses.activate
