@@ -64,7 +64,16 @@ def get_user_auth_token():
         token = data["token"]
         return token
     else:
-        raise Exception(f"Token file not found at: {AUTH_TOKEN_PATH}")
+        echo(
+            style(
+                "\nThe authentication token json file doesn't exists at the required path. "
+                "Please download the file from the Profile section of the EvalAI webapp and "
+                "place it at ~/.evalai/token.json or use evalai set_token <token> to add it.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
 
 
 def get_request_header():
