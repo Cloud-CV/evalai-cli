@@ -158,3 +158,9 @@ aws_credentials = """
 submission_result_file = """
                 [{"Total": 60, "Metric1": 61, "Metric2": 62, "Metric3": 63}]
                 """
+
+user_doesnt_participate_challenge_error = """
+{
+    "error": "You haven't participated in the challenge"
+}
+"""

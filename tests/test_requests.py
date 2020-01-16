@@ -11,7 +11,7 @@ from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
 from .base import BaseTestClass
-from tests.data import challenge_response, teams_response
+from tests.data import challenge_response, submission_response, teams_response
 
 
 class TestHTTPErrorRequests(BaseTestClass):
@@ -342,6 +342,33 @@ class TestHTTPErrorRequests(BaseTestClass):
         url = "{}{}".format(API_HOST_URL, URLS.leaderboard.value).format("1")
         expected = self.expected.format(url)
         assert response == expected
+
+
+class TestMakeSubmissionWhenSubmittingToChallengesUserDoesntParticipate(BaseTestClass):
+    def setup(self):
+
+        error_data = json.loads(submission_response.user_doesnt_participate_challenge_error)
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.make_submission.value).format("1", "2"),
+            json=error_data,
+            status=403,
+        )
+
+    @responses.activate
+    def test_make_submission_when_submitting_to_challenges_user_doesnt_participate(self):
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open("test_file.txt", "w") as f:
+                f.write("Test File")
+            result = runner.invoke(challenge, ["1", "phase", "2", "submit", "--file", "test_file.txt"], input="N")
+            response = result.output.rstrip()
+            expected = (
+                "Do you want to include the Submission Details? [y/N]: N\n\n"
+                "You haven't participated in the challenge"
+            )
+            assert response == expected
 
 
 class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
