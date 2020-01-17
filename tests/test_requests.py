@@ -344,7 +344,7 @@ class TestHTTPErrorRequests(BaseTestClass):
         assert response == expected
 
 
-class TestMakeSubmissionWhenSubmittingToChallengesUserDoesntParticipate(BaseTestClass):
+class TestMakeSubmissionWhenUserDidntParticipate(BaseTestClass):
     def setup(self):
 
         error_data = json.loads(submission_response.user_doesnt_participate_challenge_error)
