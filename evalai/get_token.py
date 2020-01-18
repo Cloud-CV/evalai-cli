@@ -1,11 +1,8 @@
 import click
-import os
 
-from click import echo, style
+from click import echo
 
 from evalai.utils.auth import get_user_auth_token
-from evalai.utils.config import AUTH_TOKEN_PATH
-import json
 
 
 @click.group(invoke_without_command=True)
