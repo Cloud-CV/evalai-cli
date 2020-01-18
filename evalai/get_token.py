@@ -14,4 +14,4 @@ def get_token():
     Get the EvalAI token.
     """
     token = get_user_auth_token()
-    echo(f"Current token is {token}")
+    echo("Current token is {0}".format(token))
