@@ -337,9 +337,6 @@ class TestPush(BaseTestClass):
     @responses.activate
     def test_push(self):
         runner = CliRunner()
-        result = runner.invoke(
-            push,
-            ["evalai-push-test:v1", "--phase", "20"]
-        )
+        result = runner.invoke(push, ["evalai-push-test:v1", "--phase", "20"])
         print(result.output.strip())
         assert result.exit_code == 0
