@@ -69,6 +69,7 @@ class TestTeams:
         result = runner.invoke(teams, ["--participant", "--host"])
         response = result.output
         assert response == expected
+        assert result.exit_code == 1
 
     @responses.activate
     def test_display_participant_teams_list(self):
