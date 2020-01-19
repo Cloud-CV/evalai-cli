@@ -280,7 +280,6 @@ def display_submission_result(submission_id):
             )
         )
 
-
 def display_submission_stderr(submission_id):
     """
     Function to display stderr file of a particular submission in Terminal output
@@ -291,7 +290,7 @@ def display_submission_stderr(submission_id):
         with open(file_url, "r") as fr:
             try:
                 file_contents = fr.read()
-                print(file_contents)
+                print (file_contents)
                 fr.close()
             except (OSError, IOError) as e:
                 echo(e)
@@ -303,7 +302,6 @@ def display_submission_stderr(submission_id):
                 fg="yellow",
             )
         )
-
 
 def convert_bytes_to(byte, to, bsize=1024):
     """

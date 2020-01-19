@@ -63,7 +63,6 @@ def result(ctx):
     """
     display_submission_result(ctx.submission_id)
 
-
 @submission.command()
 @click.pass_obj
 def stderr(ctx):
@@ -74,7 +73,6 @@ def stderr(ctx):
     Invoked by `evalai submission SUBMISSION_ID stterr`.
     """
     display_submission_stderr(ctx.submission_id)
-
 
 @click.command()
 @click.argument("IMAGE", nargs=1)
