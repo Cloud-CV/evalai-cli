@@ -290,3 +290,54 @@ class TestMakeSubmission(BaseTestClass):
                 ],
             )
             assert result.exit_code == 0
+
+
+class TestDisplaySubmissionStderr(BaseTestClass):
+    def setup(self):
+        self.submission = json.loads(submission_response.submission_stderr_details)
+
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.get_submission.value).format("48728"),
+            json=self.submission,
+            status=200,
+        )
+
+        responses.add(
+            responses.GET,
+            self.submission["stderr_file"],
+            json=json.loads(submission_response.submission_stderr_details),
+            status=200,
+        )
+
+    @responses.activate
+    def test_display_submission_strerr_with_a_string_argument(self):
+        expected = (
+            "Usage: submission [OPTIONS] SUBMISSION_ID COMMAND [ARGS]...\n"
+            '\nError: Invalid value for "SUBMISSION_ID": four is not a valid integer\n'
+        )
+        runner = CliRunner()
+        result = runner.invoke(submission, ["four"])
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_display_submission_strerr_with_no_argument(self):
+        expected = (
+            "Usage: submission [OPTIONS] SUBMISSION_ID COMMAND [ARGS]...\n"
+            '\nError: Missing argument "SUBMISSION_ID".\n'
+        )
+        runner = CliRunner()
+        result = runner.invoke(submission)
+        response = result.output
+        assert response == expected
+
+    @responses.activate
+    def test_display_submission_stderr_details(self):
+        expected = ""
+        runner = CliRunner()
+        result = runner.invoke(submission, ["48728", "stderr"])
+        response = result.output.strip()
+        if response == expected:
+            assert response

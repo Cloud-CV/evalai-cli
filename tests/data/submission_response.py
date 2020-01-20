@@ -1,9 +1,29 @@
 submission = """
 {
-    "count": 4,
+    "count": 5,
     "next": null,
     "previous": null,
     "results": [
+        {
+            "challenge_phase": 251,
+            "created_by": 5672,
+            "execution_time": 0.085137,
+            "id": 48728,
+            "input_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/a93d2f2b-ac19-409d-a97d-7240ea336a0c.txt",
+            "is_public": false,
+            "method_description": null,
+            "method_name": null,
+            "participant_team": 3519,
+            "participant_team_name": "test",
+            "project_url": null,
+            "publication_url": null,
+            "status": "failed",
+            "stderr_file": null,
+            "stdout_file": null,
+            "submission_result_file": null,
+            "submitted_at": "2018-06-03T09:24:09.866590Z",
+            "when_made_public": null
+        },
         {
             "challenge_phase": 7,
             "created_by": 4,
@@ -122,6 +142,31 @@ submission_result = """
                     "submitted_at": "2018-06-08T09:24:09.866590Z",
                     "when_made_public": null
                 }"""
+
+
+submission_stderr_details = """
+                {
+                    "challenge_phase": 251,
+                    "created_by": 5672,
+                    "execution_time": 0.085137,
+                    "id": 48728,
+                    "input_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/a93d2f2b-\
+                    ac19-409d-a97d-7240ea336a0c.txt",
+                    "is_public": false,
+                    "method_description": null,
+                    "method_name": null,
+                    "participant_team": 3519,
+                    "participant_team_name": "test",
+                    "project_url": null,
+                    "publication_url": null,
+                    "status": "submitted",
+                    "stderr_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/39f3b087-8f86-4757-9c93-bf0b26c1a3c2.txt",
+                    "stdout_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/0b2c4396-e078-4b95-b041-83801a430874.txt",
+                    "submission_result_file": null,
+                    "submitted_at": "2018-06-03T09:24:09.866590Z",
+                    "when_made_public": null
+                }"""
+
 
 aws_credentials = """
 {
