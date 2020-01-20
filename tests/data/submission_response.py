@@ -160,10 +160,8 @@ submission_stderr_details = """
                     "project_url": null,
                     "publication_url": null,
                     "status": "submitted",
-                    "stderr_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/39f3b087-\
-                    8f86-4757-9c93-bf0b26c1a3c2.txt",
-                    "stdout_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/0b2c4396-\
-                    e078-4b95-b041-83801a430874.txt",
+                    "stderr_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/39f3b087-8f86-4757-9c93-bf0b26c1a3c2.txt",
+                    "stdout_file": "https://evalai.s3.amazonaws.com/media/submission_files/submission_48728/0b2c4396-e078-4b95-b041-83801a430874.txt",
                     "submission_result_file": null,
                     "submitted_at": "2018-06-03T09:24:09.866590Z",
                     "when_made_public": null

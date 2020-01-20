@@ -287,20 +287,14 @@ def display_submission_stderr(submission_id):
     """
     try:
         response = submission_details_request(submission_id).json()
-        file_url = requests.get(response['stderr_file']).text
-        with open(file_url, "r") as fr:
-            try:
-                file_contents = fr.read()
-                print(file_contents)
-                fr.close()
-            except (OSError, IOError) as e:
-                echo(e)
-    except requests.exceptions.MissingSchema:
+        echo(requests.get(response['stderr_file']).text)
+    except requests.exceptions.RequestException:
         echo(
             style(
-                "\nThe Submission is yet to be evaluated.\n",
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
                 bold=True,
-                fg="yellow",
+                fg="red",
             )
         )
 

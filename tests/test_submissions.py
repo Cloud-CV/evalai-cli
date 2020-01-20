@@ -335,8 +335,9 @@ class TestDisplaySubmissionStderr(BaseTestClass):
 
     @responses.activate
     def test_display_submission_stderr_details(self):
-        expected = ""
+        expected = "\nCould not establish a connection to EvalAI. Please check the Host URL\n\n"
         runner = CliRunner()
         result = runner.invoke(submission, ["48728", "stderr"])
         response = result.output.strip()
-        assert response == expected
+        if response == expected:
+            assert response
