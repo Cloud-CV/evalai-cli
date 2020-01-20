@@ -1,5 +1,4 @@
 from click.testing import CliRunner
-from unittest.mock import patch, mock_open, Mock
 
 from evalai.add_token import set_token
 
