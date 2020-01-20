@@ -291,6 +291,7 @@ class TestMakeSubmission(BaseTestClass):
             )
             assert result.exit_code == 0
 
+
 class TestDisplaySubmissionStderr(BaseTestClass):
     def setup(self):
         self.submission = json.loads(submission_response.submission_stderr_details)
