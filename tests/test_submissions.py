@@ -334,7 +334,7 @@ class TestDisplaySubmissionStderr(BaseTestClass):
 
     @responses.activate
     def test_display_submission_stderr_details(self):
-        expected = "Display stderr message output"
+        expected = ""
         runner = CliRunner()
         result = runner.invoke(submission, ["48728", "stderr"])
         response = result.output.strip()
