@@ -98,7 +98,6 @@ def is_auth_token_valid(auth_token):
             )
         )
         return False
-
     return True
 
 
