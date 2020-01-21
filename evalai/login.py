@@ -23,6 +23,12 @@ def login(ctx):
         try:
             json.dump(token, TokenFile)
         except (OSError, IOError) as e:
-            echo(e)
+            echo(
+                style(
+                    "Unable to store token data due to error: {}".format(e),
+                    bold=True,
+                    fg="red",
+                )
+            )
 
     echo(style("\nLogged in successfully!", bold=True))
