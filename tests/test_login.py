@@ -2,6 +2,7 @@ import responses
 import json
 
 from unittest.mock import patch
+from unittest import TestCase
 from click.testing import CliRunner
 from evalai.utils.auth import URLS
 from evalai.utils.config import API_HOST_URL
@@ -10,8 +11,8 @@ from evalai.login import login
 from .base import BaseTestClass
 
 
-class TestLogin(BaseTestClass):
-    def setup(self):
+class TestLogin(TestCase):
+    def setUp(self):
         token = json.loads("""{"token": "test"}""")
 
         url = "{}{}"
