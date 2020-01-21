@@ -1,11 +1,10 @@
 import responses
+import json
 
 from unittest.mock import patch
 from click.testing import CliRunner
-from evalai.utils.auth import (
-    get_host_url,
-    URLS
-)
+from evalai.utils.auth import URLS
+from evalai.utils.config import API_HOST_URL
 from evalai.login import login
 
 from .base import BaseTestClass
@@ -13,14 +12,13 @@ from .base import BaseTestClass
 
 class TestLogin(BaseTestClass):
     def setup(self):
-        payload = {"username": "username", "password": "password"}
+        token = json.loads("""{"token": "test"}""")
 
         url = "{}{}"
         responses.add(
             responses.POST,
-            url.format(get_host_url(), URLS.login.value),
-            headers=payload,
-            json={"token": "test"},
+            url.format(API_HOST_URL, URLS.login.value),
+            json=token,
             status=200,
         )
 
@@ -33,5 +31,5 @@ class TestLogin(BaseTestClass):
 
         runner = CliRunner()
         result = runner.invoke(login, input="username\npassword")
-        response = result.output.rstrip()
+        response = result.output
         assert expected in response
