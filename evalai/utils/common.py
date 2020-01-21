@@ -103,4 +103,3 @@ def store_data_to_json(path, content, message):
                     fg="red",
                 )
             )
-            sys.exit(1)
