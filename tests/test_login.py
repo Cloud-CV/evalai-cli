@@ -1,19 +1,23 @@
 import responses
-import json
+import os
 
 from unittest.mock import patch
-from unittest import TestCase
 from click.testing import CliRunner
 from evalai.utils.auth import URLS
-from evalai.utils.config import API_HOST_URL
+from evalai.utils.config import (
+    API_HOST_URL,
+    AUTH_TOKEN_DIR,
+    AUTH_TOKEN_FILE_NAME
+)
 from evalai.login import login
 
 from .base import BaseTestClass
 
 
-class TestLogin(TestCase):
-    def setUp(self):
-        token = json.loads("""{"token": "test"}""")
+class TestLogin(BaseTestClass):
+    def setup(self):
+        with open(os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)) as f:
+            token = f.read()
 
         url = "{}{}"
         responses.add(
