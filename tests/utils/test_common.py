@@ -1,27 +1,41 @@
-from unittest.mock import patch, mock_open
-from evalai.utils.common import store_data_to_json
+import os
+
+from click.testing import CliRunner
+from evalai.login import login
+from evalai.utils.config import (
+    AUTH_TOKEN_DIR,
+    AUTH_TOKEN_FILE_NAME,
+)
+from unittest.mock import patch
 
 from ..base import BaseTestClass
 
 
-@patch("evalai.utils.common.json.dump")
-@patch("evalai.utils.common.click.echo")
+@patch("evalai.login.get_user_auth_token_by_login")
 class TestStoreDataToJson(BaseTestClass):
     def setup(self):
-        self.path = "test_path"
-        self.content = "test content"
-        self.message = "test message"
+        token_file = os.path.join(AUTH_TOKEN_DIR, AUTH_TOKEN_FILE_NAME)
 
-    def test_store_data_to_json(self, mock_echo, mock_dump):
-        mock_file = mock_open()
-        with patch("evalai.utils.common.open", mock_file):
-            store_data_to_json(self.path, self.content, self.message)
-            mock_dump.assert_called()
-            mock_echo.assert_not_called()
+        with open(token_file) as f:
+            self.token = f.read()
 
-    def test_store_data_to_json_when_error_is_raised(self, mock_dump, mock_echo):
-        mock_dump.side_effect = OSError("Exception")
-        mock_file = mock_open()
-        with patch("evalai.utils.common.open", mock_file):
-            store_data_to_json(self.path, self.content, self.message)
-            mock_echo.assert_called()
+    def test_store_data_to_json(self, mock_get_user_auth_token_by_login):
+        mock_get_user_auth_token_by_login.return_value = self.token
+
+        expected = "\n\nLogged in successfully!"
+        runner = CliRunner()
+        result = runner.invoke(login, input="username\npassword")
+        response = result.output
+        assert expected in response
+
+    @patch("evalai.utils.common.json.dump")
+    def test_store_data_to_json_when_error_is_raised(self, mock_dump, mock_get_user_auth_token_by_login):
+        mock_get_user_auth_token_by_login.return_value = self.token
+        error = "Exception"
+        mock_dump.side_effect = OSError(error)
+
+        expected = "Unable to store token data due to error: {}".format(error)
+        runner = CliRunner()
+        result = runner.invoke(login, input="username\npassword")
+        response = result.output
+        assert expected in response
