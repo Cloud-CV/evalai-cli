@@ -1,9 +1,9 @@
 import os
 import click
-import json
 
 from click import echo, style
 from evalai.utils.auth import get_user_auth_token_by_login
+from evalai.utils.common import store_data_to_json
 from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
 
 
@@ -19,16 +19,6 @@ def login(ctx):
 
     if not os.path.exists(AUTH_TOKEN_DIR):
         os.makedirs(AUTH_TOKEN_DIR)
-    with open(AUTH_TOKEN_PATH, "w") as TokenFile:
-        try:
-            json.dump(token, TokenFile)
-        except (OSError, IOError) as e:
-            echo(
-                style(
-                    "Unable to store token data due to error: {}".format(e),
-                    bold=True,
-                    fg="red",
-                )
-            )
+    store_data_to_json(AUTH_TOKEN_PATH, token, "Unable to store token data due to error: {}")
 
     echo(style("\nLogged in successfully!", bold=True))
