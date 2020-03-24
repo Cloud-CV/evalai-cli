@@ -289,4 +289,5 @@ class TestMakeSubmission(BaseTestClass):
                     "localhost:{0}".format(registry_port),
                 ],
             )
+            import pdb; pdb.set_trace()
             assert result.exit_code == 0
