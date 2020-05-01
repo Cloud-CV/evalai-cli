@@ -1,10 +1,10 @@
 import click
+import json
 import os
 
 from click import echo, style
-
 from evalai.utils.config import AUTH_TOKEN_PATH
-import json
+from json.decoder import JSONDecodeError
 
 
 @click.group(invoke_without_command=True)
@@ -29,4 +29,8 @@ def get_token():
                 tokendata = json.loads(data)
                 echo("Current token is {}".format(tokendata["token"]))
             except (OSError, IOError) as e:
-                echo(e)
+                echo(str(e))
+            except JSONDecodeError as e:
+                echo("Token file was found empty, please set the token using the command evalai set_token <token>")
+            except KeyError as e:
+                echo("Invalid token found, please reset the token using the command evalai set_token <token>")
