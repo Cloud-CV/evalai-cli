@@ -3,6 +3,7 @@ from enum import Enum
 
 class URLS(Enum):
     login = "/api/auth/login"
+    validate_auth_token = "/api/auth/user"
     challenge_list = "/api/challenges/challenge/all"
     past_challenge_list = "/api/challenges/challenge/past"
     future_challenge_list = "/api/challenges/challenge/future"

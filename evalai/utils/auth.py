@@ -76,6 +76,31 @@ def get_user_auth_token():
         sys.exit(1)
 
 
+def is_auth_token_valid(auth_token):
+    """
+    Returns if token is available via server.
+    """
+    url = "{}{}".format(get_host_url(), URLS.validate_auth_token.value)
+    try:
+        headers = {"Authorization": "Token {}".format(auth_token)}
+        response = requests.post(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        if response.status_code in EVALAI_ERROR_CODES:
+            return False
+    except requests.exceptions.RequestException:
+        echo(
+            style(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL: {}\n".format(get_host_url()),
+                bold=True,
+                fg="red"
+            )
+        )
+        return False
+    return True
+
+
 def get_request_header():
     """
     Returns user auth token formatted in header for sending requests.

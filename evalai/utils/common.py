@@ -1,3 +1,5 @@
+import random
+import string
 import sys
 import click
 
@@ -88,3 +90,8 @@ def clean_data(data):
 
 def notify_user(message, color="green", bold=False):
     echo(style(message, fg=color, bold=bold))
+
+
+def generate_random_string(length):
+    letter_set = string.ascii_lowercase + string.digits
+    return "".join(random.choice(letter_set) for _ in range(length))

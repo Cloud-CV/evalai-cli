@@ -7,6 +7,7 @@ from click.testing import CliRunner
 from termcolor import colored
 
 from evalai.challenges import challenge, challenges
+from evalai.add_token import set_token
 from evalai.set_host import host
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
@@ -15,7 +16,7 @@ from evalai.utils.config import (
     AUTH_TOKEN_FILE_NAME,
     HOST_URL_FILE_PATH,
 )
-from evalai.utils.common import convert_UTC_date_to_local
+from evalai.utils.common import convert_UTC_date_to_local, generate_random_string
 
 from tests.data import challenge_response
 from tests.base import BaseTestClass
@@ -44,6 +45,78 @@ class TestGetUserAuthToken(BaseTestClass):
         result = runner.invoke(challenges)
         response = result.output
         assert response == expected
+
+
+class TestValidateUserAuthTokenByProfileWithValidToken(BaseTestClass):
+    def setup(self):
+        self.token_data = generate_random_string(40)
+
+        url = "{}{}".format(API_HOST_URL, URLS.validate_auth_token.value)
+        headers = {"Authorization": "Token {}".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=200,
+        )
+
+        self.expected = "Success: Authentication token is successfully set.\n"
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_token_is_valid(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response == self.expected
+
+
+class TestValidateUserAuthTokenByProfileWithInvalidToken(BaseTestClass):
+    def setup(self):
+        self.token_data = generate_random_string(40)
+
+        url = "{}{}".format(API_HOST_URL, URLS.validate_auth_token.value)
+        headers = {"Authorization": "Token".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=401,
+        )
+
+        self.expected = "Error: Invalid Auth Token (unrecognized or wrong Auth Token).\n"
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_token_is_invalid(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response == self.expected
+
+
+class TestValidateUserAuthTokenByProfileWithBrokenURL(BaseTestClass):
+    def setup(self):
+        self.token_data = generate_random_string(40)
+
+        url = "i-am-broken-url"
+        headers = {"Authorization": "Token".format(self.token_data)}
+        responses.add(
+            responses.POST,
+            url,
+            headers=headers,
+            status=401,
+        )
+
+        self.expected = (
+            "\nCould not establish a connection to EvalAI."
+            " Please check the Host URL: {}\n\n".format(API_HOST_URL)
+        )
+
+    @responses.activate
+    def test_validate_user_auth_token_by_profile_when_url_is_broken(self):
+        runner = CliRunner()
+        result = runner.invoke(set_token, [self.token_data])
+        response = result.output
+        assert response.startswith(self.expected)
 
 
 class TestUserRequestWithInvalidToken(BaseTestClass):
