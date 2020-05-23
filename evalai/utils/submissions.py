@@ -48,6 +48,14 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                     bold=True,
                 )
             )
+        elif response.status_code == 403:
+            echo(
+                style(
+                    "\n" + response.json()["error"] + "\n",
+                    bold=True,
+                    fg="red",
+                )
+            )
         else:
             echo(err)
         if "input_file" in response.json():
