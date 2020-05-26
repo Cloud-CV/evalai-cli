@@ -9,6 +9,7 @@ from .submissions import submission, push, download_file
 from .teams import teams
 from .get_token import get_token
 from .login import login
+from .setup import setup
 
 
 @click.version_option()
@@ -43,3 +44,4 @@ main.add_command(submission)
 main.add_command(teams)
 main.add_command(get_token)
 main.add_command(login)
+main.add_command(setup)

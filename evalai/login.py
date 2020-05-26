@@ -1,35 +1,17 @@
-import os
 import click
-import json
 
 from click import echo, style
-from evalai.utils.auth import get_user_auth_token_by_login
-from evalai.utils.config import AUTH_TOKEN_PATH, AUTH_TOKEN_DIR
+from evalai.utils.auth import get_user_auth_token_by_login, write_json_auth_token_to_file
 
 
 @click.group(invoke_without_command=True)
+@click.option('-u', '--username', type=str, hide_input=False, prompt=True)
+@click.option('-p', '--password', type=str, hide_input=True, prompt=True)
 @click.pass_context
-def login(ctx):
+def login(ctx, password, username):
     """
     Login to EvalAI and save token.
     """
-    username = click.prompt("username", type=str, hide_input=False)
-    password = click.prompt("Enter password", type=str, hide_input=True)
     token = get_user_auth_token_by_login(username, password)
-
-    if os.path.exists(AUTH_TOKEN_PATH):
-        with open(str(AUTH_TOKEN_PATH), "w") as TokenFile:
-            try:
-                json.dump(token, TokenFile)
-            except (OSError, IOError) as e:
-                echo(e)
-    else:
-        if not os.path.exists(AUTH_TOKEN_DIR):
-            os.makedirs(AUTH_TOKEN_DIR)
-        with open(str(AUTH_TOKEN_PATH), "w+") as TokenFile:
-            try:
-                json.dump(token, TokenFile)
-            except (OSError, IOError) as e:
-                echo(e)
-
+    write_json_auth_token_to_file(token)
     echo(style("\nLogged in successfully!", bold=True))

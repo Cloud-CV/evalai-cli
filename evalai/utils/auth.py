@@ -5,6 +5,7 @@ import requests
 
 from click import echo, style
 from evalai.utils.config import (
+    AUTH_TOKEN_DIR,
     AUTH_TOKEN_PATH,
     API_HOST_URL,
     EVALAI_ERROR_CODES,
@@ -98,3 +99,48 @@ def get_host_url():
                 return str(data)
             except (OSError, IOError) as e:
                 echo(style(e, bold=True, fg="red"))
+
+
+def write_host_url_to_file(host_url):
+    """
+    Writes give URL to HOST_URL_FILE_PATH.
+    Warning: Doesn't validate the URL.
+    """
+    if not os.path.exists(AUTH_TOKEN_DIR):
+        os.makedirs(AUTH_TOKEN_DIR)
+    with open(HOST_URL_FILE_PATH, "w") as fw:
+        try:
+            fw.write(host_url)
+        except (OSError, IOError) as e:
+            echo(e)
+            sys.exit(1)
+        echo(
+            style(
+                "{} is set as the host url.".format(host_url),
+                bold=True,
+            )
+        )
+
+
+def write_json_auth_token_to_file(json_token):
+    """
+    Takes token in JSON format and writes it to AUTH_TOKEN_DIR
+    JSON: {"token": "<AUTH_TOKEN>"}
+    """
+    if not os.path.exists(AUTH_TOKEN_DIR):
+        os.makedirs(AUTH_TOKEN_DIR)
+    with open(str(AUTH_TOKEN_PATH), "w+") as TokenFile:
+        try:
+            json.dump(json_token, TokenFile)
+        except (OSError, IOError) as e:
+            echo(e)
+            sys.exit(1)
+
+
+def write_auth_token_to_file(token):
+    """
+    Takes token as a string and writes it in JSON format to AUTH_TOKEN_PATH
+    """
+    token = {"token": "{}".format(token)}  # noqa
+    token = json.dumps(token)
+    write_json_auth_token_to_file(token)

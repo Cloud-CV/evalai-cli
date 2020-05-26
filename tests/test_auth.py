@@ -140,11 +140,11 @@ class TestHostConfig(BaseTestClass):
     def test_set_host_wrong_url(self):
         expected = (
             "Sorry, please enter a valid url.\n"
-            "Example: https://evalapi.cloudcv.org\n"
+            "Example: https://evalapi.cloudcv.org"
         )
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "http:/evalapi.cloudcv"])
-        assert expected == result.output
+        assert expected == result.output.strip('None\n')  # The None\n because sys.exit creates an empty new line.
         assert result.exit_code == 0
 
     def test_set_host_url(self):
