@@ -1,5 +1,6 @@
-import sys
 import click
+import json
+import sys
 
 from bs4 import BeautifulSoup
 from click import echo, style
@@ -88,3 +89,17 @@ def clean_data(data):
 
 def notify_user(message, color="green", bold=False):
     echo(style(message, fg=color, bold=bold))
+
+
+def store_data_to_json(path, content, message):
+    with open(path, "w") as file:
+        try:
+            json.dump(content, file)
+        except (OSError, IOError) as e:
+            echo(
+                style(
+                    message.format(e),
+                    bold=True,
+                    fg="red",
+                )
+            )
