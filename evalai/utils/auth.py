@@ -68,7 +68,7 @@ def get_user_auth_token():
             style(
                 "\nThe authentication token json file doesn't exists at the required path. "
                 "Please download the file from the Profile section of the EvalAI webapp and "
-                "place it at ~/.evalai/token.json\n",
+                "place it at ~/.evalai/token.json or use evalai set_token <token> to add it.\n",
                 bold=True,
                 fg="red",
             )
