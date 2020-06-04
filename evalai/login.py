@@ -22,7 +22,7 @@ def login(ctx):
             try:
                 json.dump(token, TokenFile)
             except (OSError, IOError) as e:
-                echo(e)
+                echo(style(str(e), bold=True, fg="red"))
     else:
         if not os.path.exists(AUTH_TOKEN_DIR):
             os.makedirs(AUTH_TOKEN_DIR)
@@ -30,6 +30,6 @@ def login(ctx):
             try:
                 json.dump(token, TokenFile)
             except (OSError, IOError) as e:
-                echo(e)
+                echo(style(str(e), bold=True, fg="red"))
 
     echo(style("\nLogged in successfully!", bold=True))

@@ -242,7 +242,7 @@ def download_file(url):
             response = requests.get(signed_url, stream=True)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            echo(err)
+            echo(style(str(err), bold=True, fg="red"))
             sys.exit(1)
         except requests.exceptions.RequestException:
             echo(

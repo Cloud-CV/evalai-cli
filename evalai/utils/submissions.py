@@ -49,7 +49,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
                 )
             )
         else:
-            echo(err)
+            echo(style(str(err), bold=True, fg="red"))
         if "input_file" in response.json():
             echo(style(response.json()["input_file"][0], fg="red", bold=True))
         sys.exit(1)
@@ -169,7 +169,7 @@ def display_my_submission_details(
                 )
             )
         else:
-            echo(err)
+            echo(style(str(err), bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -241,7 +241,7 @@ def submission_details_request(submission_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(str(err), bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(

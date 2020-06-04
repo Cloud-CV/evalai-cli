@@ -23,7 +23,7 @@ def host(set_host):
                 try:
                     fw.write(set_host)
                 except (OSError, IOError) as e:
-                    echo(e)
+                    echo(style(str(e), bold=True, fg="red"))
                 echo(
                     style(
                         "{} is set as the host url.".format(set_host),
@@ -58,4 +58,4 @@ def host(set_host):
                         )
                     )
                 except (OSError, IOError) as e:
-                    echo(e)
+                    echo(style(str(e), bold=True, fg="red"))
