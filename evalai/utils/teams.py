@@ -53,6 +53,7 @@ def display_teams(is_host):
     """
     url = "{}{}"
     headers = get_request_header()
+    host_url = get_host_url()
     if is_host:
         url = url.format(get_host_url(), URLS.host_team_list.value)
     else:
@@ -78,7 +79,9 @@ def display_teams(is_host):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL: {}\n".format(
+                    host_url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -98,6 +101,7 @@ def create_team(team_name, team_url, is_host):
     Function to create a new team by taking in the team name as input.
     """
     url = "{}{}"
+    host_url = get_host_url()
 
     if is_host:
         url = url.format(get_host_url(), URLS.create_host_team.value)
@@ -142,7 +146,9 @@ def create_team(team_name, team_url, is_host):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL: {}\n".format(
+                    host_url
+                ),
                 bold=True,
                 fg="red",
             )
@@ -180,6 +186,7 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
 
     url = "{}{}".format(get_host_url(), URLS.participate_in_a_challenge.value)
     url = url.format(challenge_id, participant_team_id)
+    host_url = get_host_url()
 
     headers = get_request_header()
     headers["Content-Type"] = "application/json"
@@ -206,7 +213,9 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
         echo(
             style(
                 "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
+                " Please check the Host URL: {}\n".format(
+                    host_url
+                ),
                 bold=True,
                 fg="red",
             )

@@ -13,6 +13,7 @@ from .auth import get_request_header, get_host_url
 def make_request(path, method, files=None, data=None):
     url = "{}{}".format(get_host_url(), path)
     headers = get_request_header()
+    host_url = get_host_url()
 
     if method == "GET":
         try:
@@ -35,7 +36,9 @@ def make_request(path, method, files=None, data=None):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    " Please check the Host URL: {}\n".format(
+                        host_url
+                    ),
                     bold=True,
                     fg="red",
                 )
@@ -73,7 +76,9 @@ def make_request(path, method, files=None, data=None):
             echo(
                 style(
                     "\nCould not establish a connection to EvalAI."
-                    " Please check the Host URL.\n",
+                    " Please check the Host URL: {}\n".format(
+                        host_url
+                    ),
                     bold=True,
                     fg="red",
                 )
