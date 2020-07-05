@@ -26,7 +26,7 @@ def set_token(auth_token):
                 auth_token = json.dumps(auth_token)
                 fw.write(auth_token)
             except (OSError, IOError) as e:
-                echo(e)
+                echo(style(e, bold=True, fg="red"))
             echo(
                 style(
                     "Success: Authentication token is successfully set.",
@@ -40,6 +40,7 @@ def set_token(auth_token):
                 "Error: Invalid Length. Enter a valid token of length: {}".format(
                     LEN_OF_TOKEN
                 ),
+                fg="red",
                 bold=True,
                 fg="red"
             )

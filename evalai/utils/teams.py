@@ -72,7 +72,7 @@ def display_teams(is_host):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -136,7 +136,7 @@ def create_team(team_name, team_url, is_host):
                     )
                 )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
@@ -200,7 +200,7 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
                 )
             )
         else:
-            echo(err)
+            echo(style(err, bold=True, fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
