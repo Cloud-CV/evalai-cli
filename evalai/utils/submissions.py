@@ -18,6 +18,86 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
+def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, data, file):
+    """
+    Function to upload a file to AWS using a presigned url
+    """
+    url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotations.value)
+    url = url.format(challenge_pk, challenge_phase_pk)
+
+    headers = get_request_header()
+    input_file = {"input_file": }  # File should be a dummy file here.
+    data = {"status": "submitting"}
+    data = dict(data, **submission_metadata)
+
+    try:
+        response = requests.post(
+            url, headers=headers, files=input_file, data=data
+        )
+        presigned_url = response.data.get("presigned_url")
+        submission_message = response.data.get("submission_message")
+
+        response = requests.post(
+            presigned_url, 
+            files=file,
+        )
+
+        if response.status_code == 200:
+            url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
+            data = {"message": submission_message}
+            response = request.post(
+                url,
+                data=data,
+            )
+
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        if response.status_code in EVALAI_ERROR_CODES:
+            validate_token(response.json())
+            echo(
+                style(
+                    "\nError: {}\n"
+                    "\nUse `evalai challenges` to fetch the active challenges.\n"
+                    "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                    "active phases.\n".format(response.json()["error"]),
+                    fg="red",
+                    bold=True,
+                )
+            )
+        else:
+            echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException:
+        echo(
+            style(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+    response = response.json()
+    echo(
+        style(
+            "\nYour file {} with the ID {} is successfully submitted.\n".format(
+                file.name, response["id"]
+            ),
+            fg="green",
+            bold=True,
+        )
+    )
+    echo(
+        style(
+            "You can use `evalai submission {}` to view this submission's status.\n".format(
+                response["id"]
+            ),
+            bold=True,
+            fg="white"
+        )
+    )
+
+
 def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     """
     Function to submit a file to a challenge

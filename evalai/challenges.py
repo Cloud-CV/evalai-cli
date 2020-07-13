@@ -17,7 +17,7 @@ from evalai.utils.challenges import (
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
-from evalai.utils.submissions import make_submission
+from evalai.utils.submissions import make_submission, upload_submission_file_with_presigned_url
 
 
 class Challenge(object):
@@ -233,5 +233,11 @@ def submit(ctx, file):
         )
     make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
 
+
+@phase.command(context_settings={"ignore_unknown_options": True})
+@click.pass_obj
+@click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
+def upload_submission_file(ctx, file):
+    upload_submission_file_with_presigned_url(ctx.challenge_id, ctx.phase_id)
 
 challenge.add_command(phase)
