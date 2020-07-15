@@ -237,7 +237,29 @@ def submit(ctx, file):
 @phase.command(context_settings={"ignore_unknown_options": True})
 @click.pass_obj
 @click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
-def upload_submission_file(ctx, file):
-    upload_submission_file_with_presigned_url(ctx.challenge_id, ctx.phase_id)
+def upload_submission(ctx, file):
+    submission_metadata = {}
+    if click.confirm("Do you want to include the Submission Details?"):
+        submission_metadata["method_name"] = click.prompt(
+            style("Method Name", fg="yellow"), type=str, default=""
+        )
+        submission_metadata["method_description"] = click.prompt(
+            style("Method Description", fg="yellow"), type=str, default=""
+        )
+        submission_metadata["project_url"] = click.prompt(
+            style("Project URL", fg="yellow"), type=str, default=""
+        )
+        submission_metadata["publication_url"] = click.prompt(
+            style("Publication URL", fg="yellow"), type=str, default=""
+        )
+    upload_submission_file_with_presigned_url(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
+
+
+@phase.command(context_settings={"ignore_unknown_options": True})
+@click.pass_obj
+@click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
+def upload_annotations(ctx, file):
+    upload_annotations_file_with_presigned_url(ctx.phase_id, file)
+
 
 challenge.add_command(phase)

@@ -1,3 +1,4 @@
+import os
 import requests
 import sys
 
@@ -18,7 +19,7 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
-def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, data, file):
+def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, file, submission_metadata={}):
     """
     Function to upload a file to AWS using a presigned url
     """
@@ -26,7 +27,10 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     url = url.format(challenge_pk, challenge_phase_pk)
 
     headers = get_request_header()
-    input_file = {"input_file": }  # File should be a dummy file here.
+
+    input_file = open("dummy_submission.json", "w")
+
+    input_file = {"input_file": input_file}
     data = {"status": "submitting"}
     data = dict(data, **submission_metadata)
 
@@ -37,10 +41,14 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
         presigned_url = response.data.get("presigned_url")
         submission_message = response.data.get("submission_message")
 
-        response = requests.post(
-            presigned_url, 
-            files=file,
-        )
+        input_file.close()
+        os.remove("dummy_submission.json")
+
+        with open(file, 'rb') as f:
+            response = requests.post(
+                presigned_url, 
+                data=f,
+            )
 
         if response.status_code == 200:
             url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
@@ -85,15 +93,6 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
             ),
             fg="green",
             bold=True,
-        )
-    )
-    echo(
-        style(
-            "You can use `evalai submission {}` to view this submission's status.\n".format(
-                response["id"]
-            ),
-            bold=True,
-            fg="white"
         )
     )
 

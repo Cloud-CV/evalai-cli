@@ -667,3 +667,54 @@ def display_leaderboard(challenge_id, phase_split_id):
         pretty_print_leaderboard_data(attributes, results)
     else:
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
+
+
+def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk):
+    url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotations.value)
+    url = url.format(challenge_pk, challenge_phase_pk)
+    headers = get_request_header()
+
+    try:
+        response = requests.get(url, headers=headers)
+        presigned_url = response.data.get("presigned_url")
+        with open(file, 'rb') as f:
+            response = requests.post(
+                presigned_url, 
+                data=f,
+            )
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        if response.status_code in EVALAI_ERROR_CODES:
+            validate_token(response.json())
+            echo(
+                style(
+                    "Error: {}".format(response.json()["error"]),
+                    fg="red",
+                    bold=True,
+                )
+            )
+        else:
+            echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException:
+        echo(
+            style(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+    response = response.json()
+    echo(
+        style(
+            "\nYour annotationfile {} for challenge {} is successfully submitted.\n".format(
+                file.name, challenge_pk
+            ),
+            fg="green",
+            bold=True,
+        )
+    )
+
+
