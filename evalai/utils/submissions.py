@@ -38,6 +38,9 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
         response = requests.post(
             url, headers=headers, files=files, data=data
         )
+        if response.status_code in EVALAI_ERROR_CODES:
+            response.raise_for_status()
+
         presigned_url = response.data.get("presigned_url")
         submission_message = response.data.get("submission_message")
         dummy_file.close()
