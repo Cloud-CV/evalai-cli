@@ -1,4 +1,5 @@
 import click
+import os
 
 from click import style
 
@@ -14,6 +15,7 @@ from evalai.utils.challenges import (
     display_challenge_phase_detail,
     display_challenge_phase_split_list,
     display_leaderboard,
+    upload_annotations_file_with_presigned_url,
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
@@ -238,6 +240,12 @@ def submit(ctx, file):
 @click.pass_obj
 @click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
 def upload_submission(ctx, file):
+    """
+    For uploading large submission files to S3.
+    """
+    """
+    Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_submission FILE'
+    """
     submission_metadata = {}
     if click.confirm("Do you want to include the Submission Details?"):
         submission_metadata["method_name"] = click.prompt(
@@ -259,6 +267,12 @@ def upload_submission(ctx, file):
 @click.pass_obj
 @click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
 def upload_annotations(ctx, file):
+    """
+    For uploading large test annotations for a challenge phase to S3.
+    """
+    """
+    Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
+    """
     upload_annotations_file_with_presigned_url(ctx.phase_id, file)
 
 

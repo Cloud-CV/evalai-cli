@@ -675,13 +675,18 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk)
     headers = get_request_header()
 
     try:
-        response = requests.get(url, headers=headers)
+        # Fetching the presigned url.
+        data = {"file_name": file.name}
+        response = requests.get(url, headers=headers, data=data)
         presigned_url = response.data.get("presigned_url")
+
+        # Uploading the annotation file for the current phase to S3.
         with open(file, 'rb') as f:
-            response = requests.post(
+            response = requests.put(
                 presigned_url, 
                 data=f,
             )
+
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
