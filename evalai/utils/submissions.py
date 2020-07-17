@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 import sys
@@ -36,32 +37,40 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
             dummy_file.write(json_object)
         dummy_file = open("dummy_submission.json", "r")
         files = {"input_file": dummy_file}
-        data = {"status": "submitting", "file_name": file.name}
+        data = {"status": "submitting", "file_name": file}
         data = dict(data, **submission_metadata)
         response = requests.post(
             url, headers=headers, files=files, data=data
         )
-        if response.status_code in EVALAI_ERROR_CODES:
+        if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
 
         response = response.json()
-        presigned_url = response.json()["presigned_url"]
-        submission_message = response.json()["submission_message"]
+        presigned_url = response.get("presigned_url")
+        submission_message = response.get("submission_message")
         dummy_file.close()
         os.remove("dummy_submission.json")
 
         # Uploading the submisison file to S3.
-        with open(file, 'rb') as f:
-            response = requests.put(
-                presigned_url, 
-                data=f,
-            )
+        with open(os.path.realpath(file), 'rb') as f:
+            try:
+                response = requests.put(
+                    presigned_url,
+                    data=f,
+                )
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as err:
+                if response.status_code is not HTTPStatus.OK:
+                    echo("There was some error while uploading the file: {}".format(err))
+                    sys.exit(1)
+
         # Publishing the submisison message, for processing by the submission worker.
         if response.status_code == HTTPStatus.OK:
             url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
-            data = {"message": {"submission_pk":23}}
+            data = {"submission_message": json.dumps(submission_message)}
             response = requests.post(
                 url,
+                headers=headers,
                 data=data,
             )
 
@@ -96,7 +105,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     echo(
         style(
             "\nYour file {} with the ID {} is successfully submitted.\n".format(
-                file.name, response["id"]
+                file, response["id"]
             ),
             fg="green",
             bold=True,

@@ -669,26 +669,33 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
 
 
-def upload_annotation_file_with_presigned_url(challenge_pk, challenge_phase_pk, file):
+def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk, file):
     url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotations.value)
     url = url.format(challenge_pk, challenge_phase_pk)
     headers = get_request_header()
 
     try:
         # Fetching the presigned url.
-        data = {"file_name": file.name}
+        data = {"file_name": file}
         response = requests.get(url, headers=headers, data=data)
-        if response.status_code in EVALAI_ERROR_CODES:
+        if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
 
-        presigned_url = response.data.get("presigned_url")
+        response = response.json()
+        presigned_url = response.get("presigned_url")
 
         # Uploading the annotation file for the current phase to S3.
-        with open(file, 'rb') as f:
-            response = requests.put(
-                presigned_url, 
-                data=f,
-            )
+        with open(os.path.realpath(file), 'rb') as f:
+            try:
+                response = requests.put(
+                    presigned_url,
+                    data=f,
+                )
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as err:
+                if response.status_code is not HTTPStatus.OK:
+                    echo("There was some error while uploading the file: {}".format(err))
+                    sys.exit(1)
 
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -718,7 +725,7 @@ def upload_annotation_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     echo(
         style(
             "\nYour annotationfile {} for challenge {} is successfully submitted.\n".format(
-                file.name, challenge_pk
+                file, challenge_pk
             ),
             fg="green",
             bold=True,

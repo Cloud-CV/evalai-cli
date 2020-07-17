@@ -15,7 +15,7 @@ from evalai.utils.challenges import (
     display_challenge_phase_detail,
     display_challenge_phase_split_list,
     display_leaderboard,
-    upload_annotation_file_with_presigned_url,
+    upload_annotations_file_with_presigned_url,
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
@@ -238,7 +238,7 @@ def submit(ctx, file):
 
 @phase.command(context_settings={"ignore_unknown_options": True})
 @click.pass_obj
-@click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
+@click.option("--file", type=click.STRING, required=True, help="File path to the submission file")
 def upload_submission(ctx, file):
     """
     For uploading large submission files to S3.
@@ -265,7 +265,7 @@ def upload_submission(ctx, file):
 
 @phase.command(context_settings={"ignore_unknown_options": True})
 @click.pass_obj
-@click.option("--file", type=click.File("rb"), required=True, help="File path to the submission file")
+@click.option("--file", type=click.STRING, required=True, help="File path to the annotations file")
 def upload_annotation(ctx, file):
     """
     For uploading large test annotations for a challenge phase to S3.
@@ -273,7 +273,7 @@ def upload_annotation(ctx, file):
     """
     Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
     """
-    upload_annotation_file_with_presigned_url(ctx.challenge_id, ctx.phase_id, file)
+    upload_annotations_file_with_presigned_url(ctx.challenge_id, ctx.phase_id, file)
 
 
 challenge.add_command(phase)
