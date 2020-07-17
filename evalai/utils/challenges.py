@@ -669,7 +669,7 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
 
 
-def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk):
+def upload_annotation_file_with_presigned_url(challenge_pk, challenge_phase_pk, file):
     url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotations.value)
     url = url.format(challenge_pk, challenge_phase_pk)
     headers = get_request_header()
