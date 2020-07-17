@@ -24,14 +24,17 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     """
     Function to upload a file to AWS using a presigned url
     """
-    url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotations.value)
+    url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission.value)
     url = url.format(challenge_pk, challenge_phase_pk)
 
     headers = get_request_header()
 
     try:
         # Making a submisison with a dummy file, and fetching the presigned url.
-        dummy_file = open("dummy_submission.json", "w")
+        with open("dummy_submission.json", "w") as dummy_file:
+            json_object = json.dumps({}) 
+            dummy_file.write(json_object)
+        dummy_file = open("dummy_submission.json", "r")
         files = {"input_file": dummy_file}
         data = {"status": "submitting", "file_name": file.name}
         data = dict(data, **submission_metadata)
@@ -41,8 +44,9 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
         if response.status_code in EVALAI_ERROR_CODES:
             response.raise_for_status()
 
-        presigned_url = response.data.get("presigned_url")
-        submission_message = response.data.get("submission_message")
+        response = response.json()
+        presigned_url = response.json()["presigned_url"]
+        submission_message = response.json()["submission_message"]
         dummy_file.close()
         os.remove("dummy_submission.json")
 
@@ -52,12 +56,11 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
                 presigned_url, 
                 data=f,
             )
-
         # Publishing the submisison message, for processing by the submission worker.
         if response.status_code == HTTPStatus.OK:
             url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
-            data = {"message": submission_message}
-            response = request.post(
+            data = {"message": {"submission_pk":23}}
+            response = requests.post(
                 url,
                 data=data,
             )

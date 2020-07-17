@@ -30,6 +30,6 @@ class URLS(Enum):
     )
     download_file = "/api/jobs/submission_files/?bucket={}&key={}"
     phase_details_using_slug = "/api/challenges/phase/{}/"
-    get_presigned_url_for_annotations = "/api/challenge_phase/{}/get_presigned_url_for_annotations/"
-    get_presigned_url_for_submission = "/api/challenges/challenge/{}/challenge_phase/{}/get_presigned_url_for_submission/"
+    get_presigned_url_for_annotations = "/api/challenges/challenge/{}/challenge_phase/{}/get_presigned_url_for_annotations/"
+    get_presigned_url_for_submission = "/api/jobs/challenge/{}/challenge_phase/{}/get_presigned_url_for_submission/"
     publish_submission_message = "/api/jobs/publish_submission_message/"

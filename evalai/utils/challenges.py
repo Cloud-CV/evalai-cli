@@ -724,5 +724,3 @@ def upload_annotation_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
             bold=True,
         )
     )
-
-
