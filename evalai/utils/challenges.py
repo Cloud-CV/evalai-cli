@@ -686,7 +686,7 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk,
         # Uploading the annotation file for the current phase to S3.
         with open(os.path.realpath(file), 'rb') as f:
             presigned_url = response["presigned_response"]["url"]
-            files = { 'file':{ response["file_key"], f } }
+            files = { 'file':(response["file_key"], f) }
             try:
                 response = requests.post(
                     presigned_url,
@@ -695,7 +695,7 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk,
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.OK:
+                if response.status_code is not HTTPStatus.NO_CONTENT:
                     echo("There was some error while uploading the file: {}".format(err))
                     sys.exit(1)
 

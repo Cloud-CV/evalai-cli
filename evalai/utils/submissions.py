@@ -42,7 +42,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
         response = requests.post(
             url, headers=headers, files=files, data=data
         )
-        if response.status_code is not HTTPStatus.OK:
+        if response.status_code is not HTTPStatus.CREATED:
             response.raise_for_status()
 
         response = response.json()
@@ -53,7 +53,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
 
         # Uploading the submisison file to S3.
         with open(os.path.realpath(file), 'rb') as f:
-            files = { 'file':{ response["file_key"], f } }
+            files = { 'file':(response["file_key"], f) }
             try:
                 response = requests.post(
                     presigned_url,
@@ -62,19 +62,18 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.OK:
+                if response.status_code is not HTTPStatus.NO_CONTENT:
                     echo("There was some error while uploading the file: {}".format(err))
                     sys.exit(1)
 
         # Publishing the submisison message, for processing by the submission worker.
-        if response.status_code == HTTPStatus.OK:
-            url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
-            data = {"submission_message": json.dumps(submission_message)}
-            response = requests.post(
-                url,
-                headers=headers,
-                data=data,
-            )
+        url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
+        data = {"submission_message": json.dumps(submission_message)}
+        response = requests.post(
+            url,
+            headers=headers,
+            data=data,
+        )
 
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
