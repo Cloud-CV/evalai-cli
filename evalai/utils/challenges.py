@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 import sys
 
@@ -6,6 +7,7 @@ from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
 from click import echo, style
 from datetime import datetime
+from http import HTTPStatus
 from termcolor import colored
 
 from evalai.utils.auth import get_request_header, get_host_url
@@ -684,18 +686,23 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk,
         response = response.json()
 
         # Uploading the annotation file for the current phase to S3.
+        echo(
+            style(
+                "Your file is being uploaded.",
+                fg="green",
+                bold=False,
+            )
+        )
         with open(os.path.realpath(file), 'rb') as f:
-            presigned_url = response["presigned_response"]["url"]
-            files = { 'file':(response["file_key"], f) }
+            presigned_url = response.get("presigned_url")
             try:
                 response = requests.post(
                     presigned_url,
-                    data=response["presigned_response"]["fields"],
-                    files=files
+                    data=f
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.NO_CONTENT:
+                if response.status_code is not HTTPStatus.OK:
                     echo("There was some error while uploading the file: {}".format(err))
                     sys.exit(1)
 
@@ -726,7 +733,7 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk,
     response = response.json()
     echo(
         style(
-            "\nYour annotationfile {} for challenge {} is successfully submitted.\n".format(
+            "\nYour annotation file {} for challenge {} is successfully uploaded.\n".format(
                 file, challenge_pk
             ),
             fg="green",

@@ -33,7 +33,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     try:
         # Making a submisison with a dummy file, and fetching the presigned url.
         with open("dummy_submission.json", "w") as dummy_file:
-            json_object = json.dumps({}) 
+            json_object = json.dumps({})
             dummy_file.write(json_object)
         dummy_file = open("dummy_submission.json", "r")
         files = {"input_file": dummy_file}
@@ -46,23 +46,28 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
             response.raise_for_status()
 
         response = response.json()
-        presigned_url = response.["presigned_response"]["url"]
+        presigned_url = response.get("presigned_url")
         submission_message = response.get("submission_message")
         dummy_file.close()
         os.remove("dummy_submission.json")
 
         # Uploading the submisison file to S3.
+        echo(
+            style(
+                "Your file is being uploaded.",
+                fg="green",
+                bold=False,
+            )
+        )
         with open(os.path.realpath(file), 'rb') as f:
-            files = { 'file':(response["file_key"], f) }
             try:
-                response = requests.post(
+                response = requests.put(
                     presigned_url,
-                    data=response["presigned_response"]["fields"],
-                    files=files
+                    data=f
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.NO_CONTENT:
+                if response.status_code is not HTTPStatus.OK:
                     echo("There was some error while uploading the file: {}".format(err))
                     sys.exit(1)
 
