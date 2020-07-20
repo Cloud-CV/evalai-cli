@@ -682,14 +682,16 @@ def upload_annotations_file_with_presigned_url(challenge_pk, challenge_phase_pk,
             response.raise_for_status()
 
         response = response.json()
-        presigned_url = response.get("presigned_url")
 
         # Uploading the annotation file for the current phase to S3.
         with open(os.path.realpath(file), 'rb') as f:
+            presigned_url = response["presigned_response"]["url"]
+            files = { 'file':{ response["file_key"], f } }
             try:
-                response = requests.put(
+                response = requests.post(
                     presigned_url,
-                    data=f,
+                    data=response["presigned_response"]["fields"],
+                    files=files
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:

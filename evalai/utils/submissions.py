@@ -46,17 +46,19 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
             response.raise_for_status()
 
         response = response.json()
-        presigned_url = response.get("presigned_url")
+        presigned_url = response.["presigned_response"]["url"]
         submission_message = response.get("submission_message")
         dummy_file.close()
         os.remove("dummy_submission.json")
 
         # Uploading the submisison file to S3.
         with open(os.path.realpath(file), 'rb') as f:
+            files = { 'file':{ response["file_key"], f } }
             try:
-                response = requests.put(
+                response = requests.post(
                     presigned_url,
-                    data=f,
+                    data=response["presigned_response"]["fields"],
+                    files=files
                 )
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
