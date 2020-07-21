@@ -54,7 +54,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
         # Uploading the submisison file to S3.
         echo(
             style(
-                "Your file is being uploaded.",
+                "Your file is being uploaded...",
                 fg="green",
                 bold=False,
             )
