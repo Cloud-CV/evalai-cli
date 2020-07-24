@@ -21,12 +21,12 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
-def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, file, submission_metadata={}):
+def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submission_metadata={}):
     """
     Function to upload a file to AWS using a presigned url
     """
-    url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission.value)
-    url = url.format(challenge_pk, challenge_phase_pk)
+    url = "{}{}".format(get_host_url(), URLS.get_submission_file_presigned_url.value)
+    url = url.format(challenge_phase_pk)
 
     headers = get_request_header()
 
@@ -47,7 +47,7 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
 
         response = response.json()
         presigned_url = response.get("presigned_url")
-        submission_message = response.get("submission_message")
+        submission_pk = response.get("submission_pk")
         dummy_file.close()
         os.remove("dummy_submission.json")
 
@@ -68,28 +68,23 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 if response.status_code is not HTTPStatus.OK:
-                    echo("There was some error while uploading the file: {}".format(err))
+                    echo("There was an error while uploading the file: {}".format(err))
                     sys.exit(1)
 
         # Publishing the submisison message, for processing by the submission worker.
-        url = "{}{}".format(get_host_url(), URLS.publish_submission_message.value)
-        data = {"submission_message": json.dumps(submission_message)}
+        url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
+        url = url.format(challenge_phase_pk, submission_pk)
         response = requests.post(
             url,
             headers=headers,
-            data=data,
         )
-
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
             echo(
                 style(
-                    "\nError: {}\n"
-                    "\nUse `evalai challenges` to fetch the active challenges.\n"
-                    "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "\nError: {}\n".format(response.json()["error"]),
                     fg="red",
                     bold=True,
                 )
@@ -110,8 +105,8 @@ def upload_submission_file_with_presigned_url(challenge_pk, challenge_phase_pk, 
     response = response.json()
     echo(
         style(
-            "\nYour file {} with the ID {} is successfully submitted.\n".format(
-                file, response["id"]
+            "\nYour file {} with the ID {} is successfully submitted for evaluation.\n".format(
+                file, submission_pk
             ),
             fg="green",
             bold=True,

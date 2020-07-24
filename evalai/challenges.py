@@ -1,5 +1,4 @@
 import click
-import os
 
 from click import style
 
@@ -260,7 +259,7 @@ def upload_submission(ctx, file):
         submission_metadata["publication_url"] = click.prompt(
             style("Publication URL", fg="yellow"), type=str, default=""
         )
-    upload_submission_file_with_presigned_url(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
+    upload_submission_file_with_presigned_url(ctx.phase_id, file, submission_metadata)
 
 
 @phase.command(context_settings={"ignore_unknown_options": True})
@@ -273,7 +272,7 @@ def upload_annotation(ctx, file):
     """
     Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
     """
-    upload_annotations_file_with_presigned_url(ctx.challenge_id, ctx.phase_id, file)
+    upload_annotations_file_with_presigned_url(ctx.phase_id, file)
 
 
 challenge.add_command(phase)
