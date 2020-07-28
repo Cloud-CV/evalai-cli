@@ -31,16 +31,10 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
     headers = get_request_header()
 
     try:
-        # Making a submisison with a dummy file, and fetching the presigned url.
-        with open("dummy_submission.json", "w") as dummy_file:
-            json_object = json.dumps({})
-            dummy_file.write(json_object)
-        dummy_file = open("dummy_submission.json", "r")
-        files = {"input_file": dummy_file}
         data = {"status": "submitting", "file_name": file}
         data = dict(data, **submission_metadata)
         response = requests.post(
-            url, headers=headers, files=files, data=data
+            url, headers=headers, data=data
         )
         if response.status_code is not HTTPStatus.CREATED:
             response.raise_for_status()
@@ -48,8 +42,6 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
         response = response.json()
         presigned_url = response.get("presigned_url")
         submission_pk = response.get("submission_pk")
-        dummy_file.close()
-        os.remove("dummy_submission.json")
 
         # Uploading the submisison file to S3.
         echo(
