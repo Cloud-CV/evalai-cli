@@ -1,5 +1,7 @@
+import os
 import click
 import random
+import requests
 import string
 import sys
 
@@ -7,6 +9,7 @@ from bs4 import BeautifulSoup
 from click import echo, style
 from datetime import datetime
 from dateutil import tz
+from http import HTTPStatus
 
 
 class Date(click.ParamType):
@@ -29,6 +32,36 @@ class Date(click.ParamType):
                     self.format
                 )
             )
+
+
+def upload_with_presigned_url(file, presigned_url):
+    """Function to upload a file, given the target presigned s3 url.
+
+    Arguments:
+        file (str) -- the path of the file to be uploaded
+        presigned_url (str) -- the presigned url to upload the file on s3
+    """
+    echo(
+        style(
+            "Uploading the submission file...",
+            fg="green",
+            bold=False,
+        )
+    )
+
+    with open(os.path.realpath(file), 'rb') as f:
+        try:
+            response = requests.put(
+                presigned_url,
+                data=f
+            )
+            return response
+        except Exception as err:
+            echo("There was some error while uploading the file: {}".format(err))
+            sys.exit(1)
+        if response.status_code is not HTTPStatus.OK:
+            echo("There was some error while uploading the file: ")
+            response.raise_for_status()
 
 
 def validate_token(response):

@@ -1,5 +1,4 @@
 import json
-import os
 import requests
 import sys
 
@@ -13,9 +12,10 @@ from termcolor import colored
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (
     clean_data,
-    validate_token,
     convert_UTC_date_to_local,
+    upload_with_presigned_url,
     validate_date_format,
+    validate_token,
 )
 from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
@@ -684,28 +684,10 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
             response.raise_for_status()
 
         response = response.json()
+        presigned_url = response.get("presigned_url")
 
         # Uploading the annotation file for the current phase to S3.
-        echo(
-            style(
-                "Uploading the {} phase annotations...".format(challenge_phase_pk),
-                fg="green",
-                bold=False,
-            )
-        )
-        with open(os.path.realpath(file), 'rb') as f:
-            presigned_url = response.get("presigned_url")
-            try:
-                response = requests.put(
-                    presigned_url,
-                    data=f
-                )
-            except Exception as err:
-                echo("There was some error while uploading the file: {}".format(err))
-                sys.exit(1)
-            if response.status_code is not HTTPStatus.OK:
-                echo("There was some error while uploading the file: ")
-                response.raise_for_status()
+        response = upload_with_presigned_url(file, presigned_url)
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())

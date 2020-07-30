@@ -1,4 +1,3 @@
-import os
 import requests
 import sys
 
@@ -11,9 +10,10 @@ from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
 from evalai.utils.common import (
+    convert_UTC_date_to_local,
+    upload_with_presigned_url,
     validate_token,
     validate_date_format,
-    convert_UTC_date_to_local,
 )
 
 
@@ -43,25 +43,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
         submission_pk = response.get("submission_pk")
 
         # Uploading the submisison file to S3.
-        echo(
-            style(
-                "Uploading the submission file...",
-                fg="green",
-                bold=False,
-            )
-        )
-        with open(os.path.realpath(file), 'rb') as f:
-            try:
-                response = requests.put(
-                    presigned_url,
-                    data=f
-                )
-            except Exception as err:
-                echo("There was some error while uploading the file: {}".format(err))
-                sys.exit(1)
-            if response.status_code is not HTTPStatus.OK:
-                echo("There was some error while uploading the file: ")
-                response.raise_for_status()
+        response = upload_with_presigned_url(file, presigned_url)
 
         # Publishing submission message to the message queue for processing
         url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
