@@ -239,11 +239,12 @@ def submit(ctx, file):
 @click.pass_obj
 @click.option("--file", type=click.STRING, required=True, help="File path to the submission file")
 def upload_submission(ctx, file):
-    """
-    For uploading large submission files to S3.
-    """
-    """
+    """For uploading large submission files to S3.
     Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_submission FILE'
+
+    Arguments:
+        ctx (class click.Context) --  The context object which holds state of the invocation
+        file (str) -- the path of the file to be uploaded
     """
     submission_metadata = {}
     if click.confirm("Do you want to include the Submission Details?"):
@@ -266,11 +267,12 @@ def upload_submission(ctx, file):
 @click.pass_obj
 @click.option("--file", type=click.STRING, required=True, help="File path to the annotations file")
 def upload_annotation(ctx, file):
-    """
-    For uploading large test annotations for a challenge phase to S3.
-    """
-    """
+    """For uploading large test annotations for a challenge phase to S3.
     Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
+
+    Arguments:
+        ctx (class click.Context) --  The context object which holds state of the invocation
+        file (str) -- the path of the file to be uploaded
     """
     upload_annotations_file_with_presigned_url(ctx.phase_id, file)
 

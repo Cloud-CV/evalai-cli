@@ -1,4 +1,3 @@
-import json
 import os
 import requests
 import sys
@@ -46,7 +45,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
         # Uploading the submisison file to S3.
         echo(
             style(
-                "Your file is being uploaded...",
+                "Uploading the submission file...",
                 fg="green",
                 bold=False,
             )
@@ -57,13 +56,14 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
                     presigned_url,
                     data=f
                 )
+            except Exception as err:
+                echo("There was some error while uploading the file: {}".format(err))
+                sys.exit(1)
+            if response.status_code is not HTTPStatus.OK:
+                echo("There was some error while uploading the file: ")
                 response.raise_for_status()
-            except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.OK:
-                    echo("There was an error while uploading the file: {}".format(err))
-                    sys.exit(1)
 
-        # Publishing the submisison message, for processing by the submission worker.
+        # Publishing submission message to the message queue for processing
         url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
         url = url.format(challenge_phase_pk, submission_pk)
         response = requests.post(
@@ -97,7 +97,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
     response = response.json()
     echo(
         style(
-            "\nYour file {} with the ID {} is successfully submitted for evaluation.\n".format(
+            "\nYour submission {} with the id {} is successfully submitted for evaluation.\n".format(
                 file, submission_pk
             ),
             fg="green",

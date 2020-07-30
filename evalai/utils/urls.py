@@ -32,4 +32,4 @@ class URLS(Enum):
     phase_details_using_slug = "/api/challenges/phase/{}/"
     get_annotation_file_presigned_url = "/api/challenges/phases/{}/get_annotation_file_presigned_url/"
     get_submission_file_presigned_url = "/api/jobs/phases/{}/get_submission_file_presigned_url/"
-    send_submission_message = "/api/jobs//phases/{}/send_submission_message/{}/"
+    send_submission_message = "/api/jobs/phases/{}/send_submission_message/{}/"

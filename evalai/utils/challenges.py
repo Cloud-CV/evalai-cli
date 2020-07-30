@@ -688,7 +688,7 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
         # Uploading the annotation file for the current phase to S3.
         echo(
             style(
-                "Your file is being uploaded...",
+                "Uploading the {} phase annotations...".format(challenge_phase_pk),
                 fg="green",
                 bold=False,
             )
@@ -700,12 +700,12 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
                     presigned_url,
                     data=f
                 )
+            except Exception as err:
+                echo("There was some error while uploading the file: {}".format(err))
+                sys.exit(1)
+            if response.status_code is not HTTPStatus.OK:
+                echo("There was some error while uploading the file: ")
                 response.raise_for_status()
-            except requests.exceptions.HTTPError as err:
-                if response.status_code is not HTTPStatus.OK:
-                    echo("There was some error while uploading the file: {}".format(err))
-                    sys.exit(1)
-        response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
