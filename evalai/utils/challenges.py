@@ -671,14 +671,21 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
 
 
-def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
+def upload_annotations_file_with_presigned_url(challenge_phase_pk, file_name):
+    """
+    Function to upload a large test annotation file for a challenge phase through presigned urls
+
+    Arguments:
+        challenge_phase_pk (int) -- id of the challenge phase
+        file_name (str) -- the path of the file to be uploaded
+    """
     url = "{}{}".format(get_host_url(), URLS.get_annotation_file_presigned_url.value)
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
 
     try:
-        # Fetching the presigned url.
-        data = {"file_name": file}
+        # Fetching the presigned url
+        data = {"file_name": file_name}
         response = requests.get(url, headers=headers, data=data)
         if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
@@ -686,14 +693,14 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
         response = response.json()
         presigned_url = response.get("presigned_url")
 
-        # Uploading the annotation file for the current phase to S3.
-        response = upload_with_presigned_url(file, presigned_url)
+        # Uploading the annotation file for the current phase to S3
+        response = upload_with_presigned_url(file_name, presigned_url)
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
             echo(
                 style(
-                    "Error: {}".format(response.json()["error"]),
+                    "\nThere was an error while uploading the annotation file: {}".format(response.json()["error"]),
                     fg="red",
                     bold=True,
                 )
@@ -713,10 +720,11 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file):
         sys.exit(1)
     echo(
         style(
-            "\nYour annotation file {} for challenge phase {} is successfully uploaded.\n".format(
-                file, challenge_phase_pk
+            "\nThe annotation file {} for challenge phase {} is successfully uploaded.\n".format(
+                file_name, challenge_phase_pk
             ),
             fg="green",
             bold=True,
         )
     )
+

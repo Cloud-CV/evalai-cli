@@ -34,11 +34,12 @@ class Date(click.ParamType):
             )
 
 
-def upload_with_presigned_url(file, presigned_url):
-    """Function to upload a file, given the target presigned s3 url.
+def upload_with_presigned_url(file_name, presigned_url):
+    """
+    Function to upload a file, given the target presigned s3 url
 
     Arguments:
-        file (str) -- the path of the file to be uploaded
+        file_name (str) -- the path of the file to be uploaded
         presigned_url (str) -- the presigned url to upload the file on s3
     """
     echo(
@@ -49,7 +50,7 @@ def upload_with_presigned_url(file, presigned_url):
         )
     )
 
-    with open(os.path.realpath(file), 'rb') as f:
+    with open(os.path.realpath(file_name), 'rb') as f:
         try:
             response = requests.put(
                 presigned_url,
@@ -57,10 +58,10 @@ def upload_with_presigned_url(file, presigned_url):
             )
             return response
         except Exception as err:
-            echo("There was some error while uploading the file: {}".format(err))
+            echo("There was an error while uploading the file: {}".format(err))
             sys.exit(1)
         if response.status_code is not HTTPStatus.OK:
-            echo("There was some error while uploading the file: ")
+            echo("There was an error while uploading the file: ")
             response.raise_for_status()
 
 

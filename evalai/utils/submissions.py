@@ -20,9 +20,14 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
-def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submission_metadata={}):
+def upload_submission_file_with_presigned_url(challenge_phase_pk, file_name, submission_metadata={}):
     """
-    Function to upload a file to AWS using a presigned url
+    Function to make a submission for large files through presigned urls
+
+    Arguments:
+        challenge_phase_pk (int) -- id of the challenge phase
+        file_name (str) -- the path of the file to be uploaded
+        submission_metadata (dict) -- the metadata for the submission
     """
     url = "{}{}".format(get_host_url(), URLS.get_submission_file_presigned_url.value)
     url = url.format(challenge_phase_pk)
@@ -30,7 +35,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
     headers = get_request_header()
 
     try:
-        data = {"status": "submitting", "file_name": file}
+        data = {"status": "submitting", "file_name": file_name}
         data = dict(data, **submission_metadata)
         response = requests.post(
             url, headers=headers, data=data
@@ -42,8 +47,8 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
         presigned_url = response.get("presigned_url")
         submission_pk = response.get("submission_pk")
 
-        # Uploading the submisison file to S3.
-        response = upload_with_presigned_url(file, presigned_url)
+        # Uploading the submisison file to S3
+        response = upload_with_presigned_url(file_name, presigned_url)
 
         # Publishing submission message to the message queue for processing
         url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
@@ -58,7 +63,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
             validate_token(response.json())
             echo(
                 style(
-                    "\nError: {}\n".format(response.json()["error"]),
+                    "\nThere was an error while making the submission: {}\n".format(response.json()["error"]),
                     fg="red",
                     bold=True,
                 )
@@ -80,7 +85,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file, submissi
     echo(
         style(
             "\nYour submission {} with the id {} is successfully submitted for evaluation.\n".format(
-                file, submission_pk
+                file_name, submission_pk
             ),
             fg="green",
             bold=True,
