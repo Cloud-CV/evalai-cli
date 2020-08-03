@@ -11,7 +11,7 @@ from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
 from evalai.utils.common import (
     convert_UTC_date_to_local,
-    upload_with_presigned_url,
+    upload_presigned_url_file,
     validate_token,
     validate_date_format,
 )
@@ -20,7 +20,7 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
-def upload_submission_file_with_presigned_url(challenge_phase_pk, file_name, submission_metadata={}):
+def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submission_metadata={}):
     """
     Function to make a submission for large files through presigned urls
 
@@ -48,7 +48,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file_name, sub
         submission_pk = response.get("submission_pk")
 
         # Uploading the submisison file to S3
-        response = upload_with_presigned_url(file_name, presigned_url)
+        response = upload_presigned_url_file(file_name, presigned_url)
         if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
         # Publishing submission message to the message queue for processing

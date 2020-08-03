@@ -14,11 +14,11 @@ from evalai.utils.challenges import (
     display_challenge_phase_detail,
     display_challenge_phase_split_list,
     display_leaderboard,
-    upload_annotations_file_with_presigned_url,
+    upload_presigned_url_annontations,
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
-from evalai.utils.submissions import make_submission, upload_submission_file_with_presigned_url
+from evalai.utils.submissions import make_submission, upload_presigned_url_submission_file
 
 
 class Challenge(object):
@@ -241,7 +241,7 @@ def submit(ctx, file):
 def upload_submission(ctx, file):
     """
     For uploading large submission files to S3
-    Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_submission FILE'
+    Invoked by running 'evalai challenge CHALLENGE phase PHASE upload_submission FILE'
 
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
@@ -261,7 +261,7 @@ def upload_submission(ctx, file):
         submission_metadata["publication_url"] = click.prompt(
             style("Publication URL", fg="yellow"), type=str, default=""
         )
-    upload_submission_file_with_presigned_url(ctx.phase_id, file, submission_metadata)
+    upload_presigned_url_submission_file(ctx.phase_id, file, submission_metadata)
 
 
 @phase.command(context_settings={"ignore_unknown_options": True})
@@ -270,13 +270,13 @@ def upload_submission(ctx, file):
 def upload_annotation(ctx, file):
     """
     For uploading large test annotations for a challenge phase to S3
-    Invoked by runing 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
+    Invoked by running 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
 
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
         file_name (str) -- the path of the file to be uploaded
     """
-    upload_annotations_file_with_presigned_url(ctx.phase_id, file)
+    upload_presigned_url_annontations(ctx.phase_id, file)
 
 
 challenge.add_command(phase)

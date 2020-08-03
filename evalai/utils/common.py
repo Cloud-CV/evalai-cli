@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from click import echo, style
 from datetime import datetime
 from dateutil import tz
-from http import HTTPStatus
 
 
 class Date(click.ParamType):
@@ -34,7 +33,7 @@ class Date(click.ParamType):
             )
 
 
-def upload_with_presigned_url(file_name, presigned_url):
+def upload_presigned_url_file(file_name, presigned_url):
     """
     Function to upload a file, given the target presigned s3 url
 

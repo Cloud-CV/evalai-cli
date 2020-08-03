@@ -13,7 +13,7 @@ from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (
     clean_data,
     convert_UTC_date_to_local,
-    upload_with_presigned_url,
+    upload_presigned_url_file,
     validate_date_format,
     validate_token,
 )
@@ -671,7 +671,7 @@ def display_leaderboard(challenge_id, phase_split_id):
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
 
 
-def upload_annotations_file_with_presigned_url(challenge_phase_pk, file_name):
+def upload_presigned_url_annontations(challenge_phase_pk, file_name):
     """
     Function to upload a large test annotation file for a challenge phase through presigned urls
 
@@ -695,7 +695,7 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file_name):
         presigned_url = response.get("presigned_url")
 
         # Uploading the annotation file for the current phase to S3
-        response = upload_with_presigned_url(file_name, presigned_url)
+        response = upload_presigned_url_file(file_name, presigned_url)
         if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -730,4 +730,3 @@ def upload_annotations_file_with_presigned_url(challenge_phase_pk, file_name):
             bold=True,
         )
     )
-
