@@ -49,7 +49,8 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file_name, sub
 
         # Uploading the submisison file to S3
         response = upload_with_presigned_url(file_name, presigned_url)
-
+        if response.status_code is not HTTPStatus.OK:
+            response.raise_for_status()
         # Publishing submission message to the message queue for processing
         url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
         url = url.format(challenge_phase_pk, submission_pk)
@@ -69,7 +70,7 @@ def upload_submission_file_with_presigned_url(challenge_phase_pk, file_name, sub
                 )
             )
         else:
-            echo(err)
+            echo(style("{}".format(err), fg='red'))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(

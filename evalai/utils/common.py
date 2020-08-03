@@ -56,13 +56,10 @@ def upload_with_presigned_url(file_name, presigned_url):
                 presigned_url,
                 data=f
             )
-            return response
         except Exception as err:
-            echo("There was an error while uploading the file: {}".format(err))
+            echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
             sys.exit(1)
-        if response.status_code is not HTTPStatus.OK:
-            echo("There was an error while uploading the file: ")
-            response.raise_for_status()
+        return response
 
 
 def validate_token(response):
