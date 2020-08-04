@@ -28,6 +28,8 @@ def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submissi
         challenge_phase_pk (int) -- id of the challenge phase
         file_name (str) -- the path of the file to be uploaded
         submission_metadata (dict) -- the metadata for the submission
+    Returns:
+        None
     """
     url = "{}{}".format(get_host_url(), URLS.get_submission_file_presigned_url.value)
     url = url.format(challenge_phase_pk)

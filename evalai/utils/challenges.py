@@ -678,6 +678,8 @@ def upload_presigned_url_annontations(challenge_phase_pk, file_name):
     Arguments:
         challenge_phase_pk (int) -- id of the challenge phase
         file_name (str) -- the path of the file to be uploaded
+    Returns:
+        None
     """
     url = "{}{}".format(get_host_url(), URLS.get_annotation_file_presigned_url.value)
     url = url.format(challenge_phase_pk)

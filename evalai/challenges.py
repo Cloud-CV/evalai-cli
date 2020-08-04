@@ -246,6 +246,8 @@ def upload_submission(ctx, file):
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
         file_name (str) -- the path of the file to be uploaded
+    Returns:
+        None
     """
     submission_metadata = {}
     if click.confirm("Do you want to include the Submission Details?"):
@@ -275,6 +277,8 @@ def upload_annotation(ctx, file):
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
         file_name (str) -- the path of the file to be uploaded
+    Returns:
+        None
     """
     upload_presigned_url_annontations(ctx.phase_id, file)
 
