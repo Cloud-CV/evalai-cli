@@ -43,7 +43,7 @@ def upload_presigned_url_file(file_name, presigned_url):
     """
     echo(
         style(
-            "Uploading the submission file...",
+            "Uploading the file...",
             fg="green",
             bold=False,
         )
