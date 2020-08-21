@@ -35,10 +35,10 @@ def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submissi
     url = url.format(challenge_phase_pk)
 
     headers = get_request_header()
+    data = {"status": "submitting", "file_name": file_name}
+    data = dict(data, **submission_metadata)
 
     try:
-        data = {"status": "submitting", "file_name": file_name}
-        data = dict(data, **submission_metadata)
         response = requests.post(
             url, headers=headers, data=data
         )
