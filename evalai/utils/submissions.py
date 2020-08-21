@@ -84,7 +84,6 @@ def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submissi
             )
         )
         sys.exit(1)
-    response = response.json()
     echo(
         style(
             "\nYour submission {} with the id {} is successfully submitted for evaluation.\n".format(

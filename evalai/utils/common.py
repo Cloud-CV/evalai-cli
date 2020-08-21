@@ -49,11 +49,11 @@ def upload_presigned_url_file(file_name, presigned_url):
         )
     )
 
-    with open(os.path.realpath(file_name), 'rb') as f:
+    with open(os.path.realpath(file_name), 'rb') as file:
         try:
             response = requests.put(
                 presigned_url,
-                data=f
+                data=file
             )
         except Exception as err:
             echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
