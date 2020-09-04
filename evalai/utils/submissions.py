@@ -1,3 +1,4 @@
+import os
 import requests
 import sys
 
@@ -95,7 +96,7 @@ def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submissi
     )
 
 
-def make_submission(challenge_id, phase_id, file, submission_metadata={}):
+def make_submission(challenge_id, phase_id, file_name, submission_metadata={}):
     """
     Function to submit a file to a challenge
     """
@@ -103,6 +104,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
     url = url.format(challenge_id, phase_id)
 
     headers = get_request_header()
+    file = open(os.path.realpath(file_name), 'rb')
     input_file = {"input_file": file}
     data = {"status": "submitting"}
     data = dict(data, **submission_metadata)
@@ -111,6 +113,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}):
         response = requests.post(
             url, headers=headers, files=input_file, data=data
         )
+        file.close()
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:

@@ -208,62 +208,55 @@ def participate(ctx, team):
 
 @phase.command()
 @click.pass_obj
+@click.option('--large', is_flag=True)
 @click.option(
-    "--file", type=click.File("rb"), help="File path to the submission file"
+    "--file", type=click.STRING, required=True, help="File path to the submission file"
 )
-def submit(ctx, file):
+def submit(ctx, file, large):
     """
-    Make submission to a challenge.
-    """
-    """
-    Invoked by running `evalai challenge CHALLENGE phase PHASE submit FILE`
-    """
-    submission_metadata = {}
-    if click.confirm("Do you want to include the Submission Details?"):
-        submission_metadata["method_name"] = click.prompt(
-            style("Method Name", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["method_description"] = click.prompt(
-            style("Method Description", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["project_url"] = click.prompt(
-            style("Project URL", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["publication_url"] = click.prompt(
-            style("Publication URL", fg="yellow"), type=str, default=""
-        )
-    make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
-
-
-@phase.command(context_settings={"ignore_unknown_options": True})
-@click.pass_obj
-@click.option("--file", type=click.STRING, required=True, help="File path to the submission file")
-def upload_submission(ctx, file):
-    """
-    For uploading large submission files to S3
-    Invoked by running 'evalai challenge CHALLENGE phase PHASE upload_submission FILE'
+    For uploading submission files to evalai:
+        - Invoked by running 'evalai challenge CHALLENGE phase PHASE submit FILE'
+        - For large files, add a --large option at the end of the command
 
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
-        file_name (str) -- the path of the file to be uploaded
+        file (str) -- the path of the file to be uploaded
+        large (boolean) -- flag to denote if file is large or not (if large, presigned urls are used for uploads)
     Returns:
         None
     """
-    submission_metadata = {}
-    if click.confirm("Do you want to include the Submission Details?"):
-        submission_metadata["method_name"] = click.prompt(
-            style("Method Name", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["method_description"] = click.prompt(
-            style("Method Description", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["project_url"] = click.prompt(
-            style("Project URL", fg="yellow"), type=str, default=""
-        )
-        submission_metadata["publication_url"] = click.prompt(
-            style("Publication URL", fg="yellow"), type=str, default=""
-        )
-    upload_presigned_url_submission_file(ctx.phase_id, file, submission_metadata)
+    if large:
+        submission_metadata = {}
+        if click.confirm("Do you want to include the Submission Details?"):
+            submission_metadata["method_name"] = click.prompt(
+                style("Method Name", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["method_description"] = click.prompt(
+                style("Method Description", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["project_url"] = click.prompt(
+                style("Project URL", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["publication_url"] = click.prompt(
+                style("Publication URL", fg="yellow"), type=str, default=""
+            )
+        upload_presigned_url_submission_file(ctx.phase_id, file, submission_metadata)
+    else:
+        submission_metadata = {}
+        if click.confirm("Do you want to include the Submission Details?"):
+            submission_metadata["method_name"] = click.prompt(
+                style("Method Name", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["method_description"] = click.prompt(
+                style("Method Description", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["project_url"] = click.prompt(
+                style("Project URL", fg="yellow"), type=str, default=""
+            )
+            submission_metadata["publication_url"] = click.prompt(
+                style("Publication URL", fg="yellow"), type=str, default=""
+            )
+        make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
 
 
 @phase.command(context_settings={"ignore_unknown_options": True})
