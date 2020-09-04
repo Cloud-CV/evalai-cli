@@ -216,7 +216,7 @@ def submit(ctx, file, large):
     """
     For uploading submission files to evalai:
         - Invoked by running 'evalai challenge CHALLENGE phase PHASE submit FILE'
-        - For large files, add a --large option at the end of the command
+        - For large files, add a '--large' option at the end of the command
 
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
