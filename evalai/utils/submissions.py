@@ -5,95 +5,18 @@ import sys
 from beautifultable import BeautifulTable
 from click import echo, style
 from datetime import datetime
-from http import HTTPStatus
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
 from evalai.utils.urls import URLS
 from evalai.utils.common import (
     convert_UTC_date_to_local,
-    upload_presigned_url_file,
     validate_token,
     validate_date_format,
 )
 
 
 requests.packages.urllib3.disable_warnings()
-
-
-def upload_presigned_url_submission_file(challenge_phase_pk, file_name, submission_metadata={}):
-    """
-    Function to make a submission for large files through presigned urls
-
-    Arguments:
-        challenge_phase_pk (int) -- id of the challenge phase
-        file_name (str) -- the path of the file to be uploaded
-        submission_metadata (dict) -- the metadata for the submission
-    Returns:
-        None
-    """
-    url = "{}{}".format(get_host_url(), URLS.get_submission_file_presigned_url.value)
-    url = url.format(challenge_phase_pk)
-
-    headers = get_request_header()
-    data = {"status": "submitting", "file_name": file_name}
-    data = dict(data, **submission_metadata)
-
-    try:
-        response = requests.post(
-            url, headers=headers, data=data
-        )
-        if response.status_code is not HTTPStatus.CREATED:
-            response.raise_for_status()
-
-        response = response.json()
-        presigned_url = response.get("presigned_url")
-        submission_pk = response.get("submission_pk")
-
-        # Uploading the submisison file to S3
-        response = upload_presigned_url_file(file_name, presigned_url)
-        if response.status_code is not HTTPStatus.OK:
-            response.raise_for_status()
-        # Publishing submission message to the message queue for processing
-        url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
-        url = url.format(challenge_phase_pk, submission_pk)
-        response = requests.post(
-            url,
-            headers=headers,
-        )
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        if response.status_code in EVALAI_ERROR_CODES:
-            validate_token(response.json())
-            echo(
-                style(
-                    "\nThere was an error while making the submission: {}\n".format(response.json()["error"]),
-                    fg="red",
-                    bold=True,
-                )
-            )
-        else:
-            echo(style("{}".format(err), fg='red'))
-        sys.exit(1)
-    except requests.exceptions.RequestException:
-        echo(
-            style(
-                "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
-                bold=True,
-                fg="red",
-            )
-        )
-        sys.exit(1)
-    echo(
-        style(
-            "\nYour submission {} with the id {} is successfully submitted for evaluation.\n".format(
-                file_name, submission_pk
-            ),
-            fg="green",
-            bold=True,
-        )
-    )
 
 
 def make_submission(challenge_id, phase_id, file_name, submission_metadata={}):

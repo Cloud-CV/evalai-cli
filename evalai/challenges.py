@@ -2,7 +2,7 @@ import click
 
 from click import style
 
-from evalai.utils.common import Date
+from evalai.utils.common import Date, upload_file_using_presigned_url
 from evalai.utils.challenges import (
     display_all_challenge_list,
     display_future_challenge_list,
@@ -14,11 +14,10 @@ from evalai.utils.challenges import (
     display_challenge_phase_detail,
     display_challenge_phase_split_list,
     display_leaderboard,
-    upload_presigned_url_annontations,
 )
 from evalai.utils.submissions import display_my_submission_details
 from evalai.utils.teams import participate_in_a_challenge
-from evalai.utils.submissions import make_submission, upload_presigned_url_submission_file
+from evalai.utils.submissions import make_submission
 
 
 class Challenge(object):
@@ -208,39 +207,30 @@ def participate(ctx, team):
 
 @phase.command()
 @click.pass_obj
-@click.option('--large', is_flag=True)
+@click.option("--large", is_flag=True)
+@click.option("--annotation", is_flag=True)
 @click.option(
     "--file", type=click.STRING, required=True, help="File path to the submission file"
 )
-def submit(ctx, file, large):
+def submit(ctx, file, annotation, large):
     """
     For uploading submission files to evalai:
-        - Invoked by running 'evalai challenge CHALLENGE phase PHASE submit FILE'
+        - Invoked by running 'evalai challenge CHALLENGE phase PHASE submit --file FILE'
         - For large files, add a '--large' option at the end of the command
+
+    For uploading test annotation files to evalai:
+        - Invoked by running "evalai challenge CHALLENGE phase PHASE submit --file FILE --annotation"
 
     Arguments:
         ctx (class click.Context) --  The context object which holds state of the invocation
         file (str) -- the path of the file to be uploaded
-        large (boolean) -- flag to denote if file is large or not (if large, presigned urls are used for uploads)
+        annotations (boolean) -- flag to denote if file is a test annotation file
+        large (boolean) -- flag to denote if submission file is large (if large, presigned urls are used for uploads)
     Returns:
         None
     """
-    if large:
-        submission_metadata = {}
-        if click.confirm("Do you want to include the Submission Details?"):
-            submission_metadata["method_name"] = click.prompt(
-                style("Method Name", fg="yellow"), type=str, default=""
-            )
-            submission_metadata["method_description"] = click.prompt(
-                style("Method Description", fg="yellow"), type=str, default=""
-            )
-            submission_metadata["project_url"] = click.prompt(
-                style("Project URL", fg="yellow"), type=str, default=""
-            )
-            submission_metadata["publication_url"] = click.prompt(
-                style("Publication URL", fg="yellow"), type=str, default=""
-            )
-        upload_presigned_url_submission_file(ctx.phase_id, file, submission_metadata)
+    if annotation:
+        upload_file_using_presigned_url(ctx.phase_id, file, "annotation")
     else:
         submission_metadata = {}
         if click.confirm("Do you want to include the Submission Details?"):
@@ -256,24 +246,11 @@ def submit(ctx, file, large):
             submission_metadata["publication_url"] = click.prompt(
                 style("Publication URL", fg="yellow"), type=str, default=""
             )
-        make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
-
-
-@phase.command(context_settings={"ignore_unknown_options": True})
-@click.pass_obj
-@click.option("--file", type=click.STRING, required=True, help="File path to the annotations file")
-def upload_annotation(ctx, file):
-    """
-    For uploading large test annotations for a challenge phase to S3
-    Invoked by running 'evalai challenge CHALLENGE phase PHASE upload_annotations FILE'
-
-    Arguments:
-        ctx (class click.Context) --  The context object which holds state of the invocation
-        file_name (str) -- the path of the file to be uploaded
-    Returns:
-        None
-    """
-    upload_presigned_url_annontations(ctx.phase_id, file)
+        if large:
+            print("LJKMKNJONJUNJUNJUNIJNIBJU")
+            upload_file_using_presigned_url(ctx.phase_id, file, "submission", submission_metadata)
+        else:
+            make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
 
 
 challenge.add_command(phase)

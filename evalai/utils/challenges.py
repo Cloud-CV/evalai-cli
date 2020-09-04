@@ -6,14 +6,12 @@ from bs4 import BeautifulSoup
 from beautifultable import BeautifulTable
 from click import echo, style
 from datetime import datetime
-from http import HTTPStatus
 from termcolor import colored
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.common import (
     clean_data,
     convert_UTC_date_to_local,
-    upload_presigned_url_file,
     validate_date_format,
     validate_token,
 )
@@ -669,66 +667,3 @@ def display_leaderboard(challenge_id, phase_split_id):
         pretty_print_leaderboard_data(attributes, results)
     else:
         echo(style("Sorry, no Leaderboard results found.", bold=True, fg="red"))
-
-
-def upload_presigned_url_annontations(challenge_phase_pk, file_name):
-    """
-    Function to upload a large test annotation file for a challenge phase through presigned urls
-
-    Arguments:
-        challenge_phase_pk (int) -- id of the challenge phase
-        file_name (str) -- the path of the file to be uploaded
-    Returns:
-        None
-    """
-    url = "{}{}".format(get_host_url(), URLS.get_annotation_file_presigned_url.value)
-    url = url.format(challenge_phase_pk)
-    headers = get_request_header()
-
-    try:
-        # Fetching the presigned url
-        data = {"file_name": file_name}
-
-        response = requests.get(url, headers=headers, data=data)
-        if response.status_code is not HTTPStatus.OK:
-            response.raise_for_status()
-
-        response = response.json()
-        presigned_url = response.get("presigned_url")
-
-        # Uploading the annotation file for the current phase to S3
-        response = upload_presigned_url_file(file_name, presigned_url)
-        if response.status_code is not HTTPStatus.OK:
-            response.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        if response.status_code in EVALAI_ERROR_CODES:
-            validate_token(response.json())
-            echo(
-                style(
-                    "\nThere was an error while uploading the annotation file: {}".format(response.json()["error"]),
-                    fg="red",
-                    bold=True,
-                )
-            )
-        else:
-            echo(style("{}".format(err), fg='red'))
-        sys.exit(1)
-    except requests.exceptions.RequestException:
-        echo(
-            style(
-                "\nCould not establish a connection to EvalAI."
-                " Please check the Host URL.\n",
-                bold=True,
-                fg="red",
-            )
-        )
-        sys.exit(1)
-    echo(
-        style(
-            "\nThe annotation file {} for challenge phase {} is successfully uploaded.\n".format(
-                file_name, challenge_phase_pk
-            ),
-            fg="green",
-            bold=True,
-        )
-    )
