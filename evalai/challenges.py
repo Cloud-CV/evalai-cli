@@ -210,7 +210,7 @@ def participate(ctx, team):
 @click.option("--large", is_flag=True)
 @click.option("--annotation", is_flag=True)
 @click.option(
-    "--file", type=click.STRING, required=True, help="File path to the submission file"
+    "--file", type=click.File("rb"), required=True, help="File path to the submission or annotation file"
 )
 def submit(ctx, file, annotation, large):
     """
@@ -247,7 +247,6 @@ def submit(ctx, file, annotation, large):
                 style("Publication URL", fg="yellow"), type=str, default=""
             )
         if large:
-            print("LJKMKNJONJUNJUNJUNIJNIBJU")
             upload_file_using_presigned_url(ctx.phase_id, file, "submission", submission_metadata)
         else:
             make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)

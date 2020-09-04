@@ -1,4 +1,3 @@
-import os
 import click
 import random
 import requests
@@ -38,7 +37,7 @@ class Date(click.ParamType):
             )
 
 
-def upload_file_to_s3(file_name, presigned_url):
+def upload_file_to_s3(file, presigned_url):
     """
     Function to upload a file, given the target presigned s3 url
 
@@ -54,16 +53,15 @@ def upload_file_to_s3(file_name, presigned_url):
         )
     )
 
-    with open(os.path.realpath(file_name), 'rb') as file:
-        try:
-            response = requests.put(
-                presigned_url,
-                data=file
-            )
-        except Exception as err:
-            echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
-            sys.exit(1)
-        return response
+    try:
+        response = requests.put(
+            presigned_url,
+            data=file
+        )
+    except Exception as err:
+        echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
+        sys.exit(1)
+    return response
 
 
 def validate_token(response):
@@ -132,7 +130,7 @@ def generate_random_string(length):
     return "".join(random.choice(letter_set) for _ in range(length))
 
 
-def upload_file_using_presigned_url(challenge_phase_pk, file_name, file_type, submission_metadata={}):
+def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission_file.value)
     elif file_type == "annotation":
@@ -143,7 +141,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file_name, file_type, su
     try:
         # Fetching the presigned url
         if file_type == "submission":
-            data = {"status": "submitting", "file_name": file_name}
+            data = {"status": "submitting", "file_name": file.name}
             data = dict(data, **submission_metadata)
             response = requests.post(
                 url, headers=headers, data=data
@@ -151,7 +149,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file_name, file_type, su
             if response.status_code is not HTTPStatus.CREATED:
                 response.raise_for_status()
         elif file_type == "annotation":
-            data = {"file_name": file_name}
+            data = {"file_name": file.name}
             response = requests.get(url, headers=headers, data=data)
             if response.status_code is not HTTPStatus.OK:
                 response.raise_for_status()
@@ -162,7 +160,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file_name, file_type, su
             submission_pk = response.get("submission_pk")
 
         # Uploading the file to S3
-        response = upload_file_to_s3(file_name, presigned_url)
+        response = upload_file_to_s3(file, presigned_url)
         if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
 
@@ -205,11 +203,11 @@ def upload_file_using_presigned_url(challenge_phase_pk, file_name, file_type, su
 
     if file_type == "submission":
         success_message = "\nYour submission {} with the id {} is successfully submitted for evaluation.\n".format(
-            file_name, submission_pk
+            file.name, submission_pk
         )
     elif file_type == "annotation":
         success_message = "\nThe annotation file {} for challenge phase {} is successfully uploaded.\n".format(
-            file_name, challenge_phase_pk
+            file.name, challenge_phase_pk
         )
     echo(
         style(
