@@ -247,7 +247,6 @@ def submit(ctx, file, annotation, large, public, private):
                 submission_metadata["is_public"] = False
             else:
                 submission_metadata["is_public"] = None
-            #print(submission_metadata["is_public"])
             if click.confirm("Do you want to include the Submission Details?"):
                 submission_metadata["method_name"] = click.prompt(
                     style("Method Name", fg="yellow"), type=str, default=""
