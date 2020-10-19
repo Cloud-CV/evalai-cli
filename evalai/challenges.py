@@ -1,4 +1,5 @@
 import click
+import json
 
 from click import style
 
@@ -242,9 +243,9 @@ def submit(ctx, file, annotation, large, public, private):
         else:
             submission_metadata = {}
             if public:
-                submission_metadata["is_public"] = True
+                submission_metadata["is_public"] = json.dumps(True)
             elif private:
-                submission_metadata["is_public"] = False
+                submission_metadata["is_public"] = json.dumps(False)
             else:
                 submission_metadata["is_public"] = None
             if click.confirm("Do you want to include the Submission Details?"):
