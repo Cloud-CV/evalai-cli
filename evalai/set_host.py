@@ -34,7 +34,7 @@ def host(set_host):
             echo(
                 style(
                     "Sorry, please enter a valid url.\n"
-                    "Example: https://evalai.cloudcv.org",
+                    "Example: https://eval.ai",
                     bold=True,
                 )
             )
@@ -43,7 +43,7 @@ def host(set_host):
             echo(
                 style(
                     "You haven't configured a Host URL for the CLI.\n"
-                    "The CLI would be using https://evalai.cloudcv.org as the default url.",
+                    "The CLI would be using https://eval.ai as the default url.",
                     bold=True,
                 )
             )
