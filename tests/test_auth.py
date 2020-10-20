@@ -130,7 +130,7 @@ class TestHostConfig(BaseTestClass):
     def test_get_default_host(self):
         expected = (
             "You haven't configured a Host URL for the CLI.\n"
-            "The CLI would be using https://evalai.cloudcv.org as the default url.\n"
+            "The CLI would be using https://eval.ai as the default url.\n"
         )
         runner = CliRunner()
         result = runner.invoke(host)
@@ -139,8 +139,7 @@ class TestHostConfig(BaseTestClass):
 
     def test_set_host_wrong_url(self):
         expected = (
-            "Sorry, please enter a valid url.\n"
-            "Example: https://evalai.cloudcv.org\n"
+            "Sorry, please enter a valid url.\n" "Example: https://eval.ai\n"
         )
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "https:/evalai.cloudcv"])
@@ -148,18 +147,16 @@ class TestHostConfig(BaseTestClass):
         assert result.exit_code == 0
 
     def test_set_host_url(self):
-        expected = "{} is set as the host url.\n".format(
-            "https://evalai.cloudcv.org"
-        )
+        expected = "{} is set as the host url.\n".format("https://eval.ai")
         runner = CliRunner()
-        result = runner.invoke(host, ["-sh", "https://evalai.cloudcv.org"])
+        result = runner.invoke(host, ["-sh", "https://eval.ai"])
         assert expected == result.output
         assert result.exit_code == 0
 
     def test_set_host_url_and_display(self):
-        expected = "https://evalai.cloudcv.org is the Host URL of EvalAI.\n"
+        expected = "https://eval.ai is the Host URL of EvalAI.\n"
         runner = CliRunner()
-        runner.invoke(host, ["-sh", "https://evalai.cloudcv.org"])
+        runner.invoke(host, ["-sh", "https://eval.ai"])
         result = runner.invoke(host)
         assert expected == result.output
         assert result.exit_code == 0
@@ -173,9 +170,7 @@ class TestSetAndLoadHostURL(BaseTestClass):
         url = "{}{}"
         responses.add(
             responses.GET,
-            url.format(
-                "https://evalai.cloudcv.org", URLS.challenge_list.value
-            ),
+            url.format("https://eval.ai", URLS.challenge_list.value),
             json=challenge_data,
             status=200,
         )
@@ -220,7 +215,7 @@ class TestSetAndLoadHostURL(BaseTestClass):
     @responses.activate
     def test_set_and_load_host_url(self):
         runner = CliRunner()
-        result = runner.invoke(host, ["-sh", "https://evalai.cloudcv.org"])
+        result = runner.invoke(host, ["-sh", "https://eval.ai"])
         result = runner.invoke(challenges)
         response = result.output.strip()
         assert str(response) == self.output
