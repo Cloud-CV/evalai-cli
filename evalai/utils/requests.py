@@ -47,7 +47,10 @@ def make_request(path, method, files=None, data=None):
             files = {"input_file": open(files, "rb")}
         else:
             files = None
-        data = {"status": "submitting"}
+        if data is not None:
+            data["status"] = "submitting"
+        else:
+            data = {"status": "submitting"}
         try:
             response = requests.post(
                 url, headers=headers, files=files, data=data
