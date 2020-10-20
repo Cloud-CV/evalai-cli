@@ -79,7 +79,9 @@ def result(ctx):
     required=False,
     default=LOCAL_DOCKER_REGISTRY_URI,
 )
-def push(image, phase, url):
+@click.option("--public", is_flag=True)
+@click.option("--private", is_flag=True)
+def push(image, phase, url, public, private):
     """
     Push docker image to a particular challenge phase.
     """
@@ -90,6 +92,17 @@ def push(image, phase, url):
         message = "\nError: Please enter the tag name with image.\n\nFor eg: `evalai push ubuntu:latest --phase 123`"
         notify_user(message, color="red")
         sys.exit(1)
+
+    if public and private:
+        message = "\nError: Submission can't be public and private.\nPlease select either --public or --private"
+        notify_user(message, color="red")
+        sys.exit(1)
+
+    submission_metadata = {}
+    if public:
+        submission_metadata["is_public"] = json.dumps(True)
+    elif private:
+        submission_metadata["is_public"] = json.dumps(False)
 
     tag = str(uuid.uuid4())
     docker_client = docker.from_env()
@@ -193,7 +206,7 @@ def push(image, phase, url):
                 json.dump(data, outfile)
             request_path = URLS.make_submission.value
             request_path = request_path.format(challenge_pk, phase_pk)
-            response = make_request(request_path, "POST", submission_file_path)
+            response = make_request(request_path, "POST", submission_file_path, data=submission_metadata)
             shutil.rmtree(BASE_TEMP_DIR)
         else:
             print(
