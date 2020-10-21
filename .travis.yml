@@ -5,7 +5,7 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install flake8 pytest PyYAML
-  - pip install coveralls==5.0.3
+  - pip install coveralls==2.1.2
 script:
   - flake8 ./
   - python setup.py test
