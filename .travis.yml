@@ -4,7 +4,9 @@ python:
   - "3.6"
 install:
   - pip install -r requirements.txt
-  - pip install PyYAML coveralls flake8 pytest
+  - pip install coverage==4.5.4
+  - pip install flake8 pytest PyYAML
+  - pip install coveralls
 script:
   - flake8 ./
   - python setup.py test
