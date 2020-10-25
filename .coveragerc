@@ -11,4 +11,5 @@ exclude_lines =
 omit =
     */python?.?/*
     */tests/*
+    */.eggs/*
     setup.py

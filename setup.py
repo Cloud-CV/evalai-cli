@@ -27,7 +27,7 @@ with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 tests_require = [
-    "coverage==4.5.1",
+    "coverage==4.5.4",
     "coveralls==1.3.0",
     "flake8==3.0.4",
     "pytest==3.5.1",
