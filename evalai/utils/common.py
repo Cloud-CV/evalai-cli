@@ -1,5 +1,5 @@
 import click
-import os
+import json
 import random
 import requests
 import string
@@ -10,7 +10,8 @@ from click import echo, style
 from datetime import datetime
 from dateutil import tz
 from http import HTTPStatus
-from tqdm import tqdm
+from pathlib import Path
+from progressbar import progressbar
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
@@ -57,22 +58,20 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
 
     try:
         parts = []
-        total_size = os.path.getsize(file.name)
-        index = 1
-        for chunk in tqdm(range(0, total_size)):
+        index = 0
+        file_size = Path(file.name).stat().st_size
+        for chunk_size in progressbar(range(0, file_size, max_chunk_size)):
             presigned_url_object = presigned_urls[index]
-            part = presigned_url_object["partNumer"]
+            part = presigned_url_object["partNumber"]
             url = presigned_url_object["url"]
             file_data = file.read(max_chunk_size)
-            print(f"upload part {part} size={len(file_data)}")
             response = requests.put(url, data=file_data)
-            print(response)
             if response.status_code != HTTPStatus.OK:
                 response.raise_for_status()
 
             etag = response.headers['ETag']
             parts.append({"ETag": etag, "PartNumber": part})
-            chunk += max_chunk_size
+            index += 1
 
         response = {
             "success": True,
@@ -166,7 +165,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
     try:
         # Fetching the presigned url
         if file_type == "submission":
-            file_size = os.path.getsize(file.name)
+            file_size = Path(file.name).stat().st_size
             num_file_chunks = int(file_size / max_chunk_size) + 1
             data = {"status": "submitting", "file_name": file.name, "num_file_chunks": num_file_chunks}
             data = dict(data, **submission_metadata)
@@ -178,9 +177,9 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
                 response.raise_for_status()
 
             # Update url params for multipart upload on S3
-            upload_complete_url = upload_complete_url.format(challenge_phase_pk, response.get("submission_pk"))
+            upload_complete_url = upload_complete_url.format(challenge_phase_pk, response.json().get("submission_pk"))
         elif file_type == "annotation":
-            file_size = os.path.getsize(file.name)
+            file_size = Path(file.name).stat().st_size
             num_file_chunks = int(file_size / max_chunk_size) + 1
 
             data = {"file_name": file.name, "num_file_chunks": num_file_chunks}
@@ -193,6 +192,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
 
         response = response.json()
         presigned_urls = response.get("presigned_urls")
+        upload_id = response.get("upload_id")
         if file_type == "submission":
             submission_pk = response.get("submission_pk")
 
@@ -200,8 +200,8 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         response = upload_file_to_s3(file, presigned_urls, max_chunk_size)
 
         data = {
-            "parts": response.get("parts"),
-            "upload_id": response.get("upload_id")
+            "parts": json.dumps(response.get("parts")),
+            "upload_id": upload_id
         }
 
         # Complete multipart S3 upload
