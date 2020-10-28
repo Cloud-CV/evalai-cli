@@ -10,6 +10,7 @@ from click import echo, style
 from datetime import datetime
 from dateutil import tz
 from http import HTTPStatus
+from tqdm import tqdm
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
@@ -37,6 +38,7 @@ class Date(click.ParamType):
                 )
             )
 
+
 def upload_file_to_s3(file, presigned_urls, max_chunk_size):
     """
     Function to upload a file, given the target presigned s3 url
@@ -55,8 +57,10 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
 
     try:
         parts = []
-
-        for presigned_url_object in presigned_urls:
+        total_size = os.path.getsize(file.name)
+        index = 1
+        for chunk in tqdm(range(0, total_size)):
+            presigned_url_object = presigned_urls[index]
             part = presigned_url_object["partNumer"]
             url = presigned_url_object["url"]
             file_data = file.read(max_chunk_size)
@@ -65,10 +69,11 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
             print(response)
             if response.status_code != HTTPStatus.OK:
                 response.raise_for_status()
-            
+
             etag = response.headers['ETag']
             parts.append({"ETag": etag, "PartNumber": part})
-        
+            chunk += max_chunk_size
+
         response = {
             "success": True,
             "parts": parts
@@ -155,8 +160,6 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
 
-    print(upload_complete_url)
-
     # Read max 100MB chunk for multipart upload
     max_chunk_size = 100 * 1024 * 1024
 
@@ -173,7 +176,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
 
             if response.status_code is not HTTPStatus.CREATED:
                 response.raise_for_status()
-            
+
             # Update url params for multipart upload on S3
             upload_complete_url = upload_complete_url.format(challenge_phase_pk, response.get("submission_pk"))
         elif file_type == "annotation":
@@ -184,7 +187,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
             response = requests.get(url, headers=headers, data=data)
             if response.status_code is not HTTPStatus.OK:
                 response.raise_for_status()
-            
+
             # Update url params for multipart upload on S3
             upload_complete_url = upload_complete_url.format(challenge_phase_pk)
 
