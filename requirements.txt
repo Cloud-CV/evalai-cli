@@ -8,3 +8,4 @@ python-dateutil==2.7.3
 requests==2.20.0
 validators==0.12.6
 termcolor==1.1.0
+tqdm==4.49.0
