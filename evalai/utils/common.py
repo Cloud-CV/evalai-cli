@@ -152,14 +152,14 @@ def generate_random_string(length):
 def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission_file.value)
-        upload_complete_url = "{}{}".format(get_host_url(), URLS.complete_upload_for_submission_file.value)
+        upload_complete_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_submission_file.value)
     elif file_type == "annotation":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotation_file.value)
-        upload_complete_url = "{}{}".format(get_host_url(), URLS.complete_upload_for_annotation_file.value)
+        upload_complete_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_annotation_file.value)
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
 
-    # Read max 100MB chunk for multipart upload
+    # Limit to max 100 MB chunk for multipart upload
     max_chunk_size = 100 * 1024 * 1024
 
     try:
