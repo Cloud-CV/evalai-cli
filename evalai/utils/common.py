@@ -152,10 +152,10 @@ def generate_random_string(length):
 def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission_file.value)
-        upload_complete_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_submission_file.value)
+        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_submission_file.value)
     elif file_type == "annotation":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotation_file.value)
-        upload_complete_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_annotation_file.value)
+        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_annotation_file.value)
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
 
@@ -177,7 +177,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
                 response.raise_for_status()
 
             # Update url params for multipart upload on S3
-            upload_complete_url = upload_complete_url.format(challenge_phase_pk, response.json().get("submission_pk"))
+            finish_upload_url = finish_upload_url.format(challenge_phase_pk, response.json().get("submission_pk"))
         elif file_type == "annotation":
             file_size = Path(file.name).stat().st_size
             num_file_chunks = int(file_size / max_chunk_size) + 1
@@ -188,7 +188,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
                 response.raise_for_status()
 
             # Update url params for multipart upload on S3
-            upload_complete_url = upload_complete_url.format(challenge_phase_pk)
+            finish_upload_url = finish_upload_url.format(challenge_phase_pk)
 
         response = response.json()
         presigned_urls = response.get("presigned_urls")
@@ -206,7 +206,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
 
         # Complete multipart S3 upload
         response = requests.post(
-            upload_complete_url, headers=headers, data=data
+            finish_upload_url, headers=headers, data=data
         )
 
         if response.status_code is not HTTPStatus.OK:
