@@ -4,14 +4,11 @@ import os
 import pytest
 import responses
 import socket
-import sys
-import logging
 
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
 
-from evalai.set_host import host
 from evalai.challenges import challenge
 from evalai.submissions import submission, push
 from tests.data import submission_response, challenge_response
@@ -368,7 +365,7 @@ class TestMakeSubmission(BaseTestClass):
                 ],
             )
             assert result.exit_code == 0
-    
+
     @responses.activate
     def test_make_submission_using_presigned_url(self, request):
         expected = (
