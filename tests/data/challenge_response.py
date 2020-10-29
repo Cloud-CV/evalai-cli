@@ -427,7 +427,7 @@ get_submission_file_presigned_url = """
     "presigned_urls": [
         {
             "partNumber": 1,
-            "url": "https://staging-evalai.s3.amazonaws.com/media/submission_files/submission_403/5fb32be8-1fcf-42d3-9b9c-230e4027d656.json?uploadId=R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si&partNumber=1&AWSAccessKeyId=AKIA5UXVOEPMOLO4VIX2&Signature=Bga2IIsvDfJFOAMnZRM3j5G64y0%3D&Expires=1603971221"
+            "url": "https://staging-evalai.s3.amazonaws.com/media/submission_files/submission_403/5fb32be8-1fcf-42d3-9b9c-230e4027d656.json?uploadId=R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si&partNumber=1&Signature=Bga2IIsvDfJFOAMnZ5G64y0%3D&Expires=1603971221"
         }
     ],
     "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si",
@@ -473,7 +473,7 @@ get_annotation_file_presigned_url = """
     "presigned_urls": [
         {
             "partNumber": 1,
-            "url": "https://staging-evalai.s3.amazonaws.com/media/test_annotations/8af3d688-f559-49be-ab20-16e02805d228.txt?uploadId=40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw&partNumber=1&AWSAccessKeyId=AKIA5UXVOEPMOLO4VIX2&Signature=lkHj9J9GshsvodXNnbKE%2F7y9t3E%3D&Expires=1603971332"
+            "url": "https://staging-evalai.s3.amazonaws.com/media/test_annotations/8af3d688-f559-49be-ab20-16e02805d228.txt?uploadId=40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw&partNumber=1&Signature=lkHj9JhsvodXNnbKE%2F7y9t3E%3D&Expires=1603971332"
         }
     ],
     "upload_id": "40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw"
