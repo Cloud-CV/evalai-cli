@@ -1,4 +1,5 @@
 import click
+import json
 import random
 import requests
 import string
@@ -9,6 +10,8 @@ from click import echo, style
 from datetime import datetime
 from dateutil import tz
 from http import HTTPStatus
+from pathlib import Path
+from tqdm import tqdm
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
@@ -37,7 +40,7 @@ class Date(click.ParamType):
             )
 
 
-def upload_file_to_s3(file, presigned_url):
+def upload_file_to_s3(file, presigned_urls, max_chunk_size):
     """
     Function to upload a file, given the target presigned s3 url
 
@@ -54,10 +57,26 @@ def upload_file_to_s3(file, presigned_url):
     )
 
     try:
-        response = requests.put(
-            presigned_url,
-            data=file
-        )
+        parts = []
+        index = 0
+        file_size = Path(file.name).stat().st_size
+        for chunk_size in tqdm(range(0, file_size, max_chunk_size)):
+            presigned_url_object = presigned_urls[index]
+            part = presigned_url_object["partNumber"]
+            url = presigned_url_object["url"]
+            file_data = file.read(max_chunk_size)
+            response = requests.put(url, data=file_data)
+            if response.status_code != HTTPStatus.OK:
+                response.raise_for_status()
+
+            etag = response.headers['ETag']
+            parts.append({"ETag": etag, "PartNumber": part})
+            index += 1
+
+        response = {
+            "success": True,
+            "parts": parts
+        }
     except Exception as err:
         echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
         sys.exit(1)
@@ -133,34 +152,63 @@ def generate_random_string(length):
 def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission_file.value)
+        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_submission_file.value)
     elif file_type == "annotation":
         url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotation_file.value)
+        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_annotation_file.value)
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
+
+    # Limit to max 100 MB chunk for multipart upload
+    max_chunk_size = 100 * 1024 * 1024
 
     try:
         # Fetching the presigned url
         if file_type == "submission":
-            data = {"status": "submitting", "file_name": file.name}
+            file_size = Path(file.name).stat().st_size
+            num_file_chunks = int(file_size / max_chunk_size) + 1
+            data = {"status": "submitting", "file_name": file.name, "num_file_chunks": num_file_chunks}
             data = dict(data, **submission_metadata)
             response = requests.post(
                 url, headers=headers, data=data
             )
+
             if response.status_code is not HTTPStatus.CREATED:
                 response.raise_for_status()
+
+            # Update url params for multipart upload on S3
+            finish_upload_url = finish_upload_url.format(challenge_phase_pk, response.json().get("submission_pk"))
         elif file_type == "annotation":
-            data = {"file_name": file.name}
+            file_size = Path(file.name).stat().st_size
+            num_file_chunks = int(file_size / max_chunk_size) + 1
+
+            data = {"file_name": file.name, "num_file_chunks": num_file_chunks}
             response = requests.get(url, headers=headers, data=data)
             if response.status_code is not HTTPStatus.OK:
                 response.raise_for_status()
 
+            # Update url params for multipart upload on S3
+            finish_upload_url = finish_upload_url.format(challenge_phase_pk)
+
         response = response.json()
-        presigned_url = response.get("presigned_url")
+        presigned_urls = response.get("presigned_urls")
+        upload_id = response.get("upload_id")
         if file_type == "submission":
             submission_pk = response.get("submission_pk")
 
         # Uploading the file to S3
-        response = upload_file_to_s3(file, presigned_url)
+        response = upload_file_to_s3(file, presigned_urls, max_chunk_size)
+
+        data = {
+            "parts": json.dumps(response.get("parts")),
+            "upload_id": upload_id
+        }
+
+        # Complete multipart S3 upload
+        response = requests.post(
+            finish_upload_url, headers=headers, data=data
+        )
+
         if response.status_code is not HTTPStatus.OK:
             response.raise_for_status()
 

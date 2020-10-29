@@ -171,6 +171,79 @@ class TestMakeSubmission(BaseTestClass):
             status=200,
         )
 
+        # To get presigned URLs for submission upload parts
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.get_presigned_url_for_submission_file.value).format(
+                "2",
+            ),
+            json=json.loads(challenge_response.get_submission_file_presigned_url),
+            status=200,
+        )
+
+        # To finish mulitpart file upload
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.finish_upload_for_submission_file.value).format(
+                "2", "9"
+            ),
+            json=json.loads(challenge_response.finish_submission_file_upload),
+            status=200,
+        )
+
+        # To get presigned URL for part
+        presigned_url_response = json.loads(challenge_response.get_submission_file_presigned_url)
+        part_file_upload_url = presigned_url_response["presigned_urls"][0]["url"]
+        responses.add(
+            responses.PUT,
+            part_file_upload_url,
+            headers=json.loads(challenge_response.part_file_upload_to_s3),
+            status=200,
+        )
+
+        # To publish submission message
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.send_submission_message.value).format(
+                "2", "9"
+            )
+        )
+
+        # To get presigned URLs for submission upload parts
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.get_presigned_url_for_annotation_file.value).format(
+                "2",
+            ),
+            json=json.loads(challenge_response.get_annotation_file_presigned_url),
+            status=200,
+        )
+
+        # To finish mulitpart file upload
+        url = "{}{}"
+        responses.add(
+            responses.POST,
+            url.format(API_HOST_URL, URLS.finish_upload_for_annotation_file.value).format(
+                "2"
+            ),
+            json=json.loads(challenge_response.finish_annotation_file_upload),
+            status=200,
+        )
+
+        # To get presigned URL for part
+        presigned_url_response = json.loads(challenge_response.get_annotation_file_presigned_url)
+        part_file_upload_url = presigned_url_response["presigned_urls"][0]["url"]
+        responses.add(
+            responses.PUT,
+            part_file_upload_url,
+            headers=json.loads(challenge_response.annotation_part_file_upload_to_s3),
+            status=200,
+        )
+
         responses.add_passthru("http+docker://localhost/")
 
     @responses.activate
@@ -292,6 +365,56 @@ class TestMakeSubmission(BaseTestClass):
                 ],
             )
             assert result.exit_code == 0
+
+    @responses.activate
+    def test_make_submission_using_presigned_url(self, request):
+        expected = (
+            "Do you want to include the Submission Details? [y/N]: N\n"
+            "Uploading the file...\n\n"
+            "Your submission test_file.txt with the id 9 is successfully submitted for evaluation.\n\n"
+        )
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open("test_file.txt", "w") as f:
+                f.write("1 2 3 4 5 6")
+
+            result = runner.invoke(
+                challenge,
+                ["1", "phase", "2", "submit", "--file", "test_file.txt", "--large"],
+                input="N"
+            )
+            response = result.output
+
+            # Remove progress bar from response
+            splitted_response = response.split("\n")
+            splitted_response.pop(2)
+            response = "\n".join(splitted_response)
+            assert response == expected
+
+    @responses.activate
+    def test_upload_annotation_using_presigned_url(self, request):
+        expected = (
+            "Uploading the file...\n\n"
+            "The annotation file test_file.txt for challenge phase 2 is successfully uploaded.\n\n"
+        )
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open("test_file.txt", "w") as f:
+                f.write("1 2 3 4 5 6")
+
+            result = runner.invoke(
+                challenge,
+                ["1", "phase", "2", "submit", "--file", "test_file.txt", "--large", "--annotation"],
+                input="N"
+            )
+            response = result.output
+
+            # Remove progress bar from response
+            splitted_response = response.split("\n")
+            splitted_response.pop(1)
+
+            response = "\n".join(splitted_response)
+            assert response == expected
 
 
 class TestPush(BaseTestClass):

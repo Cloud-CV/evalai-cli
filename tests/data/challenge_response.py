@@ -421,3 +421,74 @@ empty_leaderboard = """
     "results": []
 }
 """
+
+get_submission_file_presigned_url = """
+{
+    "presigned_urls": [
+        {
+            "partNumber": 1,
+            "url": "https://staging-evalai.s3.amazonaws.com/media/submission_files/submission_403/5fb32be8-1fcf-42d3-9b9c-230e4027d656.json?uploadId=R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si&partNumber=1&Signature=Bga2IIsvDfJFOAMnZ5G64y0%3D&Expires=1603971221"
+        }
+    ],
+    "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si",
+    "submission_pk": 9
+}
+"""
+
+upload_file_to_s3 = """
+{
+    "parts": "[
+        {
+            "ETag": "\\"8e31830e7ed2b537d7fff83ef2525384\\"",
+            "PartNumber": 1
+        }
+    ]",
+    "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si"
+}
+"""
+
+finish_submission_file_upload = """
+{
+    "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si",
+    "submission_pk": 9
+}
+"""
+
+part_file_upload_to_s3 = """
+{
+    "ETag": "\\"8e31830e7ed2b537d7fff83ef2525384\\""
+}
+"""
+
+send_submission_message = """
+{
+    "submission_pk": 9,
+    "phase_pk": 2,
+    "challenge_pk": 1,
+}
+"""
+
+get_annotation_file_presigned_url = """
+{
+    "presigned_urls": [
+        {
+            "partNumber": 1,
+            "url": "https://staging-evalai.s3.amazonaws.com/media/test_annotations/8af3d688-f559-49be-ab20-16e02805d228.txt?uploadId=40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw&partNumber=1&Signature=lkHj9JhsvodXNnbKE%2F7y9t3E%3D&Expires=1603971332"
+        }
+    ],
+    "upload_id": "40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw"
+}
+"""
+
+finish_annotation_file_upload = """
+{
+    "upload_id": "40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw",
+    "challenge_phase_pk": 2
+}
+"""
+
+annotation_part_file_upload_to_s3 = """
+{
+    "ETag": "\\"30bb2b9819ff69e7891523af9ad66b49\\""
+}
+"""
