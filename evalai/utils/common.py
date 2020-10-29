@@ -11,7 +11,7 @@ from datetime import datetime
 from dateutil import tz
 from http import HTTPStatus
 from pathlib import Path
-from progressbar import progressbar
+from tqdm import tqdm
 
 from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.config import EVALAI_ERROR_CODES
@@ -60,7 +60,7 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
         parts = []
         index = 0
         file_size = Path(file.name).stat().st_size
-        for chunk_size in progressbar(range(0, file_size, max_chunk_size)):
+        for chunk_size in tqdm(range(0, file_size, max_chunk_size)):
             presigned_url_object = presigned_urls[index]
             part = presigned_url_object["partNumber"]
             url = presigned_url_object["url"]
