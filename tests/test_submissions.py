@@ -215,7 +215,7 @@ class TestMakeSubmission(BaseTestClass):
         # To get presigned URLs for submission upload parts
         url = "{}{}"
         responses.add(
-            responses.GET,
+            responses.POST,
             url.format(API_HOST_URL, URLS.get_presigned_url_for_annotation_file.value).format(
                 "2",
             ),
