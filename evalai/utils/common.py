@@ -183,7 +183,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
             num_file_chunks = int(file_size / max_chunk_size) + 1
 
             data = {"file_name": file.name, "num_file_chunks": num_file_chunks}
-            response = requests.get(url, headers=headers, data=data)
+            response = requests.post(url, headers=headers, data=data)
             if response.status_code is not HTTPStatus.OK:
                 response.raise_for_status()
 
