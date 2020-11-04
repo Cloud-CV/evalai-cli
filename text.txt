@@ -1,0 +1,6 @@
+Please refer challenge terms and conditions here: https://eval.ai/web/challenges/challenge-page/2/evaluation
+
+By agreeing to participate in the challenge, you are agreeing to terms and conditions.
+
+Do you accept challenge terms and conditions? [y/N]: Y
+404 Client Error: Not Found for url: https://eval.ai/api/challenges/challenge/2/participant_team/3
