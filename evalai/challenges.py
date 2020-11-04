@@ -206,7 +206,8 @@ def participate(ctx, team):
     """
     terms_and_conditions_page_url = "{}/web/challenges/challenge-page/{}/evaluation".format(get_host_url(), ctx.challenge_id)
     message = "Please refer challenge terms and conditions here: {}" \
-    "\n\nDo you accept challenge terms and conditions?".format(terms_and_conditions_page_url)
+        "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions." \
+        "\n\nDo you accept challenge terms and conditions?".format(terms_and_conditions_page_url)
     if click.confirm(message):
         participate_in_a_challenge(ctx.challenge_id, team)
     else:
