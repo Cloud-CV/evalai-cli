@@ -3,6 +3,7 @@ import json
 
 from click import style
 
+from evalai.utils.auth import get_host_url
 from evalai.utils.common import Date, notify_user, upload_file_using_presigned_url
 from evalai.utils.challenges import (
     display_all_challenge_list,
@@ -203,7 +204,14 @@ def participate(ctx, team):
     """
     Invoked by running `evalai challenge CHALLENGE participate TEAM`
     """
-    participate_in_a_challenge(ctx.challenge_id, team)
+    terms_and_conditions_page_url = "{}/web/challenges/challenge-page/{}/evaluation".format(get_host_url(), ctx.challenge_id)
+    message = "Please refer challenge terms and conditions here: {}" \
+    "\n\nDo you accept challenge terms and conditions?".format(terms_and_conditions_page_url)
+    if click.confirm(message):
+        participate_in_a_challenge(ctx.challenge_id, team)
+    else:
+        message = "\nYou can't participate in the challenge without accepting terms and conditions"
+        notify_user(message, color="red")
 
 
 @phase.command()
