@@ -9,6 +9,7 @@ from evalai.challenges import challenge
 
 from tests.data import teams_response
 
+from evalai.utils.auth import get_host_url
 from evalai.utils.config import API_HOST_URL
 from evalai.utils.urls import URLS
 
@@ -223,11 +224,16 @@ class TestTeams:
 
     @responses.activate
     def test_participate_in_a_challenge(self):
-        output = "Your team id {} is now participating in this challenge.\n".format(
-            "3"
+        terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
+        terms_and_conditions_page_url = terms_and_conditions_page_url.format(2)
+        output = (
+            "Please refer challenge terms and conditions here: {}"
+            "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+            "\n\nDo you accept challenge terms and conditions? [y/N]: Y\n".format(terms_and_conditions_page_url)
+            + "Your team id {} is now participating in this challenge.\n".format("3")
         )
         runner = CliRunner()
-        result = runner.invoke(challenge, ["2", "participate", "3"])
+        result = runner.invoke(challenge, ["2", "participate", "3"], input="Y")
         response = result.output
         assert response == output
 

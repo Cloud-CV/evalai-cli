@@ -7,7 +7,7 @@ from requests.exceptions import RequestException
 from evalai.challenges import challenge, challenges
 from evalai.teams import teams
 from evalai.submissions import submission
-from evalai.utils.auth import get_request_header
+from evalai.utils.auth import get_request_header, get_host_url
 from evalai.utils.urls import URLS
 from evalai.utils.config import API_HOST_URL
 
@@ -262,13 +262,23 @@ class TestHTTPErrorRequests(BaseTestClass):
 
     @responses.activate
     def test_participate_in_a_challenge_for_http_error_404(self):
-        runner = CliRunner()
-        result = runner.invoke(challenge, ["2", "participate", "3"])
-        response = result.output
+        terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
+        terms_and_conditions_page_url = terms_and_conditions_page_url.format(2)
+
         url = "{}{}".format(
             API_HOST_URL, URLS.participate_in_a_challenge.value
         ).format("2", "3")
-        expected = "{}{}".format(self.expected.format(url), "\n")
+
+        expected = (
+            "Please refer challenge terms and conditions here: {}"
+            "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+            "\n\nDo you accept challenge terms and conditions? [y/N]: Y\n".format(terms_and_conditions_page_url)
+            + self.expected.format(url) + "\n"
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, ["2", "participate", "3"], input="Y")
+        response = result.output
         assert response == expected
 
     @responses.activate
@@ -463,11 +473,20 @@ class TestTeamsWhenObjectDoesNotExist(BaseTestClass):
 
     @responses.activate
     def test_participate_in_a_challenge_when_object_does_not_exist(self):
+        terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
+        terms_and_conditions_page_url = terms_and_conditions_page_url.format(2)
+        expected = (
+            "Please refer challenge terms and conditions here: {}"
+            "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+            "\n\nDo you accept challenge terms and conditions? [y/N]: Y\n\n".format(terms_and_conditions_page_url)
+            + self.expected
+        )
+
         runner = CliRunner()
-        result = runner.invoke(challenge, ["2", "participate", "3"])
+        result = runner.invoke(challenge, ["2", "participate", "3"], input="Y")
         response = result.output.rstrip()
-        expected = "\n{}\n\n{}".format(
-            self.expected,
+        expected = "{}\n\n{}".format(
+            expected,
             "Use `evalai challenges` to fetch the active challenges.",
         )
         expected = "{}\n\n{}".format(
@@ -838,7 +857,7 @@ class TestRequestForExceptions(BaseTestClass):
     @responses.activate
     def test_participate_in_a_challenge_for_request_exception(self):
         runner = CliRunner()
-        result = runner.invoke(challenge, ["2", "participate", "3"])
+        result = runner.invoke(challenge, ["2", "participate", "3"], input="Y")
         assert result.exit_code == 1
 
     @responses.activate
@@ -967,8 +986,32 @@ class TestTeamsSuccess(BaseTestClass):
 
     @responses.activate
     def test_participate_in_a_challenge_success(self):
+        terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
+        terms_and_conditions_page_url = terms_and_conditions_page_url.format(self.challenge_id)
+        expected = (
+            "Please refer challenge terms and conditions here: {}"
+            "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+            "\n\nDo you accept challenge terms and conditions? [y/N]: Y\n".format(terms_and_conditions_page_url)
+            + self.expected_participate
+        )
+
         runner = CliRunner()
-        result = runner.invoke(challenge, [self.challenge_id, "participate", self.team_id])
+        result = runner.invoke(challenge, [self.challenge_id, "participate", self.team_id], input="Y")
         response = result.output
-        expected = self.expected_participate
+        assert response == expected
+
+    @responses.activate
+    def test_participate_in_a_challenge_decline_terms_and_conditions(self):
+        terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
+        terms_and_conditions_page_url = terms_and_conditions_page_url.format(self.challenge_id)
+        expected = (
+            "Please refer challenge terms and conditions here: {}"
+            "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+            "\n\nDo you accept challenge terms and conditions? [y/N]: N".format(terms_and_conditions_page_url)
+            + "\n\nYou can't participate in the challenge without accepting terms and conditions\n"
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(challenge, [self.challenge_id, "participate", self.team_id], input="N")
+        response = result.output
         assert response == expected

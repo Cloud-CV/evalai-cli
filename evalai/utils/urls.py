@@ -35,3 +35,4 @@ class URLS(Enum):
     finish_upload_for_submission_file = "/api/jobs/phases/{}/finish_submission_file_upload/{}/"
     finish_upload_for_annotation_file = "/api/challenges/phases/{}/finish_annotation_file_upload/"
     send_submission_message = "/api/jobs/phases/{}/send_submission_message/{}/"
+    terms_and_conditions_page = "/web/challenges/challenge-page/{}/evaluation"
