@@ -334,8 +334,8 @@
                 <div class="command code-margin">
                     <div class="label">Run this command</div>
                     <div class="text codebg">
-                        <span id="makeDockerSubmission">evalai push &lt;image:tag&gt; -p 4 --private</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('makeDockerSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="makePrivateDockerSubmission">evalai push &lt;image:tag&gt; -p 4 --private</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('makePrivateDockerSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -347,8 +347,8 @@
                 <div class="command code-margin">
                     <div class="label">Run this command</div>
                     <div class="text codebg">
-                        <span id="makeDockerSubmission">evalai push &lt;image:tag&gt; -p 4 --public</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('makeDockerSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="makePublicDockerSubmission">evalai push &lt;image:tag&gt; -p 4 --public</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('makePublicDockerSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -373,8 +373,8 @@
                 <div class="command code-margin">
                     <div class="label">Run this command</div>
                     <div class="text codebg">
-                        <span id="makeSubmission">evalai challenge 1 phase 4 submit --file submission.json --large</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('makeSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="makeLargeSubmission">evalai challenge 1 phase 4 submit --file submission.json --large</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('makeLargeSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -386,8 +386,8 @@
                 <div class="command code-margin">
                     <div class="label">Run this command</div>
                     <div class="text codebg">
-                        <span id="makeSubmission">evalai challenge 1 phase 4 submit --file submission.json --private</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('makeSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="makePrivateSubmission">evalai challenge 1 phase 4 submit --file submission.json --private</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('makePrivateSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -399,8 +399,8 @@
                 <div class="command code-margin">
                     <div class="label">Run this command</div>
                     <div class="text codebg">
-                        <span id="makeSubmission">evalai challenge 1 phase 4 submit --file submission.json --public</span>
-                        <a class="copy-btn" onclick="CopyToClipboard('makeSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        <span id="makePublicSubmission">evalai challenge 1 phase 4 submit --file submission.json --public</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('makePublicSubmission')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
@@ -470,6 +470,35 @@
                     <div class="text codebg">
                         <span id="viewSubmissionBetweenDates">evalai challenge 1 phase 4 submissions -s 06/15/18 -e 06/25/18</span>
                         <a class="copy-btn" onclick="CopyToClipboard('viewSubmissionBetweenDates')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        </a>
+                    </div>
+                </div>
+                <br id="challenge-annotations">
+                <h3 id="h3-style"><a href="#challenge-annotations" class="sub-heading">Challenge annotations</a></h3>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12" id="code-label">
+                        <h4 class="code-container-style"><b>Upload challenge phase annotations if user is challenge host</b></h4>
+                    </div>
+                </div>
+                <div class="command code-margin">
+                    <div class="label">Run this command</div>
+                    <div class="text codebg">
+                        <span id="uploadTestAnnotation">evalai challenge 1 phase 4 submit --file annotation.json --annotation</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('uploadTestAnnotation')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="code-label">
+                        <h4 class="code-container-style"><b>Upload challenge phase annotations > 400MB if user is challenge host</b></h4>
+                    </div>
+                </div>
+                <div class="command code-margin">
+                    <div class="label">Run this command</div>
+                    <div class="text codebg">
+                        <span id="uploadLargeAnnotation">evalai challenge 1 phase 4 submit --file annotation.json --large --annotation</span>
+                        <a class="copy-btn" onclick="CopyToClipboard('uploadLargeAnnotation')" data-toggle="tooltip" data-placement="top" title="copy to clipboard"><i class="fas fa-copy"></i>
                         </a>
                     </div>
                 </div>
