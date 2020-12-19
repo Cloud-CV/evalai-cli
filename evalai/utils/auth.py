@@ -16,6 +16,39 @@ from evalai.utils.urls import URLS
 requests.packages.urllib3.disable_warnings()
 
 
+def get_user_access_token(token):
+    """
+    Returns user access token after login.
+    """
+    url = "{}{}".format(get_host_url(), URLS.get_access_token.value)
+    try:
+        headers = {"Authorization": "Token {}".format(token["token"])}
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        if response.status_code in EVALAI_ERROR_CODES:
+            echo(
+                style(
+                    "\nUnable to fetch auth token.\n",
+                    bold=True,
+                    fg="red",
+                )
+            )
+        sys.exit(1)
+    except requests.exceptions.RequestException:
+        echo(
+            style(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+    token = response.json()
+    return token
+
+
 def get_user_auth_token_by_login(username, password):
     """
     Returns user auth token by login.
@@ -47,6 +80,8 @@ def get_user_auth_token_by_login(username, password):
         sys.exit(1)
 
     token = response.json()
+    # Replace expiring auth token with access token
+    token = get_user_access_token(token)
     return token
 
 
@@ -80,7 +115,7 @@ def get_request_header():
     """
     Returns user auth token formatted in header for sending requests.
     """
-    header = {"Authorization": "Token {}".format(get_user_auth_token())}
+    header = {"Authorization": "Bearer {}".format(get_user_auth_token())}
 
     return header
 
