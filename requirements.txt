@@ -1,6 +1,6 @@
 beautifulsoup4==4.7.1
 beautifultable==0.7.0
-boto3==1.9.88
+boto3>=1.9.88
 click==6.7
 docker==3.6.0
 lxml==4.2.1
@@ -8,4 +8,4 @@ python-dateutil==2.7.3
 requests==2.20.0
 validators==0.12.6
 termcolor==1.1.0
-tqdm==4.49.0
+tqdm>=4.49.0
