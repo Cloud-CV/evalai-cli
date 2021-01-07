@@ -35,7 +35,6 @@ tests_require = [
     "pytest-env==0.6.2",
     "responses==0.9.0",
     "pre-commit==1.14.4",
-    "urllib3==1.26.2",
 ]
 
 setup(
