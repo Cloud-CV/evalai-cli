@@ -1,5 +1,5 @@
 build_and_push() {
-    python3 -m pip install --upgrade setuptools wheel twine
+    python3 -m pip install --upgrade setuptools wheel twine keyring==21.4.0
     python3 setup.py sdist bdist_wheel
     python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/* -u ${TEST_PYPI_USERNAME}  -p ${TEST_PYPI_PASSWORD}
 
