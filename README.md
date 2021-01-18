@@ -46,8 +46,15 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
     ```bash
     pip install -e .
     ```
+ 
+5. Change the evalai-cli host to make request to local EvalAI server running on `http://localhost:8000` by running:
+   
+   ```bash
+   evalai host -sh http://localhost:8000
+   ```
 
-5. Login to cli using the command ``` evalai login```
+
+6. Login to cli using the command ``` evalai login```
 Two users will be created by default which are listed below -
 
     ```bash
