@@ -4,7 +4,7 @@ import os
 from os.path import expanduser
 
 
-LEN_OF_TOKEN = 40
+LEN_OF_TOKEN = 210
 
 AUTH_TOKEN_FILE_NAME = "token.json"
 
