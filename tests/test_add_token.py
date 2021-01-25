@@ -14,9 +14,3 @@ class TestSetToken:
         response = result.output.rstrip()
         assert response == expected
 
-    def test_set_token_when_auth_token_is_invalid(self):
-        expected = "Error: Invalid Length. Enter a valid token of length: {}".format(LEN_OF_TOKEN)
-        runner = CliRunner()
-        result = runner.invoke(set_token, [generate_random_string(10)])
-        response = result.output.rstrip()
-        assert response == expected
