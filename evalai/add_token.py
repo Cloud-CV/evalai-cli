@@ -2,7 +2,6 @@ import json
 import os
 
 import click
-import validators
 from click import echo, style
 
 from evalai.utils.config import AUTH_TOKEN_DIR, AUTH_TOKEN_PATH

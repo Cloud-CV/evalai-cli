@@ -10,7 +10,8 @@ class TestSetToken:
     def test_set_token(self):
         expected = "Success: Authentication token is successfully set."
         runner = CliRunner()
-        result = runner.invoke(set_token, [generate_random_string(LEN_OF_TOKEN)])
+        result = runner.invoke(
+            set_token, [generate_random_string(LEN_OF_TOKEN)]
+        )
         response = result.output.rstrip()
         assert response == expected
-
