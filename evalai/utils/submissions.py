@@ -1,3 +1,4 @@
+import json
 import requests
 import sys
 
@@ -18,18 +19,57 @@ from evalai.utils.common import (
 requests.packages.urllib3.disable_warnings()
 
 
-def make_submission(challenge_id, phase_id, file, submission_metadata={}):
+def get_submission_meta_attributes(challenge_id, phase_id):
+    """
+    Function to get all submission_meta_attributes for a challenge phase
+    """
+    url = "{}{}".format(get_host_url(), URLS.challenge_phase_detail.value)
+    url = url.format(challenge_id, phase_id)
+    headers = get_request_header()
+    try:
+        response = requests.get(
+            url, headers=headers
+        )
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        if response.status_code in EVALAI_ERROR_CODES:
+            validate_token(response.json())
+            echo(
+                style(
+                    "\nError: {}\n"
+                    "\nUse `evalai challenges` to fetch the active challenges.\n"
+                    "\nUse `evalai challenge CHALLENGE phases` to fetch the "
+                    "active phases.\n".format(response.json()),
+                    fg="red",
+                    bold=True,
+                )
+            )
+        else:
+            echo(err)
+        sys.exit(1)
+    except requests.exceptions.RequestException:
+        echo(
+            style(
+                "\nCould not establish a connection to EvalAI."
+                " Please check the Host URL.\n",
+                bold=True,
+                fg="red",
+            )
+        )
+        sys.exit(1)
+    response = response.json()
+    return response["submission_meta_attributes"]
+
+def make_submission(challenge_id, phase_id, file, submission_metadata={}, submission_attribute_metadata={}):
     """
     Function to submit a file to a challenge
     """
     url = "{}{}".format(get_host_url(), URLS.make_submission.value)
     url = url.format(challenge_id, phase_id)
-
     headers = get_request_header()
     input_file = {"input_file": file}
-    data = {"status": "submitting"}
+    data = {"status": "submitting", "submission_metadata":json.dumps(submission_attribute_metadata)}
     data = dict(data, **submission_metadata)
-
     try:
         response = requests.post(
             url, headers=headers, files=input_file, data=data
