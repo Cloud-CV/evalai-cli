@@ -313,7 +313,7 @@ def submit(ctx, file, annotation, large, public, private):
                                         value.append(choice)
                                         optionChosen = False
                                     else:
-                                        echo("Choose correct value(s) from the given options only")
+                                        echo("Error: Choose correct value(s) from the given options only")
                                         optionChosen = True
                                         break
                             echo("Values chosen: {}".format(value))
