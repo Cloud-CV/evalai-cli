@@ -60,6 +60,7 @@ def get_submission_meta_attributes(challenge_id, phase_id):
     response = response.json()
     return response["submission_meta_attributes"]
 
+
 def make_submission(challenge_id, phase_id, file, submission_metadata={}, submission_attribute_metadata={}):
     """
     Function to submit a file to a challenge
@@ -68,7 +69,8 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}, submis
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
     input_file = {"input_file": file}
-    data = {"status": "submitting", "submission_metadata":json.dumps(submission_attribute_metadata)}
+    data = {"status": "submitting", "submission_metadata": json.dumps(
+        submission_attribute_metadata)}
     data = dict(data, **submission_metadata)
     try:
         response = requests.post(

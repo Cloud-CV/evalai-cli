@@ -2,7 +2,6 @@ import click
 import json
 
 from click import style
-from click.termui import prompt
 from click.utils import echo
 
 from evalai.utils.auth import get_host_url
@@ -313,7 +312,8 @@ def submit(ctx, file, annotation, large, public, private):
                                         value.append(choice)
                                         optionChosen = False
                                     else:
-                                        echo("Error: Choose correct value(s) from the given options only")
+                                        echo(
+                                            "Error: Choose correct value(s) from the given options only")
                                         optionChosen = True
                                         break
                             echo("Values chosen: {}".format(value))
