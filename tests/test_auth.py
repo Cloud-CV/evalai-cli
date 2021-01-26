@@ -6,6 +6,7 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from termcolor import colored
 
+from evalai.login import login
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
 from evalai.utils.urls import URLS
@@ -13,6 +14,7 @@ from evalai.utils.config import (
     API_HOST_URL,
     AUTH_TOKEN_DIR,
     AUTH_TOKEN_FILE_NAME,
+    AUTH_TOKEN_PATH,
     HOST_URL_FILE_PATH,
 )
 from evalai.utils.common import convert_UTC_date_to_local
@@ -219,3 +221,36 @@ class TestSetAndLoadHostURL(BaseTestClass):
         result = runner.invoke(challenges)
         response = result.output.strip()
         assert str(response) == self.output
+
+
+class TestLogin(BaseTestClass):
+    def teardown(self):
+        if os.path.exists(HOST_URL_FILE_PATH):
+            os.remove(HOST_URL_FILE_PATH)
+
+    def test_login(self):
+        expected = "\nLogged in successfully!"
+        runner = CliRunner()
+        result = runner.invoke(host, ["-sh", "http://localhost:8000"])
+        result = runner.invoke(login, input="host\npassword")
+        responses = result.output.strip()
+        assert expected in str(responses)
+        assert os.path.exists(AUTH_TOKEN_PATH), "Auth Token is not set"
+
+    def test_login_when_httperror(self):
+        expected = "\nCould not establish a connection to EvalAI. Please check the Host URL."
+        runner = CliRunner()
+        result = runner.invoke(host, ["-sh", "https://evalaiwrongurl.ai"])
+        result = runner.invoke(host)
+        result = runner.invoke(login, input="host\npassword")
+        responses = result.output.strip()
+        assert expected in str(responses)
+
+    def test_login_when_wrong_credentials(self):
+        expected = "\nUnable to log in with provided credentials."
+        runner = CliRunner()
+        result = runner.invoke(host, ["-sh", "http://localhost:8000"])
+        result = runner.invoke(host)
+        result = runner.invoke(login, input="notahost\nnotapassword")
+        responses = result.output.strip()
+        assert expected in str(responses)
