@@ -308,30 +308,55 @@ def submit(ctx, file, annotation, large, public, private):
                         attribute_type = attribute["type"]
                         attribute_name = attribute["name"]
                         attribute_description = attribute["description"]
+                        attribute_required = attribute.get("required")
+                        if attribute_required:
+                            attribute_name = attribute_name + '*'
                         value = None
                         message = "{} ({})".format(
                             attribute_name, attribute_description
                         )
                         if attribute_type == "text":
-                            value = click.prompt(
-                                style(message, fg="yellow"),
-                                type=str,
-                                default="",
-                            )
+                            while True:
+                                value = click.prompt(
+                                    style(message, fg="yellow"),
+                                    type=str,
+                                    default="",
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute_name)
+                                )
                         if attribute_type == "boolean":
-                            value = click.prompt(
-                                style(message, fg="yellow"), type=bool
-                            )
+                            while True:
+                                value = click.prompt(
+                                    style(message, fg="yellow"), type=bool, default=""
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute_name)
+                                )
                         if attribute_type == "radio":
-                            value = click.prompt(
-                                style(
-                                    "{}: Choices:{}".format(
-                                        message, attribute["options"]
+                            while True:
+                                value = click.prompt(
+                                    style(
+                                        "{}: Choices:{}".format(
+                                            message, attribute["options"]
+                                        ),
+                                        fg="yellow",
                                     ),
-                                    fg="yellow",
-                                ),
-                                type=click.Choice(attribute["options"]),
-                            )
+                                    type=click.Choice(attribute["options"]),
+                                    default=""
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute_name)
+                                )
                         if attribute_type == "checkbox":
                             optionChosen = True
                             while optionChosen:
@@ -344,11 +369,24 @@ def submit(ctx, file, annotation, large, public, private):
                                         fg="yellow",
                                     ),
                                     type=str,
+                                    show_default=False,
+                                    default=""
                                 )
-                                choices = [
-                                    choice.strip(" ")
-                                    for choice in choices.split(",")
-                                ]
+                                if choices != "":
+                                    choices = [
+                                        choice.strip(" ")
+                                        for choice in choices.split(",")
+                                    ]
+                                else:
+                                    choices = []
+                                    optionChosen = False
+                                if attribute_required and len(choices) == 0:
+                                    echo(
+                                        "Error: {} is a required field. Please select atleast one option".format(
+                                            attribute_name
+                                        )
+                                    )
+                                    optionChosen = True
                                 for choice in choices:
                                     if choice in attribute["options"]:
                                         value.append(choice)
