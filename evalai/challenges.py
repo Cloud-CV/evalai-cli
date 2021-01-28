@@ -5,7 +5,11 @@ from click import style
 from click.utils import echo
 
 from evalai.utils.auth import get_host_url
-from evalai.utils.common import Date, notify_user, upload_file_using_presigned_url
+from evalai.utils.common import (
+    Date,
+    notify_user,
+    upload_file_using_presigned_url,
+)
 from evalai.utils.challenges import (
     display_all_challenge_list,
     display_future_challenge_list,
@@ -18,7 +22,10 @@ from evalai.utils.challenges import (
     display_challenge_phase_split_list,
     display_leaderboard,
 )
-from evalai.utils.submissions import display_my_submission_details, get_submission_meta_attributes
+from evalai.utils.submissions import (
+    display_my_submission_details,
+    get_submission_meta_attributes,
+)
 from evalai.utils.teams import participate_in_a_challenge
 from evalai.utils.submissions import make_submission
 from evalai.utils.urls import URLS
@@ -207,13 +214,18 @@ def participate(ctx, team):
     Invoked by running `evalai challenge CHALLENGE participate TEAM`
     """
     terms_and_conditions_page_url = "{}{}".format(
-        get_host_url(), URLS.terms_and_conditions_page.value)
+        get_host_url(), URLS.terms_and_conditions_page.value
+    )
     terms_and_conditions_page_url = terms_and_conditions_page_url.format(
-        ctx.challenge_id)
-    message = "Please refer challenge terms and conditions here: {}" \
-        "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions." \
+        ctx.challenge_id
+    )
+    message = (
+        "Please refer challenge terms and conditions here: {}"
+        "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
         "\n\nDo you accept challenge terms and conditions?".format(
-            terms_and_conditions_page_url)
+            terms_and_conditions_page_url
+        )
+    )
     if click.confirm(message):
         participate_in_a_challenge(ctx.challenge_id, team)
     else:
@@ -228,7 +240,10 @@ def participate(ctx, team):
 @click.option("--public", is_flag=True)
 @click.option("--private", is_flag=True)
 @click.option(
-    "--file", type=click.File("rb"), required=True, help="File path to the submission or annotation file"
+    "--file",
+    type=click.File("rb"),
+    required=True,
+    help="File path to the submission or annotation file",
 )
 def submit(ctx, file, annotation, large, public, private):
     """
@@ -268,7 +283,9 @@ def submit(ctx, file, annotation, large, public, private):
                     style("Method Name", fg="yellow"), type=str, default=""
                 )
                 submission_metadata["method_description"] = click.prompt(
-                    style("Method Description", fg="yellow"), type=str, default=""
+                    style("Method Description", fg="yellow"),
+                    type=str,
+                    default="",
                 )
                 submission_metadata["project_url"] = click.prompt(
                     style("Project URL", fg="yellow"), type=str, default=""
@@ -277,53 +294,87 @@ def submit(ctx, file, annotation, large, public, private):
                     style("Publication URL", fg="yellow"), type=str, default=""
                 )
             submission_meta_attributes = get_submission_meta_attributes(
-                ctx.challenge_id, ctx.phase_id)
+                ctx.challenge_id, ctx.phase_id
+            )
             submission_attribute_metadata = []
-            if submission_meta_attributes and len(submission_meta_attributes) > 0:
-                if click.confirm("Do you want to include the Submission Metadata"):
+            if (
+                submission_meta_attributes
+                and len(submission_meta_attributes) > 0
+            ):
+                if click.confirm(
+                    "Do you want to include the Submission Metadata?"
+                ):
                     for attribute in submission_meta_attributes:
-                        typ = attribute["type"]
-                        name = attribute["name"]
-                        desc = attribute["description"]
+                        attribute_type = attribute["type"]
+                        attribute_name = attribute["name"]
+                        attribute_description = attribute["description"]
                         value = None
-                        message = "{} ({})".format(name, desc)
-                        if(typ == "text"):
+                        message = "{} ({})".format(
+                            attribute_name, attribute_description
+                        )
+                        if attribute_type == "text":
                             value = click.prompt(
-                                style(message, fg="yellow"), type=str, default=""
+                                style(message, fg="yellow"),
+                                type=str,
+                                default="",
                             )
-                        if(typ == "boolean"):
+                        if attribute_type == "boolean":
                             value = click.prompt(
                                 style(message, fg="yellow"), type=bool
                             )
-                        if(typ == "radio"):
+                        if attribute_type == "radio":
                             value = click.prompt(
-                                style("{}: Choices:{}".format(message, attribute["options"]), fg="yellow"), type=click.Choice(attribute["options"])
+                                style(
+                                    "{}: Choices:{}".format(
+                                        message, attribute["options"]
+                                    ),
+                                    fg="yellow",
+                                ),
+                                type=click.Choice(attribute["options"]),
                             )
-                        if(typ == "checkbox"):
+                        if attribute_type == "checkbox":
                             optionChosen = True
                             while optionChosen:
                                 value = []
                                 choices = click.prompt(
-                                    style("{}: Choices(0 or more separated by comma):{}".format(message, attribute["options"]), fg="yellow"), type=str
+                                    style(
+                                        "{}: Choices(0 or more separated by comma):{}".format(
+                                            message, attribute["options"]
+                                        ),
+                                        fg="yellow",
+                                    ),
+                                    type=str,
                                 )
-                                choices = choices.strip(' ').split(',')
+                                choices = [
+                                    choice.strip(" ")
+                                    for choice in choices.split(",")
+                                ]
                                 for choice in choices:
-                                    if choice in attribute['options']:
+                                    if choice in attribute["options"]:
                                         value.append(choice)
                                         optionChosen = False
                                     else:
                                         echo(
-                                            "Error: Choose correct value(s) from the given options only")
+                                            "Error: Choose correct value(s) from the given options only"
+                                        )
                                         optionChosen = True
                                         break
                             echo("Values chosen: {}".format(value))
-                        submission_attribute_metadata.append({name: value})
+                        submission_attribute_metadata.append(
+                            {attribute_name: value}
+                        )
             if large:
                 upload_file_using_presigned_url(
-                    ctx.phase_id, file, "submission", submission_metadata)
+                    ctx.phase_id, file, "submission", submission_metadata
+                )
             else:
-                make_submission(ctx.challenge_id, ctx.phase_id,
-                                file, submission_metadata, submission_attribute_metadata)
+                make_submission(
+                    ctx.challenge_id,
+                    ctx.phase_id,
+                    file,
+                    submission_metadata,
+                    submission_attribute_metadata,
+                )
 
 
 challenge.add_command(phase)

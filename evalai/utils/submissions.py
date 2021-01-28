@@ -22,14 +22,19 @@ requests.packages.urllib3.disable_warnings()
 def get_submission_meta_attributes(challenge_id, phase_id):
     """
     Function to get all submission_meta_attributes for a challenge phase
+
+    Parameters:
+    challenge_id (int): id of challenge to which submission is made
+    phase_id (int): id of challenge phase to which submission is made
+
+    Returns:
+    list: list of objects of submission meta attributes
     """
     url = "{}{}".format(get_host_url(), URLS.challenge_phase_detail.value)
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
     try:
-        response = requests.get(
-            url, headers=headers
-        )
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
@@ -61,7 +66,13 @@ def get_submission_meta_attributes(challenge_id, phase_id):
     return response["submission_meta_attributes"]
 
 
-def make_submission(challenge_id, phase_id, file, submission_metadata={}, submission_attribute_metadata={}):
+def make_submission(
+    challenge_id,
+    phase_id,
+    file,
+    submission_metadata={},
+    submission_attribute_metadata={},
+):
     """
     Function to submit a file to a challenge
     """
@@ -69,8 +80,10 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}, submis
     url = url.format(challenge_id, phase_id)
     headers = get_request_header()
     input_file = {"input_file": file}
-    data = {"status": "submitting", "submission_metadata": json.dumps(
-        submission_attribute_metadata)}
+    data = {
+        "status": "submitting",
+        "submission_metadata": json.dumps(submission_attribute_metadata),
+    }
     data = dict(data, **submission_metadata)
     try:
         response = requests.post(
@@ -122,7 +135,7 @@ def make_submission(challenge_id, phase_id, file, submission_metadata={}, submis
                 response["id"]
             ),
             bold=True,
-            fg="white"
+            fg="white",
         )
     )
 
@@ -147,7 +160,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
             style(
                 "\nSorry, you have not made any submissions to this challenge phase.\n",
                 bold=True,
-                fg="red"
+                fg="red",
             )
         )
         sys.exit(1)
@@ -177,7 +190,7 @@ def pretty_print_my_submissions_data(submissions, start_date, end_date):
             style(
                 "\nSorry, no submissions were made during this time period.\n",
                 bold=True,
-                fg="red"
+                fg="red",
             )
         )
         sys.exit(1)
@@ -313,7 +326,7 @@ def display_submission_result(submission_id):
     """
     try:
         response = submission_details_request(submission_id).json()
-        echo(requests.get(response['submission_result_file']).text)
+        echo(requests.get(response["submission_result_file"]).text)
     except requests.exceptions.MissingSchema:
         echo(
             style(
