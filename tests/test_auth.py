@@ -233,8 +233,8 @@ class TestLogin(BaseTestClass):
         responses.add(
             responses.POST,
             url.format("https://eval.ai", URLS.login.value),
-            json = valid_login_response,
-            match = [
+            json=valid_login_response,
+            match=[
                 responses.urlencoded_params_matcher(valid_login_body)
             ],
             status=200
@@ -245,8 +245,8 @@ class TestLogin(BaseTestClass):
         responses.add(
             responses.POST,
             url.format("https://eval.ai", URLS.login.value),
-            json = invalid_login_response,
-            match = [
+            json=invalid_login_response,
+            match=[
                 responses.urlencoded_params_matcher(invalid_login_body)
             ],
             status=400
@@ -278,7 +278,7 @@ class TestLogin(BaseTestClass):
         assert os.path.exists(AUTH_TOKEN_PATH), "Auth Token is not set"
         # Checking if the token is equal to what was set during login
         with open(str(AUTH_TOKEN_PATH), "r") as TokenFile:
-           assert json.loads(TokenFile.read()) == json.loads(auth_response.get_access_token_response)
+            assert json.loads(TokenFile.read()) == json.loads(auth_response.get_access_token_response)
 
     @responses.activate
     def test_login_when_httperror(self):
@@ -297,4 +297,3 @@ class TestLogin(BaseTestClass):
         result = runner.invoke(login, input="notahost\nnotapassword")
         responses = result.output.strip()
         assert expected in str(responses)
-        
