@@ -6,7 +6,6 @@ from beautifultable import BeautifulTable
 from click.testing import CliRunner
 from termcolor import colored
 
-from evalai.utils.auth import get_host_url
 from evalai.login import login
 from evalai.challenges import challenge, challenges
 from evalai.set_host import host
@@ -235,7 +234,7 @@ class TestLogin(BaseTestClass):
             responses.POST,
             url.format("https://eval.ai", URLS.login.value),
             json = valid_login_response,
-            match=[
+            match = [
                 responses.urlencoded_params_matcher(valid_login_body)
             ],
             status=200
@@ -247,7 +246,7 @@ class TestLogin(BaseTestClass):
             responses.POST,
             url.format("https://eval.ai", URLS.login.value),
             json = invalid_login_response,
-            match=[
+            match = [
                 responses.urlencoded_params_matcher(invalid_login_body)
             ],
             status=400
@@ -298,3 +297,4 @@ class TestLogin(BaseTestClass):
         result = runner.invoke(login, input="notahost\nnotapassword")
         responses = result.output.strip()
         assert expected in str(responses)
+        
