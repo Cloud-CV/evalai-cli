@@ -273,8 +273,8 @@ class TestLogin(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "https://eval.ai"])
         result = runner.invoke(login, input="host\npassword")
-        responses = result.output.strip()
-        assert expected in str(responses)
+        response = result.output.strip()
+        assert expected in str(response)
         assert os.path.exists(AUTH_TOKEN_PATH), "Auth Token is not set"
         # Checking if the token is equal to what was set during login
         with open(str(AUTH_TOKEN_PATH), "r") as TokenFile:
@@ -286,8 +286,8 @@ class TestLogin(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "https://evalaiwrongurl.ai"])
         result = runner.invoke(login, input="host\npassword")
-        responses = result.output.strip()
-        assert expected in str(responses)
+        response = result.output.strip()
+        assert expected in str(response)
 
     @responses.activate
     def test_login_when_wrong_credentials(self):
@@ -295,5 +295,5 @@ class TestLogin(BaseTestClass):
         runner = CliRunner()
         result = runner.invoke(host, ["-sh", "https://eval.ai"])
         result = runner.invoke(login, input="notahost\nnotapassword")
-        responses = result.output.strip()
-        assert expected in str(responses)
+        response = result.output.strip()
+        assert expected in str(response)
