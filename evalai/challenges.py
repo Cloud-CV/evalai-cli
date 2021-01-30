@@ -326,7 +326,8 @@ def submit(ctx, file, annotation, large, public, private):
                                     break
                                 echo(
                                     "Error: {} is a required field".format(
-                                        attribute_name)
+                                        attribute["name"]
+                                    )
                                 )
                         if attribute_type == "boolean":
                             while True:
@@ -337,13 +338,14 @@ def submit(ctx, file, annotation, large, public, private):
                                     break
                                 echo(
                                     "Error: {} is a required field".format(
-                                        attribute_name)
+                                        attribute["name"]
+                                    )
                                 )
                         if attribute_type == "radio":
                             while True:
                                 value = click.prompt(
                                     style(
-                                        "{}: Choices:{}".format(
+                                        "{}:\nChoices:{}".format(
                                             message, attribute["options"]
                                         ),
                                         fg="yellow",
@@ -355,7 +357,8 @@ def submit(ctx, file, annotation, large, public, private):
                                     break
                                 echo(
                                     "Error: {} is a required field".format(
-                                        attribute_name)
+                                        attribute["name"]
+                                    )
                                 )
                         if attribute_type == "checkbox":
                             optionChosen = True
@@ -363,7 +366,7 @@ def submit(ctx, file, annotation, large, public, private):
                                 value = []
                                 choices = click.prompt(
                                     style(
-                                        "{}: Choices(0 or more separated by comma):{}".format(
+                                        "{}:\nChoices(separated by comma):{}".format(
                                             message, attribute["options"]
                                         ),
                                         fg="yellow",
@@ -383,7 +386,7 @@ def submit(ctx, file, annotation, large, public, private):
                                 if attribute_required and len(choices) == 0:
                                     echo(
                                         "Error: {} is a required field. Please select atleast one option".format(
-                                            attribute_name
+                                            attribute["name"]
                                         )
                                     )
                                     optionChosen = True
@@ -397,7 +400,6 @@ def submit(ctx, file, annotation, large, public, private):
                                         )
                                         optionChosen = True
                                         break
-                            echo("Values chosen: {}".format(value))
                         submission_attribute_metadata.append(
                             {attribute_name: value}
                         )
