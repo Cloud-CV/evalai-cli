@@ -18,7 +18,7 @@ from evalai.utils.common import notify_user
 from evalai.utils.requests import make_request
 from evalai.utils.submissions import (
     display_submission_details,
-    display_submission_result,
+    display_submission_file_data,
     convert_bytes_to,
 )
 from evalai.utils.urls import URLS
@@ -60,7 +60,8 @@ def result(ctx):
     """
     Invoked by `evalai submission SUBMISSION_ID result`.
     """
-    display_submission_result(ctx.submission_id)
+    error_message = "\nThe Submission is yet to be evaluated.\n"
+    display_submission_file_data(ctx.submission_id, "submission_result_file", error_message)
 
 
 @click.command()

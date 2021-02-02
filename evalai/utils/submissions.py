@@ -265,17 +265,17 @@ def display_submission_details(submission_id):
     pretty_print_submission_details(response)
 
 
-def display_submission_result(submission_id):
+def display_submission_file_data(submission_id, file_name, error_message):
     """
-    Function to display result of a particular submission
+    Function to display information of a particular submission
     """
     try:
         response = submission_details_request(submission_id).json()
-        echo(requests.get(response['submission_result_file']).text)
+        echo(requests.get(response[file_name]).text)
     except requests.exceptions.MissingSchema:
         echo(
             style(
-                "\nThe Submission is yet to be evaluated.\n",
+                error_message,
                 bold=True,
                 fg="red",
             )
