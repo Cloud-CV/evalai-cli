@@ -330,8 +330,8 @@ class TestHTTPErrorRequests(BaseTestClass):
             expected = (
                 "Do you want to include the Submission Details? [y/N]: N\n"
                 "Do you want to include the Submission Metadata? [y/N]: N\n{}".format(
-                self.expected.format(url)
-            )
+                    self.expected.format(url)
+                )
             )
             assert response == expected
 
@@ -429,8 +429,8 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             expected = (
                 "Do you want to include the Submission Details? [y/N]: N\n"
                 "Do you want to include the Submission Metadata? [y/N]: N\n\n{}".format(
-                self.expected
-            )
+                    self.expected
+                )
             )
             expected = "{}\n\n{}".format(
                 expected,

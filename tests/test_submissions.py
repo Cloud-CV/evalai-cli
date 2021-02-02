@@ -279,8 +279,8 @@ class TestMakeSubmission(BaseTestClass):
         expected = (
             "Do you want to include the Submission Details? [y/N]: N\n"
             "Do you want to include the Submission Metadata? [y/N]: N\n\n{}".format(
-            expected
-        )
+                expected
+            )
         )
         runner = CliRunner()
         with runner.isolated_filesystem():
