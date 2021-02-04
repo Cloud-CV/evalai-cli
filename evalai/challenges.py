@@ -361,8 +361,8 @@ def submit(ctx, file, annotation, large, public, private):
                                     )
                                 )
                         if attribute_type == "checkbox":
-                            optionChosen = True
-                            while optionChosen:
+                            option_chosen = True
+                            while option_chosen:
                                 value = []
                                 choices = click.prompt(
                                     style(
@@ -382,23 +382,23 @@ def submit(ctx, file, annotation, large, public, private):
                                     ]
                                 else:
                                     choices = []
-                                    optionChosen = False
+                                    option_chosen = False
                                 if attribute_required and len(choices) == 0:
                                     echo(
                                         "Error: {} is a required field. Please select atleast one option".format(
                                             attribute["name"]
                                         )
                                     )
-                                    optionChosen = True
+                                    option_chosen = True
                                 for choice in choices:
                                     if choice in attribute["options"]:
                                         value.append(choice)
-                                        optionChosen = False
+                                        option_chosen = False
                                     else:
                                         echo(
                                             "Error: Choose correct value(s) from the given options only"
                                         )
-                                        optionChosen = True
+                                        option_chosen = True
                                         break
                         submission_attribute_metadata.append(
                             {attribute_name: value}
