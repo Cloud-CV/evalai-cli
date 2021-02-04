@@ -2,9 +2,14 @@ import click
 import json
 
 from click import style
+from click.utils import echo
 
 from evalai.utils.auth import get_host_url
-from evalai.utils.common import Date, notify_user, upload_file_using_presigned_url
+from evalai.utils.common import (
+    Date,
+    notify_user,
+    upload_file_using_presigned_url,
+)
 from evalai.utils.challenges import (
     display_all_challenge_list,
     display_future_challenge_list,
@@ -17,7 +22,10 @@ from evalai.utils.challenges import (
     display_challenge_phase_split_list,
     display_leaderboard,
 )
-from evalai.utils.submissions import display_my_submission_details
+from evalai.utils.submissions import (
+    display_my_submission_details,
+    get_submission_meta_attributes,
+)
 from evalai.utils.teams import participate_in_a_challenge
 from evalai.utils.submissions import make_submission
 from evalai.utils.urls import URLS
@@ -205,11 +213,19 @@ def participate(ctx, team):
     """
     Invoked by running `evalai challenge CHALLENGE participate TEAM`
     """
-    terms_and_conditions_page_url = "{}{}".format(get_host_url(), URLS.terms_and_conditions_page.value)
-    terms_and_conditions_page_url = terms_and_conditions_page_url.format(ctx.challenge_id)
-    message = "Please refer challenge terms and conditions here: {}" \
-        "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions." \
-        "\n\nDo you accept challenge terms and conditions?".format(terms_and_conditions_page_url)
+    terms_and_conditions_page_url = "{}{}".format(
+        get_host_url(), URLS.terms_and_conditions_page.value
+    )
+    terms_and_conditions_page_url = terms_and_conditions_page_url.format(
+        ctx.challenge_id
+    )
+    message = (
+        "Please refer challenge terms and conditions here: {}"
+        "\n\nBy agreeing to participate in the challenge, you are agreeing to terms and conditions."
+        "\n\nDo you accept challenge terms and conditions?".format(
+            terms_and_conditions_page_url
+        )
+    )
     if click.confirm(message):
         participate_in_a_challenge(ctx.challenge_id, team)
     else:
@@ -224,7 +240,10 @@ def participate(ctx, team):
 @click.option("--public", is_flag=True)
 @click.option("--private", is_flag=True)
 @click.option(
-    "--file", type=click.File("rb"), required=True, help="File path to the submission or annotation file"
+    "--file",
+    type=click.File("rb"),
+    required=True,
+    help="File path to the submission or annotation file",
 )
 def submit(ctx, file, annotation, large, public, private):
     """
@@ -264,7 +283,9 @@ def submit(ctx, file, annotation, large, public, private):
                     style("Method Name", fg="yellow"), type=str, default=""
                 )
                 submission_metadata["method_description"] = click.prompt(
-                    style("Method Description", fg="yellow"), type=str, default=""
+                    style("Method Description", fg="yellow"),
+                    type=str,
+                    default="",
                 )
                 submission_metadata["project_url"] = click.prompt(
                     style("Project URL", fg="yellow"), type=str, default=""
@@ -272,10 +293,128 @@ def submit(ctx, file, annotation, large, public, private):
                 submission_metadata["publication_url"] = click.prompt(
                     style("Publication URL", fg="yellow"), type=str, default=""
                 )
+            submission_meta_attributes = get_submission_meta_attributes(
+                ctx.challenge_id, ctx.phase_id
+            )
+            submission_attribute_metadata = []
+            if (
+                submission_meta_attributes
+                and len(submission_meta_attributes) > 0
+            ):
+                if click.confirm(
+                    "Do you want to include the Submission Metadata?"
+                ):
+                    for attribute in submission_meta_attributes:
+                        attribute_type = attribute["type"]
+                        attribute_name = attribute["name"]
+                        attribute_description = attribute["description"]
+                        attribute_required = attribute.get("required")
+                        if attribute_required:
+                            attribute_name = attribute_name + '*'
+                        value = None
+                        message = "{} ({})".format(
+                            attribute_name, attribute_description
+                        )
+                        if attribute_type == "text":
+                            while True:
+                                value = click.prompt(
+                                    style(message, fg="yellow"),
+                                    type=str,
+                                    default="",
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute["name"]
+                                    )
+                                )
+                        if attribute_type == "boolean":
+                            while True:
+                                value = click.prompt(
+                                    style(message, fg="yellow"), type=bool, default=""
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute["name"]
+                                    )
+                                )
+                        if attribute_type == "radio":
+                            while True:
+                                value = click.prompt(
+                                    style(
+                                        "{}:\nChoices:{}".format(
+                                            message, attribute["options"]
+                                        ),
+                                        fg="yellow",
+                                    ),
+                                    type=click.Choice(attribute["options"]),
+                                    default=""
+                                )
+                                if not attribute_required or value != "":
+                                    break
+                                echo(
+                                    "Error: {} is a required field".format(
+                                        attribute["name"]
+                                    )
+                                )
+                        if attribute_type == "checkbox":
+                            option_chosen = True
+                            while option_chosen:
+                                value = []
+                                choices = click.prompt(
+                                    style(
+                                        "{}:\nChoices(separated by comma):{}".format(
+                                            message, attribute["options"]
+                                        ),
+                                        fg="yellow",
+                                    ),
+                                    type=str,
+                                    show_default=False,
+                                    default=""
+                                )
+                                if choices != "":
+                                    choices = [
+                                        choice.strip(" ")
+                                        for choice in choices.split(",")
+                                    ]
+                                else:
+                                    choices = []
+                                    option_chosen = False
+                                if attribute_required and len(choices) == 0:
+                                    echo(
+                                        "Error: {} is a required field. Please select atleast one option".format(
+                                            attribute["name"]
+                                        )
+                                    )
+                                    option_chosen = True
+                                for choice in choices:
+                                    if choice in attribute["options"]:
+                                        value.append(choice)
+                                        option_chosen = False
+                                    else:
+                                        echo(
+                                            "Error: Choose correct value(s) from the given options only"
+                                        )
+                                        option_chosen = True
+                                        break
+                        submission_attribute_metadata.append(
+                            {attribute_name: value}
+                        )
             if large:
-                upload_file_using_presigned_url(ctx.phase_id, file, "submission", submission_metadata)
+                upload_file_using_presigned_url(
+                    ctx.phase_id, file, "submission", submission_metadata
+                )
             else:
-                make_submission(ctx.challenge_id, ctx.phase_id, file, submission_metadata)
+                make_submission(
+                    ctx.challenge_id,
+                    ctx.phase_id,
+                    file,
+                    submission_metadata,
+                    submission_attribute_metadata,
+                )
 
 
 challenge.add_command(phase)
