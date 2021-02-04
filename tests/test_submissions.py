@@ -149,6 +149,17 @@ class TestMakeSubmission(BaseTestClass):
             status=200,
         )
 
+        # To get Challenge Phase Details
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format(
+                "1", "2"
+            ),
+            json=json.loads(challenge_response.challenge_phase_details),
+            status=200,
+        )
+
         # To get Challenge Phase Details using slug
         url = "{}{}"
         responses.add(
@@ -265,8 +276,11 @@ class TestMakeSubmission(BaseTestClass):
             "Your file {} with the ID {} is successfully submitted.\n\n"
             "You can use `evalai submission {}` to view this submission's status."
         ).format("test_file.txt", "9", "9")
-        expected = "Do you want to include the Submission Details? [y/N]: N\n\n{}".format(
-            expected
+        expected = (
+            "Do you want to include the Submission Details? [y/N]: N\n"
+            "Do you want to include the Submission Metadata? [y/N]: N\n\n{}".format(
+                expected
+            )
         )
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -276,7 +290,7 @@ class TestMakeSubmission(BaseTestClass):
             result = runner.invoke(
                 challenge,
                 ["1", "phase", "2", "submit", "--file", "test_file.txt"],
-                input="N",
+                input="N\nN",
             )
             assert result.exit_code == 0
             assert result.output.strip() == expected
@@ -291,6 +305,18 @@ class TestMakeSubmission(BaseTestClass):
                 "Test\nProject URL []: Test\nPublication URL []: Test\n"
             ),
         )
+        expected = "{}{}".format(
+            expected,
+            "Do you want to include the Submission Metadata? [y/N]: Y\n",
+        )
+        expected = "{}{}".format(
+            expected,
+            (
+                "TextAttribute* (Sample) []: Test\nSingleOptionAttribute* (Sample):\n"
+                "Choices:['A', 'B', 'C'] []: A\nMultipleChoiceAttribute* (Sample):\n"
+                "Choices(separated by comma):['alpha', 'beta', 'gamma']: alpha\nTrueFalseField* (Sample) []: True\n"
+            ),
+        )
         expected = "{}\n{}".format(
             expected,
             (
@@ -299,7 +325,6 @@ class TestMakeSubmission(BaseTestClass):
                 "submission's status."
             ).format("test_file.txt", "9", "9"),
         )
-
         runner = CliRunner()
         with runner.isolated_filesystem():
             with open("test_file.txt", "w") as f:
@@ -308,7 +333,7 @@ class TestMakeSubmission(BaseTestClass):
             result = runner.invoke(
                 challenge,
                 ["1", "phase", "2", "submit", "--file", "test_file.txt"],
-                input="Y\nTest\nTest\nTest\nTest",
+                input="Y\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
             )
             assert result.exit_code == 0
             assert result.output.strip() == expected
@@ -370,6 +395,7 @@ class TestMakeSubmission(BaseTestClass):
     def test_make_submission_using_presigned_url(self, request):
         expected = (
             "Do you want to include the Submission Details? [y/N]: N\n"
+            "Do you want to include the Submission Metadata? [y/N]: N\n"
             "Uploading the file...\n\n"
             "Your submission test_file.txt with the id 9 is successfully submitted for evaluation.\n\n"
         )
@@ -381,13 +407,13 @@ class TestMakeSubmission(BaseTestClass):
             result = runner.invoke(
                 challenge,
                 ["1", "phase", "2", "submit", "--file", "test_file.txt", "--large"],
-                input="N"
+                input="N\nN"
             )
             response = result.output
 
             # Remove progress bar from response
             splitted_response = response.split("\n")
-            splitted_response.pop(2)
+            splitted_response.pop(3)
             response = "\n".join(splitted_response)
             assert response == expected
 

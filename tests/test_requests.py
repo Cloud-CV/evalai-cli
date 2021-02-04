@@ -24,6 +24,15 @@ class TestHTTPErrorRequests(BaseTestClass):
 
         responses.add(
             responses.GET,
+            url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format(
+                "1", "2"
+            ),
+            json=json.loads(challenge_response.challenge_phase_details),
+            status=200,
+        )
+
+        responses.add(
+            responses.GET,
             url.format(API_HOST_URL, URLS.challenge_list.value),
             status=404,
         )
@@ -315,11 +324,14 @@ class TestHTTPErrorRequests(BaseTestClass):
             result = runner.invoke(
                 challenge,
                 ["1", "phase", "2", "submit", "--file", "test_file.txt"],
-                input="N",
+                input="N\nN",
             )
             response = result.output.rstrip()
-            expected = "Do you want to include the Submission Details? [y/N]: N\n{}".format(
-                self.expected.format(url)
+            expected = (
+                "Do you want to include the Submission Details? [y/N]: N\n"
+                "Do you want to include the Submission Metadata? [y/N]: N\n{}".format(
+                    self.expected.format(url)
+                )
             )
             assert response == expected
 
@@ -376,6 +388,16 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             status=406,
         )
 
+        # To get Challenge Phase Details
+        url = "{}{}"
+        responses.add(
+            responses.GET,
+            url.format(API_HOST_URL, URLS.challenge_phase_detail.value).format(
+                "1", "2"
+            ),
+            json=json.loads(challenge_response.challenge_phase_details),
+            status=200,
+        )
         self.expected = "Error: Sorry, the object does not exist."
 
     @responses.activate
@@ -400,12 +422,15 @@ class TestSubmissionDetailsWhenObjectDoesNotExist(BaseTestClass):
             result = runner.invoke(
                 challenge,
                 ["1", "phase", "2", "submit", "--file", "test_file.txt"],
-                input="N",
+                input="N\nN",
             )
             response = result.output.strip()
 
-            expected = "Do you want to include the Submission Details? [y/N]: N\n\n{}".format(
-                self.expected
+            expected = (
+                "Do you want to include the Submission Details? [y/N]: N\n"
+                "Do you want to include the Submission Metadata? [y/N]: N\n\n{}".format(
+                    self.expected
+                )
             )
             expected = "{}\n\n{}".format(
                 expected,

@@ -220,19 +220,82 @@ challenge_phase_list = """
 
 challenge_phase_details = """
 {
-    "challenge": 10,
-    "codename": "phase2",
-    "description": "Est nobis consequatur quam sint in nemo distinctio magni. \
-    Eaque a natus laboriosam ipsa molestiae corrupti.",
-    "end_date": "2019-09-25T18:56:42.789372Z",
-    "id": 20,
-    "is_active": false,
-    "is_public": true,
-    "leaderboard_public": true,
-    "max_submissions": 100000,
-    "max_submissions_per_day": 100000,
-    "name": "Philip Phase",
-    "start_date": "2018-08-21T18:56:42.789363Z"
+  "id": 42,
+  "name": "Test Phase",
+  "description": "Test Description",
+  "leaderboard_public": "True",
+  "start_date": "2019-01-01T00:00:00Z",
+  "end_date": "2099-05-24T23:59:59Z",
+  "challenge": 21,
+  "max_submissions_per_day": 5,
+  "max_submissions_per_month": 50,
+  "max_submissions": 50,
+  "is_public": "True",
+  "is_active": "True",
+  "is_submission_public": "True",
+  "codename": "test",
+  "test_annotation": "http://localhost:8000/media/test_annotations/6b95e923-76f7-490e-a2f7-551b354a07b8.pdf",
+  "slug": "random-test-21",
+  "max_concurrent_submissions_allowed": 3,
+  "environment_image": "None",
+  "is_restricted_to_select_one_submission": "False",
+  "submission_meta_attributes": [
+    {
+      "name": "TextAttribute",
+      "type": "text",
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "SingleOptionAttribute",
+      "type": "radio",
+      "options": [
+        "A",
+        "B",
+        "C"
+      ],
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "MultipleChoiceAttribute",
+      "type": "checkbox",
+      "options": [
+        "alpha",
+        "beta",
+        "gamma"
+      ],
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "TrueFalseField",
+      "type": "boolean",
+      "required": "True",
+      "description": "Sample"
+    }
+  ],
+  "is_partial_submission_evaluation_enabled": "False",
+  "config_id": 2,
+  "allowed_submission_file_types": ".json, .zip, .txt, .tsv, .gz, .csv, .h5, .npy",
+  "default_submission_meta_attributes": [
+    {
+      "name": "method_name",
+      "is_visible": "True"
+    },
+    {
+      "name": "method_description",
+      "is_visible": "True"
+    },
+    {
+      "name": "project_url",
+      "is_visible": "True"
+    },
+    {
+      "name": "publication_url",
+      "is_visible": "True"
+    }
+  ]
 }
 """
 
