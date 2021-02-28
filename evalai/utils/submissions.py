@@ -44,7 +44,7 @@ def get_submission_meta_attributes(challenge_id, phase_id):
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()),
+                    "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -99,7 +99,7 @@ def make_submission(
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -219,7 +219,7 @@ def display_my_submission_details(
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -290,7 +290,7 @@ def submission_details_request(submission_id):
                     "\nError: {}\n"
                     "\nUse `evalai challenge CHALLENGE phase PHASE submissions` "
                     "to view your submission.\n".format(
-                        response.json()["error"]
+                        response.json().get("error", response.json().get("detail"))
                     ),
                     fg="red",
                     bold=True,

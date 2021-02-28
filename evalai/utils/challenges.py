@@ -323,7 +323,7 @@ def display_challenge_details(challenge):
             validate_token(response.json())
             echo(
                 style(
-                    "\nError: {}".format(response.json()["error"]),
+                    "\nError: {}".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -390,7 +390,7 @@ def display_challenge_phase_list(challenge_id):
             validate_token(response.json())
             echo(
                 style(
-                    "\nError: {}".format(response.json()["error"]),
+                    "\nError: {}".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -509,7 +509,7 @@ def display_challenge_phase_detail(challenge_id, phase_id, is_json):
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -577,7 +577,7 @@ def display_challenge_phase_split_list(challenge_id):
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                    "active phases.\n".format(response.json()["error"]),
+                    "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -640,7 +640,7 @@ def display_leaderboard(challenge_id, phase_split_id):
             validate_token(response.json())
             echo(
                 style(
-                    "Error: {}".format(response.json()["error"]),
+                    "Error: {}".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
