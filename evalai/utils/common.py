@@ -221,8 +221,9 @@ def upload_file_using_presigned_url(
         data = {
             "parts": json.dumps(response.get("parts")),
             "upload_id": upload_id,
-            "annotations_uploaded_using_cli": True,
         }
+        if file_type == "annotation":
+            data["annotations_uploaded_using_cli"] = True
 
         # Complete multipart S3 upload
         response = requests.post(finish_upload_url, headers=headers, data=data)
