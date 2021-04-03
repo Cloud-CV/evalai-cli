@@ -309,6 +309,12 @@ def submit(ctx, file, annotation, large, public, private):
                         attribute_name = attribute["name"]
                         attribute_description = attribute["description"]
                         attribute_required = attribute.get("required")
+                        attribute_data = {
+                            'name': attribute_name,
+                            'type': attribute_type,
+                            'description': attribute_description,
+                            'required': attribute_required,
+                        }
                         if attribute_required:
                             attribute_name = attribute_name + '*'
                         value = None
@@ -329,6 +335,7 @@ def submit(ctx, file, annotation, large, public, private):
                                         attribute["name"]
                                     )
                                 )
+                            attribute_data['value'] = value
                         if attribute_type == "boolean":
                             while True:
                                 value = click.prompt(
@@ -341,6 +348,7 @@ def submit(ctx, file, annotation, large, public, private):
                                         attribute["name"]
                                     )
                                 )
+                            attribute_data['value'] = value
                         if attribute_type == "radio":
                             while True:
                                 value = click.prompt(
@@ -360,6 +368,8 @@ def submit(ctx, file, annotation, large, public, private):
                                         attribute["name"]
                                     )
                                 )
+                            attribute_data['options'] = attribute['options']
+                            attribute_data['value'] = value
                         if attribute_type == "checkbox":
                             option_chosen = True
                             while option_chosen:
@@ -400,9 +410,9 @@ def submit(ctx, file, annotation, large, public, private):
                                         )
                                         option_chosen = True
                                         break
-                        submission_attribute_metadata.append(
-                            {attribute_name: value}
-                        )
+                            attribute_data['options'] = attribute['options']
+                            attribute_data['values'] = value
+                        submission_attribute_metadata.append(attribute_data)
             if large:
                 upload_file_using_presigned_url(
                     ctx.phase_id, file, "submission", submission_metadata
