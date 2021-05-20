@@ -160,7 +160,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
     headers = get_request_header()
 
     # Limit to max 100 MB chunk for multipart upload
-    max_chunk_size = 100 * 1024 * 1024
+    max_chunk_size = 20 * 1024 * 1024
 
     try:
         # Fetching the presigned url
