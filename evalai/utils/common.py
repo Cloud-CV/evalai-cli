@@ -175,8 +175,6 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
 
     # Limit to max 100 MB chunk for multipart upload
     max_chunk_size = 20 * 1024 * 1024
-    submission_published = False
-    submission_pk = 0
 
     try:
         # Fetching the presigned url
@@ -218,8 +216,6 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         if not response["success"] and file_type == "submission":
             # Publishing submission message to the message queue for processing
             response = publish_submission_message(challenge_phase_pk, submission_pk, headers)
-            if response.status_code is HTTPStatus.OK:
-                submission_published = True
             response.raise_for_status()
 
         data = {
@@ -235,8 +231,6 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         if file_type == "submission":
             # Publishing submission message to the message queue for processing
             response = publish_submission_message(challenge_phase_pk, submission_pk, headers)
-            if response.status_code is HTTPStatus.OK:
-                submission_published = True
             response.raise_for_status()
 
         # Publish submission before throwing submission upload error
@@ -258,9 +252,6 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
             )
         else:
             echo(style("{}".format(err), fg='red'))
-
-        if not submission_published and file_type == "submission" and submission_pk != 0:
-            response = publish_submission_message(challenge_phase_pk, submission_pk, headers)
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
