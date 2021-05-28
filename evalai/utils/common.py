@@ -205,12 +205,9 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         }
 
         # Complete multipart S3 upload
-        response = requests.post(
+        upload_response = requests.post(
             finish_upload_url, headers=headers, data=data
         )
-
-        if response.status_code is not HTTPStatus.OK:
-            response.raise_for_status()
 
         if file_type == "submission":
             # Publishing submission message to the message queue for processing
@@ -221,6 +218,10 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
                 headers=headers,
             )
             response.raise_for_status()
+
+        # Publish submission before throwing submission upload error
+        if upload_response.status_code is not HTTPStatus.OK:
+            upload_response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
