@@ -4,7 +4,14 @@ import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+from distutils.util import convert_path
 
+setup_config = {}
+version_file_path = convert_path("evalai/version.py")
+with open(version_file_path) as version_file:
+    exec(version_file.read(), setup_config)
+
+print(setup_config)
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -40,7 +47,7 @@ tests_require = [
 setup(
     name=PROJECT,
     cmdclass={"test": PyTest},
-    version="1.3.13",
+    version=setup_config["__version__"],
     description="Use EvalAI through command line interface",
     long_description=long_description,
     long_description_content_type="text/markdown",
