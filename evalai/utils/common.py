@@ -1,4 +1,3 @@
-import http
 import click
 import json
 import random
