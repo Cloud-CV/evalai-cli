@@ -8,10 +8,9 @@ from distutils.util import convert_path
 
 setup_config = {}
 version_file_path = convert_path("evalai/version.py")
+
 with open(version_file_path) as version_file:
     exec(version_file.read(), setup_config)
-
-print(setup_config)
 
 class PyTest(TestCommand):
     def finalize_options(self):
