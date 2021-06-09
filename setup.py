@@ -6,11 +6,6 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from distutils.util import convert_path
 
-setup_config = {}
-version_file_path = convert_path("evalai/version.py")
-
-with open(version_file_path) as version_file:
-    exec(version_file.read(), setup_config)
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -25,12 +20,17 @@ class PyTest(TestCommand):
 
 
 PROJECT = "evalai"
+setup_config = {}
+version_file_path = convert_path("evalai/version.py")
 
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
+
+with open(version_file_path) as version_file:
+    exec(version_file.read(), setup_config)
 
 tests_require = [
     "coverage==4.5.4",

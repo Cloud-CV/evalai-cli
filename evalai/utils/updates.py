@@ -2,6 +2,7 @@ import requests
 
 from distutils.version import StrictVersion
 
+
 def get_latest_version():
     url = "https://pypi.org/pypi/evalai/json"
     response = requests.get(url)

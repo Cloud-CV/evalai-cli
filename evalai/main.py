@@ -38,12 +38,13 @@ def main(ctx):
     if __version__ < latest_version:
         echo(
             style(
-                    "\nUpdate:\n"
-                    "\nPlease install the latest version of EvalAI-CLI!\n",
-                    "\Use: pip install --upgrade evalai\n",
-                    fg="red",
-                    bold=True,
-                ))
+                "\nUpdate:\n"
+                "\nPlease install the latest version of EvalAI-CLI!\n",
+                "\Use: pip install --upgrade evalai\n",
+                fg="red",
+                bold=True,
+            )
+        )
         sys.exit(1)
 
 
