@@ -239,9 +239,9 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
             if file_type == "submission":
-                error_message = "\nThere was an error while making the submission: {}\n".format(response.json()["error"])
+                error_message = "\nThere was an error while making the submission: {}\n".format(response.json().get("error", response.json().get("detail")))
             elif file_type == "annotation":
-                error_message = "\nThere was an error while uploading the annotation file: {}".format(response.json()["error"])
+                error_message = "\nThere was an error while uploading the annotation file: {}".format(response.json().get("error", response.json().get("detail")))
             echo(
                 style(
                     error_message,

@@ -23,7 +23,7 @@ def make_request(path, method, files=None, data=None):
                 validate_token(response.json())
                 echo(
                     style(
-                        "\nError: {}\n".format(response.json().get("error")),
+                        "\nError: {}\n".format(response.json().get("error", response.json().get("detail"))),
                         fg="red",
                         bold=True,
                     )
@@ -64,7 +64,7 @@ def make_request(path, method, files=None, data=None):
                         "\nError: {}\n"
                         "\nUse `evalai challenges` to fetch the active challenges.\n"
                         "\nUse `evalai challenge CHALLENGE phases` to fetch the "
-                        "active phases.\n".format(response.json()["error"]),
+                        "active phases.\n".format(response.json().get("error", response.json().get("detail"))),
                         fg="red",
                         bold=True,
                     )

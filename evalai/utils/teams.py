@@ -66,7 +66,7 @@ def display_teams(is_host):
             validate_token(response.json())
             echo(
                 style(
-                    "Error: {}".format(response.json()["error"]),
+                    "Error: {}".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
@@ -130,7 +130,7 @@ def create_team(team_name, team_url, is_host):
             else:
                 echo(
                     style(
-                        "Error: {}".format(response.json()["error"]),
+                        "Error: {}".format(response.json().get("error", response.json().get("detail"))),
                         fg="red",
                         bold=True,
                     )
@@ -194,7 +194,7 @@ def participate_in_a_challenge(challenge_id, participant_team_id):
                     "\nError: {}\n"
                     "\nUse `evalai challenges` to fetch the active challenges.\n"
                     "\nUse `evalai teams` to fetch your participant "
-                    "teams.\n".format(response.json()["error"]),
+                    "teams.\n".format(response.json().get("error", response.json().get("detail"))),
                     fg="red",
                     bold=True,
                 )
