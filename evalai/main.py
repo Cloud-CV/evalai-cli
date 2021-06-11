@@ -40,7 +40,7 @@ def main(ctx):
             style(
                 "\nUpdate:\n"
                 "\nPlease install the latest version of EvalAI-CLI!\n",
-                "\Use: pip install --upgrade evalai\n",
+                "\nUse: pip install --upgrade evalai\n",
                 fg="red",
                 bold=True,
             )
