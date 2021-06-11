@@ -4,6 +4,7 @@ import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+from distutils.util import convert_path
 
 
 class PyTest(TestCommand):
@@ -19,12 +20,17 @@ class PyTest(TestCommand):
 
 
 PROJECT = "evalai"
+package_config = {}
+version_file_path = convert_path("evalai/version.py")
 
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
+
+with open(version_file_path) as version_file:
+    exec(version_file.read(), package_config)
 
 tests_require = [
     "coverage==4.5.4",
@@ -40,7 +46,7 @@ tests_require = [
 setup(
     name=PROJECT,
     cmdclass={"test": PyTest},
-    version="1.3.13",
+    version=package_config["__version__"],
     description="Use EvalAI through command line interface",
     long_description=long_description,
     long_description_content_type="text/markdown",
