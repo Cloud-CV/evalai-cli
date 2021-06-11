@@ -1,6 +1,7 @@
 import click
+import sys
 
-from click import echo
+from click import echo, style
 
 from .challenges import challenge, challenges
 from .set_host import host
@@ -9,6 +10,8 @@ from .submissions import submission, push, download_file
 from .teams import teams
 from .get_token import get_token
 from .login import login
+from .utils.updates import get_latest_version
+from .version import __version__
 
 
 @click.version_option()
@@ -31,6 +34,18 @@ def main(ctx):
             " for challenge_id\nand phase_id of the challenges and phases."
         )
         echo(welcome_text)
+    latest_version = get_latest_version()
+    if __version__ < latest_version:
+        echo(
+            style(
+                "\nUpdate:\n"
+                "\nPlease install the latest version of EvalAI-CLI!\n",
+                "\Use: pip install --upgrade evalai\n",
+                fg="red",
+                bold=True,
+            )
+        )
+        sys.exit(1)
 
 
 main.add_command(challenges)
