@@ -75,16 +75,11 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
 
         response = {"success": True, "parts": parts}
     except Exception as err:
-        echo(
-            style(
-                "\nThere was an error while uploading the file: {}".format(
-                    err
-                ),
-                fg="red",
-                bold=True,
-            )
-        )
-        sys.exit(1)
+        echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
+        response = {
+            "success": False,
+            "parts": []
+        }
     return response
 
 
@@ -154,9 +149,17 @@ def generate_random_string(length):
     return "".join(random.choice(letter_set) for _ in range(length))
 
 
-def upload_file_using_presigned_url(
-    challenge_phase_pk, file, file_type, submission_metadata={}
-):
+def publish_submission_message(challenge_phase_pk, submission_pk, headers):
+    url = "{}{}".format(get_host_url(), URLS.send_submission_message.value)
+    url = url.format(challenge_phase_pk, submission_pk)
+    response = requests.post(
+        url,
+        headers=headers,
+    )
+    return response
+
+
+def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
         url = "{}{}".format(
             get_host_url(), URLS.get_presigned_url_for_submission_file.value
@@ -218,6 +221,11 @@ def upload_file_using_presigned_url(
         # Uploading the file to S3
         response = upload_file_to_s3(file, presigned_urls, max_chunk_size)
 
+        if not response["success"] and file_type == "submission":
+            # Publishing submission message to the message queue for processing
+            response = publish_submission_message(challenge_phase_pk, submission_pk, headers)
+            response.raise_for_status()
+
         data = {
             "parts": json.dumps(response.get("parts")),
             "upload_id": upload_id,
@@ -226,22 +234,18 @@ def upload_file_using_presigned_url(
             data["annotations_uploaded_using_cli"] = True
 
         # Complete multipart S3 upload
-        response = requests.post(finish_upload_url, headers=headers, data=data)
-
-        if response.status_code is not HTTPStatus.OK:
-            response.raise_for_status()
+        upload_response = requests.post(
+            finish_upload_url, headers=headers, data=data
+        )
 
         if file_type == "submission":
             # Publishing submission message to the message queue for processing
-            url = "{}{}".format(
-                get_host_url(), URLS.send_submission_message.value
-            )
-            url = url.format(challenge_phase_pk, submission_pk)
-            response = requests.post(
-                url,
-                headers=headers,
-            )
+            response = publish_submission_message(challenge_phase_pk, submission_pk, headers)
             response.raise_for_status()
+
+        # Publish submission before throwing submission upload error
+        if upload_response.status_code is not HTTPStatus.OK:
+            upload_response.raise_for_status()
     except requests.exceptions.HTTPError as err:
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
