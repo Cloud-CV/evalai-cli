@@ -69,14 +69,11 @@ def upload_file_to_s3(file, presigned_urls, max_chunk_size):
             if response.status_code != HTTPStatus.OK:
                 response.raise_for_status()
 
-            etag = response.headers['ETag']
+            etag = response.headers["ETag"]
             parts.append({"ETag": etag, "PartNumber": part})
             index += 1
 
-        response = {
-            "success": True,
-            "parts": parts
-        }
+        response = {"success": True, "parts": parts}
     except Exception as err:
         echo(style("\nThere was an error while uploading the file: {}".format(err), fg="red", bold=True))
         response = {
@@ -164,11 +161,19 @@ def publish_submission_message(challenge_phase_pk, submission_pk, headers):
 
 def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submission_metadata={}):
     if file_type == "submission":
-        url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_submission_file.value)
-        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_submission_file.value)
+        url = "{}{}".format(
+            get_host_url(), URLS.get_presigned_url_for_submission_file.value
+        )
+        finish_upload_url = "{}{}".format(
+            get_host_url(), URLS.finish_upload_for_submission_file.value
+        )
     elif file_type == "annotation":
-        url = "{}{}".format(get_host_url(), URLS.get_presigned_url_for_annotation_file.value)
-        finish_upload_url = "{}{}".format(get_host_url(), URLS.finish_upload_for_annotation_file.value)
+        url = "{}{}".format(
+            get_host_url(), URLS.get_presigned_url_for_annotation_file.value
+        )
+        finish_upload_url = "{}{}".format(
+            get_host_url(), URLS.finish_upload_for_annotation_file.value
+        )
     url = url.format(challenge_phase_pk)
     headers = get_request_header()
 
@@ -180,17 +185,21 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         if file_type == "submission":
             file_size = Path(file.name).stat().st_size
             num_file_chunks = int(file_size / max_chunk_size) + 1
-            data = {"status": "submitting", "file_name": file.name, "num_file_chunks": num_file_chunks}
+            data = {
+                "status": "submitting",
+                "file_name": file.name,
+                "num_file_chunks": num_file_chunks,
+            }
             data = dict(data, **submission_metadata)
-            response = requests.post(
-                url, headers=headers, data=data
-            )
+            response = requests.post(url, headers=headers, data=data)
 
             if response.status_code is not HTTPStatus.CREATED:
                 response.raise_for_status()
 
             # Update url params for multipart upload on S3
-            finish_upload_url = finish_upload_url.format(challenge_phase_pk, response.json().get("submission_pk"))
+            finish_upload_url = finish_upload_url.format(
+                challenge_phase_pk, response.json().get("submission_pk")
+            )
         elif file_type == "annotation":
             file_size = Path(file.name).stat().st_size
             num_file_chunks = int(file_size / max_chunk_size) + 1
@@ -219,8 +228,10 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
 
         data = {
             "parts": json.dumps(response.get("parts")),
-            "upload_id": upload_id
+            "upload_id": upload_id,
         }
+        if file_type == "annotation":
+            data["annotations_uploaded_using_cli"] = True
 
         # Complete multipart S3 upload
         upload_response = requests.post(
@@ -239,9 +250,13 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
         if response.status_code in EVALAI_ERROR_CODES:
             validate_token(response.json())
             if file_type == "submission":
-                error_message = "\nThere was an error while making the submission: {}\n".format(response.json()["error"])
+                error_message = "\nThere was an error while making the submission: {}\n".format(
+                    response.json()["error"]
+                )
             elif file_type == "annotation":
-                error_message = "\nThere was an error while uploading the annotation file: {}".format(response.json()["error"])
+                error_message = "\nThere was an error while uploading the annotation file: {}".format(
+                    response.json()["error"]
+                )
             echo(
                 style(
                     error_message,
@@ -250,7 +265,7 @@ def upload_file_using_presigned_url(challenge_phase_pk, file, file_type, submiss
                 )
             )
         else:
-            echo(style("{}".format(err), fg='red'))
+            echo(style("{}".format(err), fg="red"))
         sys.exit(1)
     except requests.exceptions.RequestException:
         echo(
