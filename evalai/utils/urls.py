@@ -1,12 +1,11 @@
 from enum import Enum
 
-GET_ALL_CHALLENGES_URL = "/api/challenges/challenge/time/{}/approved/{}/published/{}"
 class URLS(Enum):
     login = "/api/auth/login"
     get_access_token = "/api/accounts/user/get_auth_token"
-    challenge_list = GET_ALL_CHALLENGES_URL.format("all", "all", "all")
-    past_challenge_list = GET_ALL_CHALLENGES_URL.format("past", "all", "all")
-    future_challenge_list =GET_ALL_CHALLENGES_URL.format("future", "all", "all")
+    challenge_list = "/api/challenges/challenge/time/all/approved/all/visibility/all"
+    past_challenge_list = "/api/challenges/challenge/time/past/approved/all/visibility/all"
+    future_challenge_list = "/api/challenges/challenge/time/future/approved/all/visibility/all"
     challenge_details = "/api/challenges/challenge/{}"
     challenge_phase_details = "/api/challenges/challenge/phase/{}/"
     participant_teams = "/api/participants/participant_team"
