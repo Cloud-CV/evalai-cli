@@ -496,7 +496,7 @@ get_submission_file_presigned_url = """
     "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si",
     "submission_pk": 9
 }
-"""
+"""  # noqa: E501
 
 upload_file_to_s3 = """
 {
@@ -508,14 +508,14 @@ upload_file_to_s3 = """
     ]",
     "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si"
 }
-"""
+"""  # noqa: E501
 
 finish_submission_file_upload = """
 {
     "upload_id": "R8AlOJggehmUU87Ar2cDp2tF9p6Rez8iKmmWpwUD0Wi.VumJ6faNO_RFvkD3bJ4NzmokztAncqsd0JsUeslHGtK9m1B533gIQHbuxkwNgx_7F6_YTxtoUpqMHxFtY4Si",
     "submission_pk": 9
 }
-"""
+"""  # noqa: E501
 
 part_file_upload_to_s3 = """
 {
@@ -541,14 +541,14 @@ get_annotation_file_presigned_url = """
     ],
     "upload_id": "40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw"
 }
-"""
+"""  # noqa: E501
 
 finish_annotation_file_upload = """
 {
     "upload_id": "40_2O5xMNg6dBZonEAIXNJdEmcwbAHDQpXzdM9ITvEawkBW96BCSZTcZf4qxNMfzK2ZhkJfjonuG6a4aP40UCY6EK8y66trEMf1AzlOs1VjNrg.T9nAaMPOIavDQLKJw",
     "challenge_phase_pk": 2
 }
-"""
+"""  # noqa: E501
 
 annotation_part_file_upload_to_s3 = """
 {
