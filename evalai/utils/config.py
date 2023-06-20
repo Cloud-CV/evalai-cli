@@ -31,3 +31,5 @@ ENVIRONMENT = os.environ.get("EVALAI_CLI_ENVIRONMENT", "PRODUCTION")
 LOCAL_DOCKER_REGISTRY_URI = os.environ.get(
     "EVALAI_LOCAL_DOCKER_REGISTRY_URI", "localhost:5000"
 )
+
+AWS_REGION = os.environ.get("AWS_REGION_NAME", "us-east-1")
