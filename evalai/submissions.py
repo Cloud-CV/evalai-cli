@@ -24,6 +24,7 @@ from evalai.utils.submissions import (
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
     ENVIRONMENT,
+    AWS_REGION,
     EVALAI_HOST_URLS,
     HOST_URL_FILE_PATH,
     LOCAL_DOCKER_REGISTRY_URI,
@@ -153,7 +154,7 @@ def push(image, phase, url, public, private):
 
         ecr_client = boto3.client(
             "ecr",
-            region_name="us-east-1",
+            region_name=AWS_REGION,
             aws_access_key_id=AWS_SERVER_PUBLIC_KEY,
             aws_secret_access_key=AWS_SERVER_SECRET_KEY,
             aws_session_token=SESSION_TOKEN,
@@ -162,7 +163,7 @@ def push(image, phase, url, public, private):
         token = ecr_client.get_authorization_token(
             registryIds=[AWS_ACCOUNT_ID]
         )
-        ecr_client = boto3.client("ecr", region_name="us-east-1")
+        ecr_client = boto3.client("ecr", region_name=AWS_REGION)
         username, password = (
             base64.b64decode(
                 token["authorizationData"][0]["authorizationToken"]
