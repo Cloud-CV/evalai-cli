@@ -5,7 +5,7 @@ click==6.7
 docker==3.6.0
 lxml==4.6.2
 python-dateutil==2.7.3
-requests==2.25.1
+requests==2.31.0
 validators==0.12.6
 termcolor==1.1.0
 tqdm>=4.49.0
