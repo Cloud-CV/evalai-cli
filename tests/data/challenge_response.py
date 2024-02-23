@@ -329,6 +329,9 @@ object_error = """
 invalid_token = '{"detail": "Invalid token"}'
 
 
+valid_token = '{"token": "7q2jdgx52048gkoakectz5349rki"}'
+
+
 token_expired = '{"detail": "Token has expired"}'
 
 
