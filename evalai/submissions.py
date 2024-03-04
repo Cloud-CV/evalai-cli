@@ -1,5 +1,4 @@
 import os
-
 import base64
 import boto3
 import click
@@ -12,15 +11,19 @@ import tempfile
 import urllib.parse as urlparse
 import uuid
 
-from click import echo, style
+try:	# Try importing modules (exit on failure)
+    from click import echo, style
+    from evalai.utils.common import notify_user
+    from evalai.utils.requests import make_request
+    from evalai.utils.submissions import (
+        display_submission_details,
+        display_submission_result,
+        convert_bytes_to,
+    )
+except ImportError as e:
+    notify_user(f"Error: Failed to import required module - {e}")
+    sys.exit(1)
 
-from evalai.utils.common import notify_user
-from evalai.utils.requests import make_request
-from evalai.utils.submissions import (
-    display_submission_details,
-    display_submission_result,
-    convert_bytes_to,
-)
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
     ENVIRONMENT,
@@ -32,7 +35,6 @@ from evalai.utils.config import (
 
 
 class Submission(object):
-
     def __init__(self, submission_id):
         self.submission_id = submission_id
 
@@ -107,7 +109,7 @@ def push(image, phase, url, public, private):
 
     tag = str(uuid.uuid4())
     docker_client = docker.from_env()
-    try:
+    try:	# Check if docker image exists (exit on failure)
         docker_image = docker_client.images.get(image)
     except docker.errors.ImageNotFound:
         message = "\nError: Image not found. Please enter the correct image name and tag."
@@ -117,13 +119,33 @@ def push(image, phase, url, public, private):
     request_path = URLS.phase_details_using_slug.value
     request_path = request_path.format(phase)
     response = make_request(request_path, "GET")
-    challenge_pk = response.get("challenge")
-    phase_pk = response.get("id")
+
+    try:	# Fetch phase details (exit on missing challenge ID)
+    	response = make_request(request_path, "GET")
+    	challenge_pk = response.get("challenge")
+    except KeyError:
+    	message = "\nError: Failed to retrieve challenge ID from the response."
+    	notify_user(message, color="red")
+    	sys.exit(1)
+
+    try:	# Fetch phase details (exit on missing phase ID)
+        phase_pk = response.get("id")
+    except KeyError:
+        message = "\nError: Failed to retrieve phase ID from the response."
+        notify_user(message, color="red")
+        sys.exit(1)
 
     request_path = URLS.challenge_details.value
     request_path = request_path.format(challenge_pk)
     response = make_request(request_path, "GET")
-    max_docker_image_size = response.get("max_docker_image_size")
+
+    try:	# Fetch challenge details (handle missing max size)
+        max_docker_image_size = response.get("max_docker_image_size")
+    except KeyError:
+        message = "\nError: 'max_docker_image_size' key missing in response."
+        notify_user(message, color="red")
+        # Continue without size check (as discussed)
+        max_docker_image_size = None  # Or set a default value if applicable      # set the value to none instead of sys.exit(1)
 
     docker_image_size = docker_image.__dict__.get("attrs").get("VirtualSize")
     if docker_image_size > max_docker_image_size:
@@ -134,22 +156,25 @@ def push(image, phase, url, public, private):
         notify_user(message, color="red")
         sys.exit(1)
 
-    request_path = URLS.get_aws_credentials.value
-    request_path = request_path.format(phase_pk)
 
-    response = make_request(request_path, "GET")
-    federated_user = response["success"]["federated_user"]
-    repository_uri = response["success"]["docker_repository_uri"]
+    try:	#fetch AWS credentials
+        request_path = URLS.get_aws_credentials.value
+        request_path = request_path.format(phase_pk)
+
+        response = make_request(request_path, "GET")
+        federated_user = response["success"]["federated_user"]
+        repository_uri = response["success"]["docker_repository_uri"]
+    except Exception as e:
+        notify_user(
+            f"Error occurred while fetching AWS credentials: {e}", color="red"
+        )
+        sys.exit(1)
 
     # Production Environment
     if ENVIRONMENT == "PRODUCTION":
-        AWS_ACCOUNT_ID = federated_user["FederatedUser"][
-            "FederatedUserId"
-        ].split(":")[0]
+        AWS_ACCOUNT_ID = federated_user["FederatedUser"]["FederatedUserId"].split(":")[0]
         AWS_SERVER_PUBLIC_KEY = federated_user["Credentials"]["AccessKeyId"]
-        AWS_SERVER_SECRET_KEY = federated_user["Credentials"][
-            "SecretAccessKey"
-        ]
+        AWS_SERVER_SECRET_KEY = federated_user["Credentials"]["SecretAccessKey"]
         SESSION_TOKEN = federated_user["Credentials"]["SessionToken"]
 
         ecr_client = boto3.client(
@@ -160,14 +185,15 @@ def push(image, phase, url, public, private):
             aws_session_token=SESSION_TOKEN,
         )
 
-        token = ecr_client.get_authorization_token(
-            registryIds=[AWS_ACCOUNT_ID]
-        )
+        try:	# retrieve AWS authorization token,
+            token = ecr_client.get_authorization_token(registryIds=[AWS_ACCOUNT_ID])
+        except Exception as e:
+            notify_user(f"Error: Failed to retrieve authorization token - {e}")
+            sys.exit(1)
+
         ecr_client = boto3.client("ecr", region_name=AWS_REGION)
         username, password = (
-            base64.b64decode(
-                token["authorizationData"][0]["authorizationToken"]
-            )
+            base64.b64decode(token["authorizationData"][0]["authorizationToken"])
             .decode()
             .split(":")
         )
@@ -175,6 +201,7 @@ def push(image, phase, url, public, private):
         docker_client.login(
             username, password, registry=registry, dockercfg_path=os.getcwd()
         )
+
 
     # Development and Test Environment
     else:
@@ -185,9 +212,7 @@ def push(image, phase, url, public, private):
     for line in docker_client.images.push(
         repository_uri, tag, stream=True, decode=True
     ):
-        if line.get("status") in ["Pushing", "Pushed"] and line.get(
-            "progress"
-        ):
+        if line.get("status") in ["Pushing", "Pushed"] and line.get("progress"):
             print("{id}: {status} {progress}".format(**line))
         elif line.get("errorDetail"):
             error = line.get("error")
@@ -195,19 +220,17 @@ def push(image, phase, url, public, private):
         elif line.get("aux"):
             aux = line.get("aux")
             pushed_image_tag = aux["Tag"]
-            submitted_image_uri = "{}:{}".format(
-                repository_uri, pushed_image_tag
-            )
+            submitted_image_uri = "{}:{}".format(repository_uri, pushed_image_tag)
             BASE_TEMP_DIR = tempfile.mkdtemp()
             data = {"submitted_image_uri": submitted_image_uri}
-            submission_file_path = os.path.join(
-                BASE_TEMP_DIR, "submission.json"
-            )
+            submission_file_path = os.path.join(BASE_TEMP_DIR, "submission.json")
             with open(submission_file_path, "w") as outfile:
                 json.dump(data, outfile)
             request_path = URLS.make_submission.value
             request_path = request_path.format(challenge_pk, phase_pk)
-            response = make_request(request_path, "POST", submission_file_path, data=submission_metadata)
+            response = make_request(
+                request_path, "POST", submission_file_path, data=submission_metadata
+            )
             shutil.rmtree(BASE_TEMP_DIR)
         else:
             print(
@@ -221,13 +244,14 @@ def push(image, phase, url, public, private):
 
 @click.command()
 @click.argument("URL", nargs=1)
+
 def download_file(url):
+
     parsed_url = urlparse.urlparse(url)
     parsed_host_url = "{parsed_url.scheme}://{parsed_url.netloc}".format(
         parsed_url=parsed_url
     )
     is_correct_host = False
-    # TODO: Replace the hardcoded host url with cli's host url
     with open(HOST_URL_FILE_PATH, "r") as file:
         host_url = file.read()
     if parsed_host_url in EVALAI_HOST_URLS:
@@ -249,10 +273,16 @@ def download_file(url):
             sys.exit(1)
         request_path = URLS.download_file.value
         request_path = request_path.format(bucket[0], key[0])
-        response = make_request(request_path, "GET")
-        signed_url = response.get("signed_url")
+
+        try:	#fetch the signed URL from EvalAI
+            response = make_request(request_path, "GET")
+            signed_url = response.get("signed_url")
+        except Exception as e:
+            raise RuntimeError("Error occurred while fetching signed URL.") from e
+
         file_name = key[0].split("/")[-1]
-        try:
+        try:	# downloading the file using the signed URL
+
             response = requests.get(signed_url, stream=True)
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
@@ -279,9 +309,7 @@ def download_file(url):
                     bar.update(chunk_size)
             echo(
                 style(
-                    "\nYour file {} is successfully downloaded.\n".format(
-                        file_name
-                    ),
+                    "\nYour file {} is successfully downloaded.\n".format(file_name),
                     fg="green",
                     bold=True,
                 )
@@ -295,3 +323,4 @@ def download_file(url):
             )
         )
         sys.exit(1)
+
