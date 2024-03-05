@@ -2,7 +2,7 @@
 import os
 
 from os.path import expanduser
-
+AWS_REGION = os.environ.get("AWS_REGION")
 
 LEN_OF_TOKEN = 210
 
