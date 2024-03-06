@@ -12,15 +12,19 @@ import tempfile
 import urllib.parse as urlparse
 import uuid
 
-from click import echo, style
+try:
+    from click import echo, style
+    from evalai.utils.common import notify_user
+    from evalai.utils.requests import make_request
+    from evalai.utils.submissions import (
+        display_submission_details,
+        display_submission_result,
+        convert_bytes_to,
+    )
+except ImportError as e:
+    notify_user(f"Error: Failed to import required module - {e}")
+    sys.exit(1)
 
-from evalai.utils.common import notify_user
-from evalai.utils.requests import make_request
-from evalai.utils.submissions import (
-    display_submission_details,
-    display_submission_result,
-    convert_bytes_to,
-)
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
     ENVIRONMENT,
