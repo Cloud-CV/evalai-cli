@@ -296,6 +296,7 @@ def submit(ctx, file, annotation, large, public, private):
             submission_meta_attributes = get_submission_meta_attributes(
                 ctx.challenge_id, ctx.phase_id
             )
+            submission_metadata['from_cli']=True
             submission_attribute_metadata = []
             if (
                 submission_meta_attributes
