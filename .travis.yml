@@ -2,19 +2,19 @@ dist: jammy
 language: python
 sudo: false
 python:
-  - '3.8'
+- '3.8'
 install:
-  - pip install -r requirements.txt
-  - pip install coverage
-  - pip install flake8 pytest PyYAML
-  - pip install coveralls
-  - pip install setuptools --upgrade
+- pip install -r requirements.txt
+- pip install coverage
+- pip install flake8 pytest PyYAML
+- pip install coveralls
+- pip install setuptools --upgrade
 script:
-  - flake8 ./ || travis_terminate 1;
-  - python setup.py test || travis_terminate 1;
+- flake8 ./ || travis_terminate 1;
+- python setup.py test || travis_terminate 1;
 after_success:
-  - coveralls --rcfile=.coveragerc
-  - ./deploy-staging.sh
+- coveralls --rcfile=.coveragerc
+- "./deploy-staging.sh"
 notifications:
   email:
     on_success: change
@@ -24,7 +24,7 @@ deploy:
   provider: pypi
   user: cloudcv
   password:
-    secure: geiU/sJ+dCXd+IfCzik5jdZpkZZK+8OiDnPlAmR5RdjI1GXmeMa5wHwlmrUqtWpK0s2aqDYNL9FSSInTT2r8Dc2i1n9AjUHAjxJfEdXyOzJpAQ7q0LbdebfI+WEJW2R5+8qo9nz5+7vQQ/IDkuu8OP3cKEfGNawZp2T+okalvgJ01qNmZn/xd7jEbc+fH7ncPu/qK/fi70JMDuX+m0zUhXvnyue8rGTqZDltmUbWEO+qAhG3q/MxspRZaRtHFvV765fQpfrYj3Vov7kgSNFkPtkEtojjC3CdETpR6TpLipsDXOTAT0pQ8ucEBiGb8JZ7xdprEgMm7w9/jWs6Z//XH3pf+c2LyqqvnPOVC90cRiBXpL3nJQDFUO1UZFUEAvxHv0IrtVk81tz98jPyJf3Qaqu0SCDLgxPG3h5WKo3AIsuPwwMlWGtToP11x2xdJSs3N9U6wGOjtGgfzk3aVdK4jx+Ai7xtI5Bk9o/tLmNxzWSqG87RVraOJrAx/ztdoEk5jfqM//7kVw7G8/aih8nTrVlC3/l3CT751SEemWvBKJvCMJFYo2cDJqQ5nKIrJHfY2uBCroDYhJg1zX1o92sesyyleNRuKFCHclsZxcK4m81EaVy2Bb1mrtIyMHLWbST9BWUBpj/EiSLX+J/2aHV4q3j6hkK/tgYEjKg/7Z8ysw8=
-  distributions: 'sdist bdist_wheel'
+    secure: RiELCr5IMQayDlvwkHh18spa/20xO3T5a8XCEr/ZrY27AygTaFICR8zjKVdbPXRfn/uPtgRRlKJaIdQLpmHnDjmGbNNQo8Ga5E3N89sPcGjHSM7PKPcwSUu8Gwgk70YjXEnos/Bz4u/12kJ2UrgQZHlPpl0ySZRFjk8sqxwQbcxqM8lO1Wu+lGvuCufzllLDcC/Fz1OQjuXUuete/W1RHtDZD8khnKBa5p9P6c0H6AZI9+uvzCsA9qeWFqIiU9TuLja4jb9EcZdtXDDdKTbSHvft6/4JqzQBbsk5x31q5qjG8JFxh7DBrKSv3KXn5XQ7vXQOC7q4RJYDcxFrDBH3hrbO/wkRh/1qHcjzlACGQAUzECnmh+dkr1u9gnUdkC1ti78jkiC4ICA3YfCm9VDYUPSYfOgIXj2Fbv5FfJnggItO+8CLI/vnsu5MqSp/fmrjugO++lo3BC/b6/gonkt3HvyfX2DN7yMG0OMPpr2/5o+NDJekcpKg5VLAv7y3/I8hSj2LMIJ8zV9oAJAxA/qAPuOupxBTjn1+GeiR8Erx7Jak4BRm426JtvICU4h5Zn+d6Vcr1q12OwcZrOUJiBsFhfZebgUmctZjDtsJQwtysF7fovVsT6pXrTGLFgxgkxzXdn/+pyC9bwdKEdw+vbdEjxGasRtijS9BIa676ZFMRsM=
+  distributions: sdist bdist_wheel
   on:
     tags: true
