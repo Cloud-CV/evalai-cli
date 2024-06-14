@@ -9,3 +9,4 @@ requests==2.25.1
 validators==0.12.6
 termcolor==1.1.0
 tqdm>=4.49.0
+urllib3==1.25.11
