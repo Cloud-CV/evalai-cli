@@ -2,7 +2,7 @@ dist: jammy
 language: python
 sudo: false
 python:
-  - '3.11'
+  - '3.8'
 install:
   - pip install -r requirements.txt
   - pip install coverage==4.5.4
