@@ -1,5 +1,4 @@
 import os
-
 import base64
 import boto3
 import click
@@ -32,7 +31,6 @@ from evalai.utils.config import (
 
 
 class Submission(object):
-
     def __init__(self, submission_id):
         self.submission_id = submission_id
 
@@ -89,16 +87,19 @@ def push(image, phase, url, public, private):
     """
     Invoked by `evalai push IMAGE:TAG -p PHASE_ID`.
     """
+    # Validate image format
     if len(image.split(":")) != 2:
         message = "\nError: Please enter the tag name with image.\n\nFor eg: `evalai push ubuntu:latest --phase 123`"
         notify_user(message, color="red")
         sys.exit(1)
 
+    # Validate mutually exclusive options
     if public and private:
         message = "\nError: Submission can't be public and private.\nPlease select either --public or --private"
         notify_user(message, color="red")
         sys.exit(1)
 
+    # Set submission metadata
     submission_metadata = {}
     if public:
         submission_metadata["is_public"] = json.dumps(True)
@@ -107,25 +108,50 @@ def push(image, phase, url, public, private):
 
     tag = str(uuid.uuid4())
     docker_client = docker.from_env()
+
+    # Attempt to get the docker image
     try:
         docker_image = docker_client.images.get(image)
     except docker.errors.ImageNotFound:
         message = "\nError: Image not found. Please enter the correct image name and tag."
         notify_user(message, color="red")
         sys.exit(1)
+    except docker.errors.APIError as e:
+        notify_user(f"Docker API error: {e}", color="red")
+        sys.exit(1)
 
+    # Fetch phase details
     request_path = URLS.phase_details_using_slug.value
     request_path = request_path.format(phase)
     response = make_request(request_path, "GET")
-    challenge_pk = response.get("challenge")
-    phase_pk = response.get("id")
 
+    # Added exception handling for missing keys
+    try:
+        challenge_pk = response["challenge"]
+        phase_pk = response["id"]
+    except KeyError as e:
+        notify_user(f"Missing key in response: {e}", color="red")
+        sys.exit(1)
+
+    # Fetch challenge details
     request_path = URLS.challenge_details.value
     request_path = request_path.format(challenge_pk)
     response = make_request(request_path, "GET")
-    max_docker_image_size = response.get("max_docker_image_size")
 
-    docker_image_size = docker_image.__dict__.get("attrs").get("VirtualSize")
+    # Added exception handling for missing keys
+    try:
+        max_docker_image_size = response["max_docker_image_size"]
+    except KeyError as e:
+        notify_user(f"Missing key in response: {e}", color="red")
+        sys.exit(1)
+
+    # Check if the docker image size exceeds the maximum allowed size
+    try:
+        docker_image_size = docker_image.__dict__.get("attrs").get("VirtualSize")
+    except AttributeError:
+        notify_user("Error retrieving docker image size.", color="red")
+        sys.exit(1)
+
     if docker_image_size > max_docker_image_size:
         max_docker_image_size = convert_bytes_to(max_docker_image_size, "gb")
         message = "\nError: Image is too large. The maximum image size allowed is {} GB".format(
@@ -134,89 +160,132 @@ def push(image, phase, url, public, private):
         notify_user(message, color="red")
         sys.exit(1)
 
+    # Fetch AWS credentials
     request_path = URLS.get_aws_credentials.value
     request_path = request_path.format(phase_pk)
-
     response = make_request(request_path, "GET")
-    federated_user = response["success"]["federated_user"]
-    repository_uri = response["success"]["docker_repository_uri"]
+
+    # Added exception handling for missing keys
+    try:
+        federated_user = response["success"]["federated_user"]
+        repository_uri = response["success"]["docker_repository_uri"]
+    except KeyError as e:
+        notify_user(f"Missing key in response: {e}", color="red")
+        sys.exit(1)
 
     # Production Environment
     if ENVIRONMENT == "PRODUCTION":
-        AWS_ACCOUNT_ID = federated_user["FederatedUser"][
-            "FederatedUserId"
-        ].split(":")[0]
-        AWS_SERVER_PUBLIC_KEY = federated_user["Credentials"]["AccessKeyId"]
-        AWS_SERVER_SECRET_KEY = federated_user["Credentials"][
-            "SecretAccessKey"
-        ]
-        SESSION_TOKEN = federated_user["Credentials"]["SessionToken"]
+        try:
+            AWS_ACCOUNT_ID = federated_user["FederatedUser"][
+                "FederatedUserId"
+            ].split(":")[0]
+            AWS_SERVER_PUBLIC_KEY = federated_user["Credentials"]["AccessKeyId"]
+            AWS_SERVER_SECRET_KEY = federated_user["Credentials"][
+                "SecretAccessKey"
+            ]
+            SESSION_TOKEN = federated_user["Credentials"]["SessionToken"]
+        except KeyError as e:
+            notify_user(f"Missing key in federated_user: {e}", color="red")
+            sys.exit(1)
 
-        ecr_client = boto3.client(
-            "ecr",
-            region_name=AWS_REGION,
-            aws_access_key_id=AWS_SERVER_PUBLIC_KEY,
-            aws_secret_access_key=AWS_SERVER_SECRET_KEY,
-            aws_session_token=SESSION_TOKEN,
-        )
-
-        token = ecr_client.get_authorization_token(
-            registryIds=[AWS_ACCOUNT_ID]
-        )
-        ecr_client = boto3.client("ecr", region_name=AWS_REGION)
-        username, password = (
-            base64.b64decode(
-                token["authorizationData"][0]["authorizationToken"]
+        # Create ECR client and obtain authorization token
+        try:
+            ecr_client = boto3.client(
+                "ecr",
+                region_name=AWS_REGION,
+                aws_access_key_id=AWS_SERVER_PUBLIC_KEY,
+                aws_secret_access_key=AWS_SERVER_SECRET_KEY,
+                aws_session_token=SESSION_TOKEN,
             )
-            .decode()
-            .split(":")
-        )
-        registry = token["authorizationData"][0]["proxyEndpoint"]
-        docker_client.login(
-            username, password, registry=registry, dockercfg_path=os.getcwd()
-        )
+
+            token = ecr_client.get_authorization_token(
+                registryIds=[AWS_ACCOUNT_ID]
+            )
+
+            ecr_client = boto3.client("ecr", region_name=AWS_REGION)
+            username, password = (
+                base64.b64decode(
+                    token["authorizationData"][0]["authorizationToken"]
+                )
+                .decode()
+                .split(":")
+            )
+            registry = token["authorizationData"][0]["proxyEndpoint"]
+        except (KeyError, IndexError) as e:
+            notify_user(f"Error retrieving ECR credentials: {e}", color="red")
+            sys.exit(1)
+        except boto3.exceptions.Boto3Error as e:
+            notify_user(f"AWS Boto3 error: {e}", color="red")
+            sys.exit(1)
+
+        # Attempt to login to Docker registry
+        try:
+            docker_client.login(
+                username, password, registry=registry, dockercfg_path=os.getcwd()
+            )
+        except docker.errors.APIError as e:
+            notify_user(f"Docker login error: {e}", color="red")
+            sys.exit(1)
 
     # Development and Test Environment
     else:
-        repository_uri = "{0}/{1}".format(url, repository_uri.split("/")[1])
+        try:
+            repository_uri = "{0}/{1}".format(url, repository_uri.split("/")[1])
+        except IndexError:
+            notify_user("Error parsing repository URI.", color="red")
+            sys.exit(1)
 
     # Tag and push docker image and create a submission if successfully pushed
-    docker_client.images.get(image).tag("{}:{}".format(repository_uri, tag))
-    for line in docker_client.images.push(
-        repository_uri, tag, stream=True, decode=True
-    ):
-        if line.get("status") in ["Pushing", "Pushed"] and line.get(
-            "progress"
+    try:
+        docker_client.images.get(image).tag("{}:{}".format(repository_uri, tag))
+    except docker.errors.APIError as e:
+        notify_user(f"Docker tagging error: {e}", color="red")
+        sys.exit(1)
+
+    try:
+        for line in docker_client.images.push(
+            repository_uri, tag, stream=True, decode=True
         ):
-            print("{id}: {status} {progress}".format(**line))
-        elif line.get("errorDetail"):
-            error = line.get("error")
-            notify_user(error, color="red")
-        elif line.get("aux"):
-            aux = line.get("aux")
-            pushed_image_tag = aux["Tag"]
-            submitted_image_uri = "{}:{}".format(
-                repository_uri, pushed_image_tag
-            )
-            BASE_TEMP_DIR = tempfile.mkdtemp()
-            data = {"submitted_image_uri": submitted_image_uri}
-            submission_file_path = os.path.join(
-                BASE_TEMP_DIR, "submission.json"
-            )
-            with open(submission_file_path, "w") as outfile:
-                json.dump(data, outfile)
-            request_path = URLS.make_submission.value
-            request_path = request_path.format(challenge_pk, phase_pk)
-            response = make_request(request_path, "POST", submission_file_path, data=submission_metadata)
-            shutil.rmtree(BASE_TEMP_DIR)
-        else:
-            print(
-                " ".join(
-                    "{}: {}".format(k, v)
-                    for k, v in line.items()
-                    if k != "progressDetail"
+            if line.get("status") in ["Pushing", "Pushed"] and line.get(
+                "progress"
+            ):
+                print("{id}: {status} {progress}".format(**line))
+            elif line.get("errorDetail"):
+                error = line.get("error")
+                notify_user(error, color="red")
+            elif line.get("aux"):
+                aux = line.get("aux")
+                try:
+                    pushed_image_tag = aux["Tag"]
+                except KeyError as e:
+                    notify_user(f"Missing key in push response: {e}", color="red")
+                    sys.exit(1)
+
+                submitted_image_uri = "{}:{}".format(
+                    repository_uri, pushed_image_tag
                 )
-            )
+                BASE_TEMP_DIR = tempfile.mkdtemp()
+                data = {"submitted_image_uri": submitted_image_uri}
+                submission_file_path = os.path.join(
+                    BASE_TEMP_DIR, "submission.json"
+                )
+                with open(submission_file_path, "w") as outfile:
+                    json.dump(data, outfile)
+                request_path = URLS.make_submission.value
+                request_path = request_path.format(challenge_pk, phase_pk)
+                response = make_request(request_path, "POST", submission_file_path, data=submission_metadata)
+                shutil.rmtree(BASE_TEMP_DIR)
+            else:
+                print(
+                    " ".join(
+                        "{}: {}".format(k, v)
+                        for k, v in line.items()
+                        if k != "progressDetail"
+                    )
+                )
+    except docker.errors.APIError as e:
+        notify_user(f"Docker push error: {e}", color="red")
+        sys.exit(1)
 
 
 @click.command()
@@ -238,6 +307,8 @@ def download_file(url):
     if is_correct_host:
         bucket = urlparse.parse_qs(parsed_url.query).get("bucket")
         key = urlparse.parse_qs(parsed_url.query).get("key")
+
+        # Check if bucket and key are present in the URL
         if not bucket or not key:
             echo(
                 style(
@@ -247,11 +318,21 @@ def download_file(url):
                 )
             )
             sys.exit(1)
+
         request_path = URLS.download_file.value
         request_path = request_path.format(bucket[0], key[0])
         response = make_request(request_path, "GET")
-        signed_url = response.get("signed_url")
+
+        # Added exception handling for missing keys
+        try:
+            signed_url = response["signed_url"]
+        except KeyError as e:
+            notify_user(f"Missing key in response: {e}", color="red")
+            sys.exit(1)
+
         file_name = key[0].split("/")[-1]
+
+        # Download the file using the signed URL
         try:
             response = requests.get(signed_url, stream=True)
             response.raise_for_status()
@@ -268,6 +349,8 @@ def download_file(url):
                 )
             )
             sys.exit(1)
+
+        # Save the downloaded file to disk
         with open(file_name, "wb") as file:
             total_file_length = int(response.headers.get("content-length"))
             chunk_size = 1024
