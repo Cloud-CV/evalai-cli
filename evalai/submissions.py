@@ -20,6 +20,7 @@ from evalai.utils.submissions import (
     display_submission_details,
     display_submission_result,
     convert_bytes_to,
+    get_submission_meta_attributes,
 )
 from evalai.utils.urls import URLS
 from evalai.utils.config import (
@@ -126,6 +127,147 @@ def push(image, phase, url, public, private):
     max_docker_image_size = response.get("max_docker_image_size")
 
     docker_image_size = docker_image.__dict__.get("attrs").get("VirtualSize")
+    # Prompt for submission details
+    if click.confirm("Do you want to include the Submission Details?"):
+        submission_metadata["method_name"] = click.prompt(
+            style("Method Name", fg="yellow"), type=str, default=""
+        )
+        submission_metadata["method_description"] = click.prompt(
+            style("Method Description", fg="yellow"),
+            type=str,
+            default="",
+        )
+        submission_metadata["project_url"] = click.prompt(
+            style("Project URL", fg="yellow"), type=str, default=""
+        )
+        submission_metadata["publication_url"] = click.prompt(
+            style("Publication URL", fg="yellow"), type=str, default=""
+        )
+
+    submission_meta_attributes = get_submission_meta_attributes(
+        challenge_pk, phase_pk
+    )
+
+    submission_attribute_metadata = []
+
+    if (submission_meta_attributes and len(submission_meta_attributes) > 0):
+        if click.confirm(
+            "Do you want to include the Submission Metadata?"
+        ):
+            for attribute in submission_meta_attributes:
+                attribute_type = attribute["type"]
+                attribute_name = attribute["name"]
+                attribute_description = attribute["description"]
+                attribute_required = attribute.get("required")
+                attribute_data = {
+                    'name': attribute_name,
+                    'type': attribute_type,
+                    'description': attribute_description,
+                    'required': attribute_required,
+                }
+                if attribute_required:
+                    attribute_name = attribute_name + '*'
+                value = None
+                message = "{} ({})".format(
+                    attribute_name, attribute_description
+                )
+                if attribute_type == "text":
+                    while True:
+                        value = click.prompt(
+                            style(message, fg="yellow"),
+                            type=str,
+                            default="",
+                        )
+                        if not attribute_required or value != "":
+                            break
+                        echo(
+                            "Error: {} is a required field".format(
+                                attribute["name"]
+                            )
+                        )
+                    attribute_data['value'] = value
+                if attribute_type == "boolean":
+                    while True:
+                        value = click.prompt(
+                            style(message, fg="yellow"), type=bool, default=""
+                        )
+                        if not attribute_required or value != "":
+                            break
+                        echo(
+                            "Error: {} is a required field".format(
+                                attribute["name"]
+                            )
+                        )
+                    attribute_data['value'] = value
+                if attribute_type == "radio":
+                    while True:
+                        value = click.prompt(
+                            style(
+                                "{}:\nChoices:{}".format(
+                                    message, attribute["options"]
+                                ),
+                                fg="yellow",
+                            ),
+                            type=click.Choice(attribute["options"]),
+                            default=""
+                        )
+                        if not attribute_required or value != "":
+                            break
+                        echo(
+                            "Error: {} is a required field".format(
+                                attribute["name"]
+                            )
+                        )
+                    attribute_data['options'] = attribute['options']
+                    attribute_data['value'] = value
+                if attribute_type == "checkbox":
+                    option_chosen = True
+                    while option_chosen:
+                        value = []
+                        choices = click.prompt(
+                            style(
+                                "{}:\nChoices(separated by comma):{}".format(
+                                    message, attribute["options"]
+                                ),
+                                fg="yellow",
+                            ),
+                            type=str,
+                            show_default=False,
+                            default=""
+                        )
+                        if choices != "":
+                            choices = [
+                                choice.strip(" ")
+                                for choice in choices.split(",")
+                            ]
+                        else:
+                            choices = []
+                            option_chosen = False
+                        if attribute_required and len(choices) == 0:
+                            echo(
+                                "Error: {} is a required field. Please select atleast one option".format(
+                                    attribute["name"]
+                                )
+                            )
+                            option_chosen = True
+                        for choice in choices:
+                            if choice in attribute["options"]:
+                                value.append(choice)
+                                option_chosen = False
+                            else:
+                                echo(
+                                    "Error: Choose correct value(s) from the given options only"
+                                )
+                                option_chosen = True
+                                break
+                    attribute_data['options'] = attribute['options']
+                    attribute_data['values'] = value
+                submission_attribute_metadata.append(attribute_data)
+
+    # After collecting submission_attribute_metadata
+    if submission_attribute_metadata:
+        submission_metadata["submission_meta_attributes"] = submission_attribute_metadata
+
     if docker_image_size > max_docker_image_size:
         max_docker_image_size = convert_bytes_to(max_docker_image_size, "gb")
         message = "\nError: Image is too large. The maximum image size allowed is {} GB".format(

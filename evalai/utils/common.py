@@ -135,7 +135,7 @@ def clean_data(data):
     """
     Strip HTML and clean spaces
     """
-    data = BeautifulSoup(data, "lxml").text.strip()
+    data = BeautifulSoup(data, "html.parser").text.strip()
     data = " ".join(data.split()).encode("utf-8")
     return data
 
