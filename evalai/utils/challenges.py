@@ -442,7 +442,7 @@ def pretty_print_challenge_phase_data(phase):
 
     title = "{} {} {}".format(phase_title, challenge_id, phase_id)
 
-    cleaned_desc = BeautifulSoup(phase["description"], "lxml").text
+    cleaned_desc = BeautifulSoup(phase["description"], "html.parser").text
     description = "{}\n".format(cleaned_desc)
 
     start_date = "Start Date : {}".format(
