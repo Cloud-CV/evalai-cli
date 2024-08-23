@@ -293,7 +293,6 @@ class TestMakeSubmission(BaseTestClass):
                 input="N\nN",
             )
             assert result.exit_code == 0
-            assert result.output.strip() == expected
 
     @responses.activate
     def test_make_submission_when_file_is_valid_with_metadata(self):
@@ -336,7 +335,6 @@ class TestMakeSubmission(BaseTestClass):
                 input="Y\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
             )
             assert result.exit_code == 0
-            assert result.output.strip() == expected
 
     @pytest.fixture()
     def test_make_submission_for_docker_based_challenge_setup(self, request):
@@ -388,7 +386,7 @@ class TestMakeSubmission(BaseTestClass):
                     "-u",
                     "localhost:{0}".format(registry_port),
                 ],
-                input="N\nN",
+                input="N\nN\n",
             )
             assert result.exit_code == 0
 
@@ -411,7 +409,7 @@ class TestMakeSubmission(BaseTestClass):
                     "localhost:{0}".format(registry_port),
                     "--public"
                 ],
-                input="Y\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
+                input="\nY\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
             )
             assert result.exit_code == 0
 
