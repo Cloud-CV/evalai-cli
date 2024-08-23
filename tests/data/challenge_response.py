@@ -314,7 +314,7 @@ challenge_phase_details_slug = """
     "is_public": true,
     "is_active": true,
     "codename": "test2019",
-    "slug": "philip-phase-2019"
+    "slug": "philip-phase-2019",
     "submission_meta_attributes": [
     {
       "name": "TextAttribute",
@@ -350,7 +350,7 @@ challenge_phase_details_slug = """
       "required": "True",
       "description": "Sample"
     }
-  ],
+  ]
 }
 """
 
