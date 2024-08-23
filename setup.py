@@ -1,8 +1,23 @@
 #!/usr/bin/env python
 import io
+import sys
 
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 from distutils.util import convert_path
+
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = ["--cov", ".", "--cov-config", ".coveragerc"]
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+
+        sys.exit(pytest.main(self.test_args))
+
 
 PROJECT = "evalai"
 package_config = {}
@@ -30,6 +45,7 @@ tests_require = [
 
 setup(
     name=PROJECT,
+    cmdclass={"test": PyTest},
     version=package_config["__version__"],
     description="Use EvalAI through command line interface",
     long_description=long_description,
