@@ -8,7 +8,7 @@ install:
 - pip install coverage
 - pip install flake8 pytest PyYAML
 - pip install coveralls
-- pip install setuptools --upgrade
+- pip install setuptools==70.0.0
 script:
 - flake8 ./ || travis_terminate 1;
 - python setup.py test || travis_terminate 1;
