@@ -265,10 +265,7 @@ def push(image, phase, url, public, private):
                 submission_attribute_metadata.append(attribute_data)
 
     # After collecting submission_attribute_metadata
-    if submission_attribute_metadata:
-        submission_attribute_metadata = json.dumps(submission_attribute_metadata)
-    else:
-        submission_attribute_metadata = ""
+    submission_attribute_metadata = json.dumps(submission_attribute_metadata)
 
     if docker_image_size > max_docker_image_size:
         max_docker_image_size = convert_bytes_to(max_docker_image_size, "gb")
