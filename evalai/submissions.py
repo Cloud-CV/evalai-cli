@@ -266,7 +266,9 @@ def push(image, phase, url, public, private):
 
     # After collecting submission_attribute_metadata
     if submission_attribute_metadata:
-        submission_metadata["submission_meta_attributes"] = submission_attribute_metadata
+        submission_attribute_metadata = json.dumps(submission_attribute_metadata)
+    else:
+        submission_attribute_metadata = ""
 
     if docker_image_size > max_docker_image_size:
         max_docker_image_size = convert_bytes_to(max_docker_image_size, "gb")
@@ -349,7 +351,10 @@ def push(image, phase, url, public, private):
                 json.dump(data, outfile)
             request_path = URLS.make_submission.value
             request_path = request_path.format(challenge_pk, phase_pk)
-            response = make_request(request_path, "POST", submission_file_path, data=submission_metadata)
+            submission_data = {
+                "submission_metadata": submission_attribute_metadata,
+            }
+            response = make_request(request_path, "POST", submission_file_path, data=dict(submission_data, **submission_metadata))
             shutil.rmtree(BASE_TEMP_DIR)
         else:
             print(
