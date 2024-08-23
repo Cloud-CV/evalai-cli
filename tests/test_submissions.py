@@ -371,7 +371,7 @@ class TestMakeSubmission(BaseTestClass):
         return (registry_port, image_tag)
 
     @responses.activate
-    def test_make_submission_for_docker_based_challenge(
+    def test_make_submission_for_docker_based_challenge_without_submission_metadata(
         self, test_make_submission_for_docker_based_challenge_setup
     ):
         registry_port, image_tag = (
@@ -388,6 +388,30 @@ class TestMakeSubmission(BaseTestClass):
                     "-u",
                     "localhost:{0}".format(registry_port),
                 ],
+                input="N\nN",
+            )
+            assert result.exit_code == 0
+
+    @responses.activate
+    def test_make_submission_for_docker_based_challenge_with_submission_metadata(
+        self, test_make_submission_for_docker_based_challenge_setup
+    ):
+        registry_port, image_tag = (
+            test_make_submission_for_docker_based_challenge_setup
+        )
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            result = runner.invoke(
+                push,
+                [
+                    image_tag,
+                    "-p",
+                    "philip-phase-2019",
+                    "-u",
+                    "localhost:{0}".format(registry_port),
+                    "--public"
+                ],
+                input="Y\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
             )
             assert result.exit_code == 0
 
