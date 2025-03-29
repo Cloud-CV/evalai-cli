@@ -351,7 +351,10 @@ def push(image, phase, url, public, private):
             submission_data = {
                 "submission_metadata": submission_attribute_metadata,
             }
-            response = make_request(request_path, "POST", submission_file_path, data=dict(submission_data, **submission_metadata))
+            response = make_request(request_path,
+                                    "POST",
+                                    submission_file_path,
+                                    data=dict(submission_data, **submission_metadata))
             shutil.rmtree(BASE_TEMP_DIR)
         else:
             print(
