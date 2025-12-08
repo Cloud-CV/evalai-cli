@@ -11,10 +11,10 @@ from dateutil import tz
 from unittest.mock import patch
 
 from evalai.challenges import challenge
-from evalai.submissions import submission, push
+from evalai.submissions import submission, push, download_file
 from tests.data import submission_response, challenge_response
 
-from evalai.utils.config import API_HOST_URL
+from evalai.utils.config import API_HOST_URL, HOST_URL_FILE_PATH
 from evalai.utils.urls import URLS
 from .base import BaseTestClass
 
@@ -510,6 +510,73 @@ class TestPush(BaseTestClass):
         response = result.output.strip()
         assert response == expected
         assert result.exit_code == 1
+
+
+class TestDownloadFile(BaseTestClass):
+    def teardown(self):
+        if os.path.exists(HOST_URL_FILE_PATH):
+            os.remove(HOST_URL_FILE_PATH)
+
+    def _write_host_url(self, host_url="https://eval.ai"):
+        os.makedirs(os.path.dirname(HOST_URL_FILE_PATH), exist_ok=True)
+        with open(HOST_URL_FILE_PATH, "w") as fw:
+            fw.write(host_url)
+        return host_url
+
+    @responses.activate
+    def test_download_file_succeeds(self):
+        host_url = self._write_host_url()
+        bucket = "test-bucket"
+        key = "submissions/file.txt"
+        signed_url = "https://storage.example.com/file.txt"
+        api_url = "{}{}".format(
+            host_url, URLS.download_file.value
+        ).format(bucket, key)
+
+        responses.add(
+            responses.GET,
+            api_url,
+            json={"signed_url": signed_url},
+            status=200,
+        )
+        file_content = b"hello world"
+        responses.add(
+            responses.GET,
+            signed_url,
+            body=file_content,
+            headers={"content-length": str(len(file_content))},
+            status=200,
+        )
+
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            result = runner.invoke(
+                download_file,
+                [f"{host_url}/submissions?bucket={bucket}&key={key}"],
+            )
+            assert result.exit_code == 0
+            assert "successfully downloaded" in result.output
+            with open("file.txt", "rb") as downloaded:
+                assert downloaded.read() == file_content
+
+    def test_download_file_with_missing_query_params(self):
+        host_url = self._write_host_url()
+        runner = CliRunner()
+        result = runner.invoke(
+            download_file, [f"{host_url}/submissions?bucket=test-bucket"]
+        )
+        assert result.exit_code == 1
+        assert "bucket or key is missing" in result.output
+
+    def test_download_file_with_invalid_host(self):
+        self._write_host_url()
+        runner = CliRunner()
+        result = runner.invoke(
+            download_file,
+            ["https://example.com/submissions?bucket=b&key=k.txt"],
+        )
+        assert result.exit_code == 1
+        assert "doesn't match the EvalAI url" in result.output
 
     def test_push_when_image_not_found(self):
         expected = "Error: Image not found. Please enter the correct image name and tag."
