@@ -35,23 +35,35 @@ If you are interested in contributing to EvalAI-CLI, follow our [contribution gu
 
 3. Create a virtual environment
 
+    **Linux / macOS**
+
     ```bash
     cd evalai-cli
     virtualenv -p python3 venv
     source venv/bin/activate
     ```
 
+    **Windows (Optional)**
+
+    ```bat
+    cd evalai-cli
+    python -m venv venv
+    venv\Scripts\activate
+    ```
+
+    Note: Official support may vary depending on the environment.  
+    If you encounter issues on Windows, consider using WSL or a Linux-based environment.
+
 4. Install the package locally
 
     ```bash
     pip install -e .
     ```
- 
+
 5. Change the evalai-cli host to make request to local EvalAI server running on `http://localhost:8000` by running:
    
    ```bash
    evalai host -sh http://localhost:8000
-   ```
 
 
 6. Login to cli using the command ``` evalai login```
