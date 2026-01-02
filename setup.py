@@ -4,7 +4,7 @@ import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from distutils.util import convert_path
+from setuptools import convert_path  # Changed from distutils to setuptools
 
 
 class PyTest(TestCommand):
@@ -34,6 +34,7 @@ with open(version_file_path) as version_file:
 
 tests_require = [
     "coverage",
+    "packaging",  # Added to fix the Travis CI ModuleNotFoundError
     "coveralls==1.3.0",
     "flake8==3.0.4",
     "pytest==3.5.1",
