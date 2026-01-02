@@ -1,7 +1,6 @@
 import requests
 
-from distutils.version import StrictVersion
-
+from packaging.version import Version as StrictVersion
 
 def get_latest_version():
     url = "https://pypi.org/pypi/evalai/json"
