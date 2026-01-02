@@ -4,7 +4,12 @@ import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from setuptools import convert_path  # Changed from distutils to setuptools
+
+# Safe import for convert_path to support Python 3.8 through 3.13
+try:
+    from setuptools import convert_path
+except ImportError:
+    from distutils.util import convert_path
 
 
 class PyTest(TestCommand):
@@ -34,7 +39,7 @@ with open(version_file_path) as version_file:
 
 tests_require = [
     "coverage",
-    "packaging",  # Added to fix the Travis CI ModuleNotFoundError
+    "packaging",  # Required for version parsing in updates.py
     "coveralls==1.3.0",
     "flake8==3.0.4",
     "pytest==3.5.1",
