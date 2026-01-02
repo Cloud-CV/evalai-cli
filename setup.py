@@ -6,6 +6,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 # Safe import for convert_path to support Python 3.8 through 3.13
+# This fixes the removal of distutils in 3.12+ while maintaining 3.8 support
 try:
     from setuptools import convert_path
 except ImportError:
@@ -37,9 +38,10 @@ with open("requirements.txt") as f:
 with open(version_file_path) as version_file:
     exec(version_file.read(), package_config)
 
+# Added 'packaging' here to ensure Travis CI installs it for the test environment
 tests_require = [
     "coverage",
-    "packaging",  # Required for version parsing in updates.py
+    "packaging",
     "coveralls==1.3.0",
     "flake8==3.0.4",
     "pytest==3.5.1",
