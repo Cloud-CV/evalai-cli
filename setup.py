@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 import io
+import os
 import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-# Safe import for convert_path to support Python 3.8 through 3.13
-# This fixes the removal of distutils in 3.12+ while maintaining 3.8 support
-try:
-    from setuptools import convert_path
-except ImportError:
-    from distutils.util import convert_path
-
+# We are removing 'convert_path' entirely to fix the Travis CI crash.
+# This manual path join is safe for all Python versions (3.8 - 3.13).
+def get_version_path(*paths):
+    return os.path.join(os.path.dirname(__file__), *paths)
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -21,13 +19,11 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
-
         sys.exit(pytest.main(self.test_args))
-
 
 PROJECT = "evalai"
 package_config = {}
-version_file_path = convert_path("evalai/version.py")
+version_file_path = get_version_path("evalai", "version.py")
 
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
@@ -38,7 +34,6 @@ with open("requirements.txt") as f:
 with open(version_file_path) as version_file:
     exec(version_file.read(), package_config)
 
-# Added 'packaging' here to ensure Travis CI installs it for the test environment
 tests_require = [
     "coverage",
     "packaging",
