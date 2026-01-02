@@ -6,6 +6,12 @@ import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
+
+# We use a manual way to find the version file path for CI compatibility
+def get_version_path(*paths):
+    return os.path.join(os.path.dirname(__file__), *paths)
+
+
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -16,12 +22,10 @@ class PyTest(TestCommand):
         import pytest
         sys.exit(pytest.main(self.test_args))
 
+
 PROJECT = "evalai"
 package_config = {}
-
-# Use a totally manual way to find the version file path
-base_dir = os.path.abspath(os.path.dirname(__file__))
-version_file_path = os.path.join(base_dir, "evalai", "version.py")
+version_file_path = get_version_path("evalai", "version.py")
 
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
@@ -29,7 +33,6 @@ with io.open("README.md", encoding="utf-8") as f:
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
-# Load version manually
 with open(version_file_path) as version_file:
     exec(version_file.read(), package_config)
 
