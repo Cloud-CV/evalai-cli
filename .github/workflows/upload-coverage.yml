@@ -1,0 +1,86 @@
+name: upload-coverage
+
+# Runs after ci-cd completes — in the BASE repo's security context so
+# CODECOV_TOKEN is always available, including for fork PRs.
+on:
+  workflow_run:
+    workflows: [ci-cd]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+
+jobs:
+  upload_coverage:
+    name: Upload coverage to Codecov
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Checkout repository (Codecov CLI reads codecov.yml from default branch)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+
+      - name: Download pull request metadata from triggering run
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-metadata
+          path: pr-metadata
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download test coverage artifact from triggering run
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-test-reports
+          path: codecov-reports
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve pull request number
+        id: pr
+        run: |
+          pr_number="$(tr -d '[:space:]' < pr-metadata/pr_number.txt || true)"
+          echo "number=${pr_number}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify coverage file exists
+        run: test -f codecov-reports/coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: codecov-reports/coverage.xml
+          flags: cli
+          disable_search: true
+          fail_ci_if_error: true
+          verbose: true
+          override_commit: ${{ github.event.workflow_run.head_sha }}
+          override_branch: ${{ github.event.workflow_run.head_branch }}
+          override_pr: ${{ steps.pr.outputs.number }}
+
+      - name: Report coverage upload status to triggering commit
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          CONCLUSION: ${{ job.status }}
+        run: |
+          if [ "${CONCLUSION}" = "success" ]; then
+            state="success"
+            description="Coverage uploaded to Codecov successfully."
+          else
+            state="failure"
+            description="Coverage upload to Codecov failed."
+          fi
+          gh api \
+            --method POST \
+            "/repos/${{ github.repository }}/statuses/${SHA}" \
+            --field state="${state}" \
+            --field description="${description}" \
+            --field context="upload-coverage / Codecov" \
+            --field target_url="https://app.codecov.io/gh/${{ github.repository }}"
