@@ -33,4 +33,4 @@ Create optional environments for publish job scoping and approvals:
 2. Push to `staging` to publish a test build to [TestPyPI](https://test.pypi.org/project/evalai/).
 3. Create and push a git tag to publish to [PyPI](https://pypi.org/project/evalai/).
 
-CI runs on pull requests and pushes to `master` and `staging`.
+CI runs on pull requests and pushes to `master` and `staging` using Python 3.9.21 (aligned with the main EvalAI repository).
