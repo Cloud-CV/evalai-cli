@@ -314,7 +314,43 @@ challenge_phase_details_slug = """
     "is_public": true,
     "is_active": true,
     "codename": "test2019",
-    "slug": "philip-phase-2019"
+    "slug": "philip-phase-2019",
+    "submission_meta_attributes": [
+    {
+      "name": "TextAttribute",
+      "type": "text",
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "SingleOptionAttribute",
+      "type": "radio",
+      "options": [
+        "A",
+        "B",
+        "C"
+      ],
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "MultipleChoiceAttribute",
+      "type": "checkbox",
+      "options": [
+        "alpha",
+        "beta",
+        "gamma"
+      ],
+      "required": "True",
+      "description": "Sample"
+    },
+    {
+      "name": "TrueFalseField",
+      "type": "boolean",
+      "required": "True",
+      "description": "Sample"
+    }
+  ]
 }
 """
 

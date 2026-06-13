@@ -8,6 +8,7 @@ import socket
 from click.testing import CliRunner
 from datetime import datetime
 from dateutil import tz
+from unittest.mock import patch
 
 from evalai.challenges import challenge
 from evalai.submissions import submission, push
@@ -371,25 +372,57 @@ class TestMakeSubmission(BaseTestClass):
         return (registry_port, image_tag)
 
     @responses.activate
-    def test_make_submission_for_docker_based_challenge(
+    def test_make_submission_for_docker_based_challenge_without_submission_metadata(
         self, test_make_submission_for_docker_based_challenge_setup
     ):
         registry_port, image_tag = (
             test_make_submission_for_docker_based_challenge_setup
         )
-        runner = CliRunner()
-        with runner.isolated_filesystem():
-            result = runner.invoke(
-                push,
-                [
-                    image_tag,
-                    "-p",
-                    "philip-phase-2019",
-                    "-u",
-                    "localhost:{0}".format(registry_port),
-                ],
-            )
-            assert result.exit_code == 0
+        with patch(
+            'evalai.submissions.get_submission_meta_attributes',
+            return_value=json.loads(challenge_response.challenge_phase_details_slug)["submission_meta_attributes"]
+        ):
+            runner = CliRunner()
+            with runner.isolated_filesystem():
+                result = runner.invoke(
+                    push,
+                    [
+                        image_tag,
+                        "-p",
+                        "philip-phase-2019",
+                        "-u",
+                        "localhost:{0}".format(registry_port),
+                    ],
+                    input="N\nN\n",
+                )
+                assert result.exit_code == 0
+
+    @responses.activate
+    def test_make_submission_for_docker_based_challenge_with_submission_metadata(
+        self, test_make_submission_for_docker_based_challenge_setup
+    ):
+        registry_port, image_tag = (
+            test_make_submission_for_docker_based_challenge_setup
+        )
+        with patch(
+            'evalai.submissions.get_submission_meta_attributes',
+            return_value=json.loads(challenge_response.challenge_phase_details_slug)["submission_meta_attributes"]
+        ):
+            runner = CliRunner()
+            with runner.isolated_filesystem():
+                result = runner.invoke(
+                    push,
+                    [
+                        image_tag,
+                        "-p",
+                        "philip-phase-2019",
+                        "-u",
+                        "localhost:{0}".format(registry_port),
+                        "--public"
+                    ],
+                    input="\nY\nTest\nTest\nTest\nTest\nY\nTest\nA\nalpha\nTrue\n",
+                )
+                assert result.exit_code == 0
 
     @responses.activate
     def test_make_submission_using_presigned_url(self, request):

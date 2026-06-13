@@ -33,7 +33,7 @@ with open(version_file_path) as version_file:
     exec(version_file.read(), package_config)
 
 tests_require = [
-    "coverage==4.5.4",
+    "coverage",
     "coveralls==1.3.0",
     "flake8==3.0.4",
     "pytest==3.5.1",
