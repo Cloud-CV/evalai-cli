@@ -16,8 +16,7 @@ Configure these under **Settings → Secrets and variables → Actions**:
 | Secret | Used for |
 |--------|----------|
 | `CODECOV_TOKEN` | Codecov upload |
-| `TEST_PYPI_USERNAME` | TestPyPI publish on `staging` pushes |
-| `TEST_PYPI_PASSWORD` | TestPyPI publish on `staging` pushes |
+| `TEST_PYPI_API_TOKEN` | TestPyPI publish on `staging` pushes |
 | `PYPI_API_TOKEN` | Production PyPI publish on tag pushes |
 
 ## GitHub environments
