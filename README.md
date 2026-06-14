@@ -7,8 +7,9 @@ EvalAI-CLI is designed to extend the functionality of the EvalAI web application
 ------------------------------------------------------------------------------------------
 
 [![Join the chat at https://gitter.im/Cloud-CV/EvalAI](https://badges.gitter.im/Cloud-CV/EvalAI.svg)](https://gitter.im/Cloud-CV/EvalAI?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/Cloud-CV/evalai-cli.svg?branch=master)](https://travis-ci.org/Cloud-CV/evalai-cli)
-[![Coverage Status](https://coveralls.io/repos/github/Cloud-CV/evalai-cli/badge.svg?branch=master)](https://coveralls.io/github/Cloud-CV/evalai-cli?branch=master)
+[![CI/CD](https://github.com/Cloud-CV/evalai-cli/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/Cloud-CV/evalai-cli/actions/workflows/ci-cd.yml)
+[![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/Cloud-CV/evalai-cli?style=flat-square)](https://coderabbit.ai)
+[![codecov](https://codecov.io/gh/Cloud-CV/evalai-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/Cloud-CV/evalai-cli)
 [![Documentation Status](https://readthedocs.org/projects/markdown-guide/badge/?version=latest)](https://cli.eval.ai/)
 
 ## Installation

@@ -34,8 +34,7 @@ with open(version_file_path) as version_file:
 
 tests_require = [
     "coverage",
-    "coveralls==1.3.0",
-    "flake8==3.0.4",
+    "flake8==7.1.2",
     "pytest==3.5.1",
     "pytest-cov==2.5.1",
     "pytest-env==0.6.2",
