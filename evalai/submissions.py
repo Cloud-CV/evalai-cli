@@ -118,13 +118,43 @@ def push(image, phase, url, public, private):
     request_path = URLS.phase_details_using_slug.value
     request_path = request_path.format(phase)
     response = make_request(request_path, "GET")
-    challenge_pk = response.get("challenge")
-    phase_pk = response.get("id")
+    try:
+        challenge_pk = response.get("challenge")
+    except KeyError:
+        echo(
+            style(
+                "\nError: Key 'challenge' not found in response.", fg="red", bold=True
+            )
+        )
+    sys.exit(1)
+    try:
+        phase_pk = response.get("id")
+    except KeyError:
+        echo(
+            style(
+                "\nError: Key 'id' not found in response for phase details.", fg="red", bold=True
+            )
+        )
+        sys.exit(1)
 
     request_path = URLS.challenge_details.value
     request_path = request_path.format(challenge_pk)
-    response = make_request(request_path, "GET")
-    max_docker_image_size = response.get("max_docker_image_size")
+    try:
+        response = make_request(request_path, "GET")
+    except requests.exceptions.RequestException as err:
+        echo(err)
+        sys.exit(1)
+    try:
+        max_docker_image_size = response.get("max_docker_image_size")
+    except KeyError:
+        echo(
+            style(
+                "\nError: Key 'max_docker_image_size' not found in challenge details response.",
+                fg="red",
+                bold=True,
+            )
+        )
+    sys.exit(1)
 
     docker_image_size = docker_image.__dict__.get("attrs").get("VirtualSize")
     # Prompt for submission details
@@ -278,7 +308,11 @@ def push(image, phase, url, public, private):
     request_path = URLS.get_aws_credentials.value
     request_path = request_path.format(phase_pk)
 
-    response = make_request(request_path, "GET")
+    try:
+        response = make_request(request_path, "GET")
+    except requests.exceptions.RequestException as err:
+        echo(err)
+        sys.exit(1)
     federated_user = response["success"]["federated_user"]
     repository_uri = response["success"]["docker_repository_uri"]
 
