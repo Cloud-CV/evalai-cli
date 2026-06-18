@@ -62,3 +62,15 @@ Two users will be created by default which are listed below -
     Host User - username: host, password: password
     Participant User - username: participant, password: password
     ```
+## Developer Notes
+
+This CLI is built using the `click` library.
+
+- The main entry point is defined in `setup.py` via `console_scripts`
+  and maps to `evalai.main:main`.
+- The `main.py` file initializes the CLI and performs checks such as
+  version updates before routing to subcommands.
+- Each CLI command is implemented in its own module inside the `evalai/`
+  directory (for example, `login` is implemented in `evalai/login.py`).
+- Authentication is token-based: the `login` command stores a token
+  locally, and other commands reuse it via shared authentication utilities.
