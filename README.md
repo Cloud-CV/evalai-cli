@@ -62,3 +62,6 @@ Two users will be created by default which are listed below -
     Host User - username: host, password: password
     Participant User - username: participant, password: password
     ```
+
+## Deprecated Methods
+Support for Docker image and code-upload based submissions is currently deprecated.
