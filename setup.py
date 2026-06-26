@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 import io
+import os
 import sys
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from distutils.util import convert_path
+
+
+# We use a manual way to find the version file path for CI compatibility
+def get_version_path(*paths):
+    return os.path.join(os.path.dirname(__file__), *paths)
 
 
 class PyTest(TestCommand):
@@ -15,13 +20,12 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
-
         sys.exit(pytest.main(self.test_args))
 
 
 PROJECT = "evalai"
 package_config = {}
-version_file_path = convert_path("evalai/version.py")
+version_file_path = get_version_path("evalai", "version.py")
 
 with io.open("README.md", encoding="utf-8") as f:
     long_description = f.read()
@@ -34,7 +38,9 @@ with open(version_file_path) as version_file:
 
 tests_require = [
     "coverage",
-    "flake8==7.1.2",
+    "packaging",
+    "coveralls==1.3.0",
+    "flake8==3.0.4",
     "pytest==3.5.1",
     "pytest-cov==2.5.1",
     "pytest-env==0.6.2",
