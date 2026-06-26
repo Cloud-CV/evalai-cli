@@ -1,0 +1,179 @@
+name: ci-cd
+
+on:
+  push:
+    branches:
+      - master
+      - staging
+    tags:
+      - "*"
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish_target:
+        description: "Optional manual publish target"
+        required: true
+        type: choice
+        options:
+          - none
+          - testpypi
+        default: none
+
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_RUNTIME_VERSION: "3.9.21"
+
+jobs:
+  code_quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_RUNTIME_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8==7.1.2
+
+      - name: Run flake8
+        run: flake8 ./
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_RUNTIME_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools==70.0.0
+          pip install -r requirements.txt
+          pip install \
+            coverage \
+            pytest==3.5.1 \
+            pytest-cov==2.5.1 \
+            pytest-env==0.6.2 \
+            responses==0.9.0
+
+      - name: Run tests with coverage
+        run: |
+          pytest \
+            --cov evalai \
+            --cov-config .coveragerc \
+            --cov-report=xml:coverage.xml
+
+      - name: Save pull request number for downstream coverage upload
+        run: |
+          mkdir -p pr-metadata
+          echo "${{ github.event.pull_request.number }}" > pr-metadata/pr_number.txt
+
+      - name: Upload test and coverage artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ci-test-reports
+          path: coverage.xml
+          if-no-files-found: error
+
+      - name: Upload pull request metadata artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: pr-metadata
+          path: pr-metadata/pr_number.txt
+          if-no-files-found: error
+
+  publish_to_testpypi:
+    name: Publish to TestPyPI
+    runs-on: ubuntu-latest
+    needs:
+      - code_quality
+      - test
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/staging') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_target == 'testpypi')
+    environment: staging
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_RUNTIME_VERSION }}
+          cache: pip
+
+      - name: Build and publish package to TestPyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: |
+          python -m pip install --upgrade pip setuptools wheel twine
+          python setup.py sdist bdist_wheel
+          python -m twine upload \
+            --repository-url https://test.pypi.org/legacy/ \
+            dist/*
+
+  publish_to_pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs:
+      - code_quality
+      - test
+    if: startsWith(github.ref, 'refs/tags/')
+    environment: production
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_RUNTIME_VERSION }}
+          cache: pip
+
+      - name: Build and publish package to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          python -m pip install --upgrade pip setuptools wheel twine
+          python setup.py sdist bdist_wheel
+          python -m twine upload dist/*
