@@ -39,7 +39,7 @@ def main(ctx):
         echo(
             style(
                 "\nUpdate:\n"
-                "\nPlease install the latest version of EvalAI-CLI!\n",
+                "\nPlease install the latest version of EvalAI-CLI!\n"
                 "\nUse: pip install --upgrade evalai\n",
                 fg="red",
                 bold=True,
